@@ -51,4 +51,4 @@ isReverseInt(321, 312); // false
 isReverseInt(-123, 321) // false
 ```
 
-este documento se encuentra en ahi se resolvio nuestro reto [sReverseInt.js](isReverseInt.js)
+este documento se encuentra en ahi se resolvio nuestro reto [isReverseInt.js](isReverseInt.js)

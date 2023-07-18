@@ -17,7 +17,7 @@ export default function longestWord(string) {
 			longestLength = word.length;
 			longestWords = [word];
 		}
-		// Check if the current word has the same length as the longest word(s) found so far
+		// Check if the current word has the same length as the longest word found so far
 		else if (word.length === longestLength) {
 			longestWords.push(word);
 		}

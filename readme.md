@@ -36,7 +36,7 @@ console.log(longestWord("The quick brown fox jumps over the lazy dog"));
 //[ 'quick', 'brown', 'jumps' ]
 ```
 
-esta funcion esta retornando la palabra mas larga de una cadena de texto se encuentra en [longestWord.js](longestWord.js)
+esta funcion esta retornando la palabra mas larga de una cadena de texto se encuentra en [longestWord.js](/clase-0/longestWord.js)
 
 ##### isReverseInt
 

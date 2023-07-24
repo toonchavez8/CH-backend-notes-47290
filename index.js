@@ -1,7 +1,7 @@
 // All imports
 import chalk from "chalk";
-import longestWord from "./longestWord.js";
-import isReverseInt from "./isReverseInt.js";
+import longestWord from "./clase-0/isReverseInt";
+import isReverseInt from "./clase-0/isReverseInt.js";
 
 // loading console log
 console.log(chalk.yellow("starting ...   "));

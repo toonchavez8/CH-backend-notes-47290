@@ -49,8 +49,8 @@ async function main() {
 
 	const product1 = await PM.getProductbyId(1); // Product with id 1 exists
 	const product6 = await PM.getProductbyId(6); // Product with id 6 does not exist
-	console.log(product1);
-	console.log(product6);
+	console.log("producto 1", product1);
+	console.log("producto 6", product6);
 
 	await PM.updateProductById(1, { price: 120 }); // Update product with id 1
 	await PM.deleteProductById(2); // Delete product with id 2 (exists)

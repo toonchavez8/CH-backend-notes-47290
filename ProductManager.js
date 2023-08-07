@@ -92,7 +92,7 @@ class ProductManager {
 			const product = this.#_products.find((product) => product.id === id);
 			if (!product) {
 				console.error(`Product with id ${id} not found.`);
-				return [];
+				return {};
 			}
 
 			productTitle = product.title; // Store the product title in the variable

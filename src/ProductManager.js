@@ -1,20 +1,22 @@
 import fs from "fs";
 import chalk from "chalk";
-class ProductManager {
+export class ProductManager {
 	#_products;
 
-	constructor() {
+	constructor(databaseFilePath) {
 		this.#_products = [];
-		this.loadDatabase();
+		if (databaseFilePath) {
+			this.loadDatabase(databaseFilePath);
+		}
 	}
 
-	async loadDatabase() {
+	async loadDatabase(databaseFilePath) {
 		try {
-			const data = await fs.promises.readFile("database.json", "utf-8");
+			const data = await fs.promises.readFile(databaseFilePath, "utf-8");
 			this.#_products = JSON.parse(data);
 		} catch (err) {
 			if (err.code === "ENOENT") {
-				console.error("Error: Database doesn't exist. Please add products.");
+				console.error("Error: Database doesn't exist or is empty.");
 			} else {
 				console.error("Error reading from database:", err);
 			}
@@ -86,9 +88,6 @@ class ProductManager {
 		let productTitle = null; // Initialize productTitle variable to store the title
 
 		try {
-			const data = await fs.promises.readFile("database.json", "utf-8");
-			this.#_products = JSON.parse(data); // Parse the JSON data to convert it to an array
-
 			const product = this.#_products.find((product) => product.id === id);
 			if (!product) {
 				console.error(`Product with id ${id} not found.`);
@@ -140,5 +139,3 @@ class ProductManager {
 		return this.#_products[index];
 	}
 }
-
-export const PM = new ProductManager();

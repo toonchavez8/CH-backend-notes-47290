@@ -2,9 +2,11 @@ import fs from "fs";
 import chalk from "chalk";
 export class ProductManager {
 	#_products;
+	#databaseFilePath;
 
 	constructor(databaseFilePath) {
 		this.#_products = [];
+		this.#databaseFilePath = databaseFilePath; // Store the database file path
 		if (databaseFilePath) {
 			this.loadDatabase(databaseFilePath);
 		}
@@ -32,10 +34,14 @@ export class ProductManager {
 		}
 	}
 
-	async saveDatabase() {
+	async saveDatabase(databaseFilePath = null) {
+		if (!databaseFilePath) {
+			databaseFilePath = this.#databaseFilePath; // Use the original database file path
+		}
+
 		try {
 			await fs.promises.writeFile(
-				"database.json",
+				databaseFilePath,
 				JSON.stringify(this.#_products)
 			);
 		} catch (err) {
@@ -51,9 +57,31 @@ export class ProductManager {
 
 	async addProduct(title, description, price, thumbnail, code, stock) {
 		// Check for missing properties
-		if (!title || !description || !price || !thumbnail || !code || !stock) {
-			console.error("Error: Missing properties for the product.");
-			return;
+		let errorMessage = "";
+
+		switch (true) {
+			case !title:
+				errorMessage = "Missing title for the product.";
+				break;
+			case !description:
+				errorMessage = "Missing description for the product.";
+				break;
+			case !price:
+				errorMessage = "Missing price for the product.";
+				break;
+			case !thumbnail:
+				errorMessage = "Missing thumbnail for the product.";
+				break;
+			case !code:
+				errorMessage = "Missing code for the product.";
+				break;
+			case !stock:
+				errorMessage = "Missing stock for the product.";
+				break;
+		}
+
+		if (errorMessage) {
+			throw new Error(errorMessage);
 		}
 
 		// Check for duplicate code
@@ -62,7 +90,7 @@ export class ProductManager {
 		);
 		if (isDuplicateCode) {
 			console.error("Error: Product with the same code already exists.");
-			return;
+			throw new Error("Product with the same code already exists.");
 		}
 
 		const product = {
@@ -78,6 +106,7 @@ export class ProductManager {
 		this.#_products.push(product);
 		await this.saveDatabase();
 		console.log("Product added successfully and database updated.");
+		return product;
 	}
 	#getNextId() {
 		if (this.#_products.length === 0) return 1;
@@ -106,7 +135,11 @@ export class ProductManager {
 		} finally {
 			if (productTitle != null) {
 				// Now you can access the productTitle in the finally block
-				console.log(chalk.green(`${productTitle} loaded successfully!`));
+				console.log(
+					chalk.green(
+						`product named ${productTitle} with id ${id} loaded successfully!`
+					)
+				);
 			} else {
 				console.log(chalk.yellow("No product found."));
 			}

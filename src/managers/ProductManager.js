@@ -153,10 +153,14 @@ export class ProductManager {
 			return null;
 		}
 
-		this.#_products.splice(index, 1);
+		// Remove the product from the array and store it in a variable
+		const deletedProduct = this.#_products.splice(index, 1)[0];
+
 		await this.saveDatabase();
 		console.log(`Product with id ${id} deleted successfully.`);
-		return this.#_products;
+
+		// Return the deleted product
+		return deletedProduct;
 	}
 
 	async updateProductById(id, updatedProduct) {

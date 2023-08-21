@@ -100,4 +100,39 @@ router.put("/:pid", async (req, res) => {
 	}
 });
 
+// Router to delete by product id
+router.delete("/:pid", async (req, res) => {
+	let deletedProduct; // Declare the variable here
+
+	try {
+		// Extract the product ID from the request parameters
+		const id = parseInt(req.params.pid);
+
+		// Call the deleteProductById method to delete the product by ID
+		deletedProduct = await PM.deleteProductById(id);
+
+		// Check if the product was successfully deleted
+		if (!deletedProduct) {
+			return res
+				.status(404)
+				.json({ error: `Product with ID ${id} not found.` });
+		}
+
+		// Respond with a success message
+		res.status(200).json({
+			message: "Product deleted successfully.",
+			productDeleted: deletedProduct,
+		});
+	} catch (error) {
+		console.log(chalk.red("Error deleting product:", error.message));
+		res.status(500).json({ error: error.message });
+	} finally {
+		// Display the deleted product in the console
+		if (deletedProduct) {
+			console.log(chalk.green(`Product with ID ${deletedProduct.id} deleted:`));
+			console.log(deletedProduct);
+		}
+	}
+});
+
 export default router;

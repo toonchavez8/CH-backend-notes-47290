@@ -1,5 +1,6 @@
 import fs from "fs";
 import chalk from "chalk";
+import { error } from "console";
 export class ProductManager {
 	#_products;
 	#databaseFilePath;
@@ -162,11 +163,16 @@ export class ProductManager {
 		const index = this.#_products.findIndex((product) => product.id === id);
 		if (index === -1) {
 			console.error(`Product with id ${id} not found.`);
-			return null;
+			throw new Error(`Product with id ${id} not found.`);
 		}
 
-		// Combine existing product with updatedProduct
-		Object.assign(this.#_products[index], updatedProduct);
+		// Loop through the properties of the updatedProduct and update the corresponding properties of the existing product
+		for (const prop in updatedProduct) {
+			if (updatedProduct.hasOwnProperty(prop)) {
+				this.#_products[index][prop] = updatedProduct[prop];
+			}
+		}
+
 		await this.saveDatabase();
 		console.log("Product updated successfully and database updated.");
 		return this.#_products[index];

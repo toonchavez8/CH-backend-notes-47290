@@ -71,11 +71,32 @@ router.post("/", async (req, res) => {
 });
 
 // route to update product by id
-router.put("/:pid", (req, res) => {
+
+router.put("/:pid", async (req, res) => {
 	try {
+		// Extract the product ID from the request parameters
 		const id = parseInt(req.params.pid);
+
+		// Create an object with the updated product data
+		const updatedProduct = req.body;
+
+		// Call the updateProductById method to update the product by ID
+		const updated = await PM.updateProductById(id, updatedProduct);
+
+		// Check if the product was successfully updated
+		if (!updated) {
+			return res
+				.status(404)
+				.json({ error: `Product with ID ${id} not found.` });
+		}
+
+		// Respond with a success message and the updated product
+		res
+			.status(200)
+			.json({ message: "Product updated successfully.", product: updated });
 	} catch (error) {
-	} finally {
+		console.log(chalk.red("Error updating product:", error.message));
+		res.status(500).json({ error: error.message });
 	}
 });
 

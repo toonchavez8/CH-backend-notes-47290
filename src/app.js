@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import express from "express";
-import router from "./routers/product.router.js";
+import productRouter from "./routers/product.router.js";
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
 	res.json("home page");
 });
 
-app.use("/products", router);
+app.use("/api/products", productRouter);
 
 app.listen(3000, () => {
 	console.log(chalk.green("server up"));

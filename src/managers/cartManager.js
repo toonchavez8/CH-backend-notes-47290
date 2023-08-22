@@ -83,9 +83,12 @@ export class CartManager {
 	async addProductToCart(cid, pid) {
 		try {
 			const product = await productmanager.getProductbyId(pid);
+			console.log(product);
 
-			if (!product) {
-				throw new Error(`Product with ID ${pid} not found.`);
+			if (typeof product !== "object" || !product.id || !product.title) {
+				throw new Error(
+					`Product with ID ${pid} not found or has invalid data.`
+				);
 			}
 
 			const cart = this.#_cart.find((cart) => cart.id === cid);
@@ -99,8 +102,7 @@ export class CartManager {
 			if (existingProduct) {
 				existingProduct.quantity = (existingProduct.quantity || 0) + 1;
 			} else {
-				product.quantity = 1;
-				cart.products.push(product);
+				cart.products.push({ id: product.id, quantity: 1 }); // Add only the product ID and quantity
 			}
 
 			await this.#saveCartDatabase();

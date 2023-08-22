@@ -43,4 +43,26 @@ cartRouter.get("/:cid", async (req, res) => {
 	}
 });
 
+cartRouter.post("/:cid/product/:pid", async (req, res) => {
+	try {
+		const cid = parseInt(req.params.cid);
+		const pid = parseInt(req.params.pid);
+
+		// Call the addProductToCart method to add the product to the cart
+		const updatedCart = await cartManager.addProductToCart(cid, pid);
+
+		if (!updatedCart) {
+			// Handle the case where the cart or product was not found
+			res.status(404).json({ error: `Cart or product not found.` });
+		} else {
+			// Respond with the updated cart
+			res.status(200).json(updatedCart);
+		}
+	} catch (error) {
+		// Handle any other errors that occur during the request
+		console.error("Error adding product to cart:", error.message);
+		res.status(500).json({ error: error.message });
+	}
+});
+
 export default cartRouter;

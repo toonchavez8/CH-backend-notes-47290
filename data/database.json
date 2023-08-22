@@ -1,1 +1,137 @@
-[{"id":1,"title":"Professional Film Camera","description":"Capture stunning moments with our professional film camera.","price":799.99,"thumbnail":["https://example.com/images/pfc.jpg"],"code":"PFC001","stock":10},{"id":2,"title":"Portrait Lens Kit","description":"Create beautiful portraits with our versatile lens kit.","price":299.95,"thumbnail":["https://example.com/images/plk.jpg"],"code":"PLK002","stock":15},{"id":3,"title":"Professional Lighting Set","description":"Illuminate your photography with our advanced lighting set.","price":449.99,"thumbnail":["https://example.com/images/pls.jpg"],"code":"PLS003","stock":8},{"id":4,"title":"Film Development Kit","description":"Process and develop your own film with our comprehensive kit.","price":179.5,"thumbnail":["https://example.com/images/fdk.jpg"],"code":"FDK004","stock":20},{"id":5,"title":"Travel Photography Backpack","description":"Carry your gear comfortably with our specialized backpack.","price":129.99,"thumbnail":["https://example.com/images/tpb.jpg"],"code":"TPB005","stock":25},{"id":6,"title":"Camera Stabilizer Rig","description":"Achieve steady shots with our professional stabilizer rig.","price":299,"thumbnail":["https://example.com/images/csr.jpg"],"code":"CSR006","stock":12},{"id":7,"title":"Wide-angle Lens","description":"Capture expansive scenes with our high-quality wide-angle lens.","price":199.95,"thumbnail":["https://example.com/images/wal.jpg"],"code":"WAL007","stock":18},{"id":8,"title":"Film Scanner","description":"Digitize your film negatives with our efficient film scanner.","price":159.99,"thumbnail":["https://example.com/images/fs.jpg"],"code":"FS008","stock":7},{"id":9,"title":"Camera Remote Shutter","description":"Capture shots remotely with our reliable remote shutter.","price":49.5,"thumbnail":["https://example.com/images/crs.jpg"],"code":"CRS009","stock":30},{"id":10,"title":"Photography Reflector Set","description":"Enhance your lighting with our versatile reflector set.","price":69.99,"thumbnail":["https://example.com/images/prs.jpg"],"code":"PRS010","stock":22},{"id":11,"title":"Film Roll Storage Case","description":"Organize and protect your film rolls with our storage case.","price":39.95,"thumbnail":["https://example.com/images/frsc.jpg"],"code":"FRSC011","stock":14},{"id":12,"title":"Camera Lens Cleaning Kit","description":"Keep your lenses spotless with our comprehensive cleaning kit.","price":29.99,"thumbnail":["https://example.com/images/clck.jpg"],"code":"CLCK012","stock":40},{"id":13,"title":"Film Editing Software","description":"Edit your film projects with our user-friendly editing software.","price":89,"thumbnail":["https://example.com/images/fes.jpg"],"code":"FES013","stock":5},{"id":14,"title":"Camera Lens Filter Kit","description":"Explore creative effects with our versatile lens filter kit.","price":59.95,"thumbnail":["https://example.com/images/clfk.jpg"],"code":"CLFK014","stock":28},{"id":15,"title":"Portable Photography Studio","description":"Set up a professional studio anywhere with our portable kit.","price":349.99,"thumbnail":["https://example.com/images/pps.jpg"],"code":"PPS015","stock":9}]
+[
+	{
+		"id": 1,
+		"title": "Professional Film Camera",
+		"description": "Capture stunning moments with our professional film camera.",
+		"price": 799.99,
+		"thumbnail": ["https://example.com/images/pfc.jpg"],
+		"code": "PFC001",
+		"stock": 10
+	},
+	{
+		"id": 2,
+		"title": "Portrait Lens Kit",
+		"description": "Create beautiful portraits with our versatile lens kit.",
+		"price": 299.95,
+		"thumbnail": ["https://example.com/images/plk.jpg"],
+		"code": "PLK002",
+		"stock": 15
+	},
+	{
+		"id": 3,
+		"title": "Professional Lighting Set",
+		"description": "Illuminate your photography with our advanced lighting set.",
+		"price": 449.99,
+		"thumbnail": ["https://example.com/images/pls.jpg"],
+		"code": "PLS003",
+		"stock": 8
+	},
+	{
+		"id": 4,
+		"title": "Film Development Kit",
+		"description": "Process and develop your own film with our comprehensive kit.",
+		"price": 179.5,
+		"thumbnail": ["https://example.com/images/fdk.jpg"],
+		"code": "FDK004",
+		"stock": 20
+	},
+	{
+		"id": 5,
+		"title": "Travel Photography Backpack",
+		"description": "Carry your gear comfortably with our specialized backpack.",
+		"price": 129.99,
+		"thumbnail": ["https://example.com/images/tpb.jpg"],
+		"code": "TPB005",
+		"stock": 25
+	},
+	{
+		"id": 6,
+		"title": "Camera Stabilizer Rig",
+		"description": "Achieve steady shots with our professional stabilizer rig.",
+		"price": 299,
+		"thumbnail": ["https://example.com/images/csr.jpg"],
+		"code": "CSR006",
+		"stock": 12
+	},
+	{
+		"id": 7,
+		"title": "Wide-angle Lens",
+		"description": "Capture expansive scenes with our high-quality wide-angle lens.",
+		"price": 199.95,
+		"thumbnail": ["https://example.com/images/wal.jpg"],
+		"code": "WAL007",
+		"stock": 18
+	},
+	{
+		"id": 8,
+		"title": "Film Scanner",
+		"description": "Digitize your film negatives with our efficient film scanner.",
+		"price": 159.99,
+		"thumbnail": ["https://example.com/images/fs.jpg"],
+		"code": "FS008",
+		"stock": 7
+	},
+	{
+		"id": 9,
+		"title": "Camera Remote Shutter",
+		"description": "Capture shots remotely with our reliable remote shutter.",
+		"price": 49.5,
+		"thumbnail": ["https://example.com/images/crs.jpg"],
+		"code": "CRS009",
+		"stock": 30
+	},
+	{
+		"id": 10,
+		"title": "Photography Reflector Set",
+		"description": "Enhance your lighting with our versatile reflector set.",
+		"price": 69.99,
+		"thumbnail": ["https://example.com/images/prs.jpg"],
+		"code": "PRS010",
+		"stock": 22
+	},
+	{
+		"id": 11,
+		"title": "Film Roll Storage Case",
+		"description": "Organize and protect your film rolls with our storage case.",
+		"price": 39.95,
+		"thumbnail": ["https://example.com/images/frsc.jpg"],
+		"code": "FRSC011",
+		"stock": 14
+	},
+	{
+		"id": 12,
+		"title": "Camera Lens Cleaning Kit",
+		"description": "Keep your lenses spotless with our comprehensive cleaning kit.",
+		"price": 29.99,
+		"thumbnail": ["https://example.com/images/clck.jpg"],
+		"code": "CLCK012",
+		"stock": 40
+	},
+	{
+		"id": 13,
+		"title": "Film Editing Software",
+		"description": "Edit your film projects with our user-friendly editing software.",
+		"price": 89,
+		"thumbnail": ["https://example.com/images/fes.jpg"],
+		"code": "FES013",
+		"stock": 5
+	},
+	{
+		"id": 14,
+		"title": "Camera Lens Filter Kit",
+		"description": "Explore creative effects with our versatile lens filter kit.",
+		"price": 59.95,
+		"thumbnail": ["https://example.com/images/clfk.jpg"],
+		"code": "CLFK014",
+		"stock": 28
+	},
+	{
+		"id": 15,
+		"title": "Portable Photography Studio",
+		"description": "Set up a professional studio anywhere with our portable kit.",
+		"price": 349.99,
+		"thumbnail": ["https://example.com/images/pps.jpg"],
+		"code": "PPS015",
+		"stock": 9
+	}
+]

@@ -1,6 +1,6 @@
 import fs from "fs";
 import chalk from "chalk";
-import { error } from "console";
+
 export class ProductManager {
 	#_products;
 	#databaseFilePath;

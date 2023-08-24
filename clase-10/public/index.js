@@ -4,21 +4,20 @@ let chatBox = document.getElementById("chatBox");
 let submitBtn = document.getElementById("submitBtn");
 let history = document.getElementById("history");
 let clientID = document.getElementById("clientID");
-let log = []; // Initialize the log array
 
-// event lisner for chatbox and clear message on send
+// Event Listner para el enter
 chatBox.addEventListener("keyup", (event) => {
-	// check if chatbox value has any whitespaces and will remove excess spaces
+	// aqui quitamos cualquier excesso de espacios en el mensaje
 	const message = chatBox.value.trim();
 
-	// if enter is pressed and message is not empty it will send message
+	// si el enter fue ingresado y el mensaje no esta vasillo lo enviamos
 	if (event.key === "Enter" && !message == "") {
 		socketClient.emit("message", chatBox.value);
 		chatBox.value = "";
 	}
 });
 
-// button event lisnter to allow button to be used to send message
+// en el boton hacemos lo mismo
 submitBtn.addEventListener("click", (event) => {
 	event.preventDefault();
 
@@ -31,26 +30,29 @@ submitBtn.addEventListener("click", (event) => {
 	}
 });
 
+// Aqui en cada ves que se modifique el historial que es en cuanto carga el chat, se renderean todos los mensajes que es una funcion
 socketClient.on("history", (data) => {
-	log = data; // Update the log with the chat history
-	displayMessages(log); // Display the chat history with timestamps
+	displayMessages(data);
 });
 
+// aqui cuando el cliente detecte que el server mando mensaje se hace un render denuevo actualizando en tiempo real
 socketClient.on("message", (data) => {
-	log.push(data); // Add the new message to the log
-	displayMessages(log); // Display the updated chat history with timestamps
+	displayMessages(data);
 	history.scrollTop = history.scrollHeight; // Scroll to the bottom
 });
 
+// aqui solo es un for each con condicionales para visualizar el chat mas bonito
 function displayMessages(data) {
 	let messages = "";
 	const currentUserId = socketClient.id; // Replace with the actual current user's ID
 	const currentTime = new Date();
 	clientID.innerHTML = `Client id: ${currentUserId}`;
 	data.forEach((message) => {
+		console.log(message);
 		const userId = message.userId;
+		console.log(userId);
 		const lastThreeChars = userId.slice(-3); // Get the last 3 characters of the userid
-
+		console.log("last3Chars", lastThreeChars);
 		// Determine the alignment based on the current user
 		const alignmentClass =
 			userId === currentUserId ? "flex-row-reverse" : "justify-start";

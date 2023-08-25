@@ -1,54 +1,35 @@
-# Programación Backend
+# Programación Backend - Desafíos
 
-## Como usar este repo
+## Index
 
-iniciamos despues de descargar con `npm i` para instalar dependencias
+[Módulo 1](#módulo-1)
 
-luego vamos a correr `npm start` para iniciar con `node --watch` sobre nuestrto archivo maestro que manejara todos las entradas de archivos.
+- [Desafio 01](#desafío-01-classes-con-ecmascript)
+
+## Cómo usar este repositorio
+
+1. Después de descargar, ejecuta `npm i` para instalar las dependencias.
+
+2. Luego, inicia la aplicación con `npm start`, lo que ejecutará `node --watch` en nuestro archivo principal que manejará todas las entradas de archivos.
 
 ### Archivos importantes
 
-- `index.js` - Archivo principal que corre todo
+- `index.js` - Archivo principal que ejecuta todo.
 
-## Modulo 1
+## Módulo 1
 
-### Clase 0: Principios de programación Backend
+### Desafío 01: Classes con ECMAScript
 
-#### Anotaciones
+Este desafío se enfoca en el uso de clases con ECMAScript. A continuación, se muestra un resumen del código más interesante relacionado con este desafío:
 
-- Explicación de los principios básicos de programación Backend
-- Diferencias con Frontend
-- Arquitectura de una aplicación Backend
-- Mern stack
-
-#### Actividades en clase
-
-##### LongestWord
-
-Crear una funcion que te devuelve la palabra mas larga de una cadena de texto.
-
-Por ejemplo:
+Función para Obtener Productos
+La siguiente función obtiene y muestra los productos utilizando el objeto [ProductManager.js](ProductManager.js)
 
 ```js
-console.log(longestWord('Hello my name is John'));
- // hello
-console.log(longestWord("The quick brown fox jumps over the lazy dog"));
-//[ 'quick', 'brown', 'jumps' ]
+// despues de importarlo lo lo mandamos a llamar como
+console.log("products", PM.getProducts());
 ```
 
-esta funcion esta retornando la palabra mas larga de una cadena de texto se encuentra en [longestWord.js](/clase-0/longestWord.js)
+esto nos regresa un array con los productos creados. A este fase el array esta vacilla.
 
-##### isReverseInt
-
-Crear una funcion que determine si un numero dado es el reverso de otro numero.
-
-por ejemplo:
-
-```js
-isReverseInt(123, 321); // true
-isReverseInt(-123, -321); // true
-isReverseInt(321, 312); // false
-isReverseInt(-123, 321) // false
-```
-
-este documento se encuentra en ahi se resolvio nuestro reto [isReverseInt.js](isReverseInt.js)
+con `npm start` podemos comprobarlo.

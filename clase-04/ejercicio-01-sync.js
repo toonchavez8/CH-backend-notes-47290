@@ -2,7 +2,7 @@ import chalk from "chalk";
 import fs from "fs";
 
 fs.writeFileSync("./hello.txt", "Hello World!");
-fs.writeFileSync("./hello.txt", "fuck this");
+fs.writeFileSync("./hello.txt", "i see you");
 
 console.log("File written successfully!");
 

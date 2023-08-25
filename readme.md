@@ -94,7 +94,7 @@ podemos probar el codigo corriengo desde la carpeta raiz `node clase-1/showList.
 
 En esta clase, hemos añadido dos ejercicios :
 
-#### [keys.js](/clase-02/keys.js)
+#### Ejercicio: [keys.js](/clase-02/keys.js)
 
 Este ejercicio trabaja con un conjunto de objetos y crea una lista de todas las claves únicas presentes en estos objetos. El código se ve de la siguiente manera:
 
@@ -111,3 +111,95 @@ const keys = objetos.reduce((acc, curr) => {
 ```
 
 Esto lo que hace es te filtra todas las claves o keys. Comienza con un acumulador vacío y, para cada objeto, obtiene sus claves. Si una clave aún no está en el acumulador, la agrega. El resultado es un arreglo keys con claves únicas de todos los objetos. Esto es util para propiedades que estan duplicados El código completo se encuentra en [keys.js](/clase-02/keys.js)
+
+##### Resultado de keys
+
+Para correr El ejercicio se core desde la raiz con `node clase-02/keys.js` y veriamos que el resultado es
+
+```js
+[
+  'manzanas', 'peras',
+  'carne',    'jugos',
+  'dulces',   'sandias',
+  'huevos',   'panes'
+]
+```
+
+#### Ejercicio: [TicketManager.js](/clase-02/TicketManager.js)
+
+Para este ejercicio hiciemos una implementación de una clase llamada TicketManager. Hace lo siguiente:
+
+Define una clase `TicketManager` que tiene propiedades privadas ``#_events``y `#_user`.
+
+La propiedad `#_events` se utiliza para almacenar una lista de eventos.
+
+La clase tiene métodos `get` y `set` para las propiedades events y user.
+
+EL `set user(newUser)` usa un `switch case` para validacioens y mejor informacion para el usario
+
+```js
+set user(newUser) {
+  switch (true) {
+   case !newUser.name && !newUser.age && !newUser.event:
+    console.error(chalk.red("Name, Age, and Event are required"));
+    break;
+   case !newUser.name && !newUser.age:
+    console.error(chalk.red("Name and Age are required"));
+    break;
+   case !newUser.name && !newUser.event:
+    console.error(chalk.red("Name and Event are required"));
+    break;
+   case !newUser.age && !newUser.event:
+    console.error(chalk.red("Age and Event are required"));
+    break;
+   case !newUser.name:
+    console.error(chalk.red("Name is required"));
+    break;
+   case !newUser.age:
+    console.error(chalk.red("Age is required"));
+    break;
+   case !newUser.event:
+    console.error(chalk.red("Event is required"));
+    break;
+   default:
+    // Check if the event exists and attach it to the user
+    const validEvent = this.#_events.find(
+     (event) => event.id === newUser.event
+    );
+    if (validEvent) {
+     this.#_user = { ...newUser, event: validEvent };
+    } else {
+     throw new Error(`Event with id ${newUser.event} not found.`);
+    }
+  }
+ }
+ ```
+
+Me gustan mas switch cases cuando hay varias opciones de validacion como en este caso. Hace el codigo mas legible.
+
+##### Resultado de Ticketmaster
+
+Para correr El ejercicio se core desde la raiz con `node clase-02/TicketManager.js` y veriamos que el resultado es:
+
+```js
+tm.user = { name: "John Doe", age: 30, event: 1 };
+
+console.log(chalk.yellow(`name: "John Doe", age: 30, event: 5`));
+console.log("user updated", tm.user);
+```
+
+```js
+// name: "John Doe", age: 30, event: 5
+//user updated
+{
+  name: 'John Doe',
+  age: 30,
+  event: {
+    artist: 'bad bunny',
+    city: 'caba',
+    price: 120,
+    capacity: 1500,
+    id: 1
+  }
+}
+```

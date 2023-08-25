@@ -6,6 +6,7 @@
 
 - [Clase - 00: Principios de Backend](#clase-0-principios-de-programación-backend)
 - [Clase - 01: Principios de JS](#clase-01-principios-de-js)
+- [Clase - 02: Nuevas Funcionalidades](#clase-02-nuevas-funcionalidades)
 
 ## Como usar este repo
 
@@ -60,7 +61,7 @@ este documento se encuentra en ahi se resolvio nuestro reto [isReverseInt.js](is
 
 ### Clase 01: Principios de JS
 
-#### Ejercicio: showList
+#### Ejercicio: [showList.js](/clase-01/showList.js)
 
 En este ejercicio, hemos creado la función showList que recibe un array y muestra sus elementos en la consola. Si el array está vacío, muestra un mensaje en rojo indicando que el array está vacío.
 
@@ -78,7 +79,7 @@ function showList(array) {
 }
 ```
 
-las pruebas de las funciones anteriores se encuentran en dentro del mismo archivo.
+las pruebas de las funciones anteriores se encuentran en dentro del archivo [showList.js](/clase-01/showList.js)
 
 ```js
 // Pruebas
@@ -88,3 +89,25 @@ showList([]);
 ```
 
 podemos probar el codigo corriengo desde la carpeta raiz `node clase-1/showList.js` y veremos como funciona.
+
+### Clase 02: Nuevas Funcionalidades
+
+En esta clase, hemos añadido dos ejercicios :
+
+#### [keys.js](/clase-02/keys.js)
+
+Este ejercicio trabaja con un conjunto de objetos y crea una lista de todas las claves únicas presentes en estos objetos. El código se ve de la siguiente manera:
+
+```js
+const keys = objetos.reduce((acc, curr) => {
+ Object.keys(curr).forEach((key) => {
+  if (!acc.includes(key)) {
+   acc.push(key);
+  }
+ });
+ return acc;
+}, []);
+
+```
+
+Esto lo que hace es te filtra todas las claves o keys. Comienza con un acumulador vacío y, para cada objeto, obtiene sus claves. Si una clave aún no está en el acumulador, la agrega. El resultado es un arreglo keys con claves únicas de todos los objetos. Esto es util para propiedades que estan duplicados El código completo se encuentra en [keys.js](/clase-02/keys.js)

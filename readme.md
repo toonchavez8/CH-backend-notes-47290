@@ -7,6 +7,7 @@
 - [Clase - 00: Principios de Backend](#clase-0-principios-de-programación-backend)
 - [Clase - 01: Principios de JS](#clase-01-principios-de-js)
 - [Clase - 02: Nuevas Funcionalidades](#clase-02-nuevas-funcionalidades)
+- [Clase - 03: Sincronia y Asincronia](#clase-03-sincronia-y-asincronia)
 
 ## Como usar este repo
 
@@ -202,4 +203,36 @@ console.log("user updated", tm.user);
     id: 1
   }
 }
+```
+
+### Clase 03: Sincronia y Asincronia
+
+#### Ejercicio: [calculadora.js](/clase-03/calculadora.js)
+
+En este ejercicio, hemos implementado una calculadora simple que puede realizar operaciones de suma, resta, multiplicación y división. La calculadora utiliza promesas para manejar las operaciones de manera asíncrona.
+
+Podemos correr `node clase-03/calculadora.js` y modificar los numeros
+
+```js
+async function calculator() {
+ try {
+  console.log(chalk.green(await add(5, 5)));
+  console.log(chalk.green(await subtract(5, 5)));
+  console.log(chalk.green(await multiply(5, 5)));
+  console.log(chalk.green(await divide(5, 5)));
+ } catch (error) {
+  console.log(chalk.redBright(error));
+ }
+}
+```
+
+##### Resultado
+
+y el resultado que podriamos ver seria
+
+```js
+10
+0
+25
+1
 ```

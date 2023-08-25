@@ -8,7 +8,8 @@
 - [Clase - 01: Principios de JS](#clase-01-principios-de-js)
 - [Clase - 02: Nuevas Funcionalidades](#clase-02-nuevas-funcionalidades)
 - [Clase - 03: Sincronia y Asincronia](#clase-03-sincronia-y-asincronia)
-- [Clase -04: Manejo de Archivos](#clase-04-manejo-de-archivos)
+- [Clase - 04: Manejo de Archivos](#clase-04-manejo-de-archivos)
+- [Clase - 05: Administradores de Paquetes](#clase-05-administradores-de-paquetes-npm)
 
  [Dependencias](#dependencias)
 
@@ -263,10 +264,152 @@ i see you
 Hello Again!
 ```
 
+### Clase 05: Administradores de paquetes (NPM)
+
+#### [Actividad 01](/clase-05/actividad-01.js)
+
+En este ejericio lo que hacmeos es importamos Chalk y luego creamos una funcion para correr sacar un numero random del 1 al 20, lo corremos 1000 veces y vemos cuantas veces sale cada numero y lo mentemos a un objto donde llevamos el conteo
+
+```js
+function getRandomNumbers() {
+ const obj = {};
+ for (let index = 0; index < 1000; index++) {
+  const aleatoreo = parseInt(Math.random() * 20 + 1);
+  if (!obj[aleatoreo]) obj[aleatoreo] = 1;
+  else obj[aleatoreo]++;
+ }
+
+ return obj;
+}
+```
+
+y la usamos para retornar un obj de random number
+
+##### Resultado de Activad 01
+
+podemos correr `node clase-05/actividad-01` desde la raiz y veriamos en la consola lo siguente
+
+ ```js
+ //Random numbers generated!
+{
+  '1': 51,
+  '2': 49,
+  '3': 50,
+  '4': 49,
+  '5': 38,
+  '6': 45,
+  '7': 52,
+  '8': 55,
+  '9': 52,
+  '10': 35,
+  '11': 60,
+  '12': 50,
+  '13': 56,
+  '14': 39,
+  '15': 47,
+  '16': 49,
+  '17': 57,
+  '18': 53,
+  '19': 65,
+  '20': 48
+}
+```
+
+#### [Actividad 02](/clase-05/actividad-02.js)
+
+En este ejercicio lo que hacemos es crear una classe donde recibidmos un usario y usamos crypto para encriptar el usario y esconder los datos del usario
+
+se hace con
+
+```js
+// Generate a random 128-byte salt and convert it to a base64 string.
+  const salt = crypto.randomBytes(128).toString("base64");
+
+  // Hash the user's password using SHA-256 algorithm and the generated salt.
+  user.password = crypto
+   .createHmac("sha256", salt)
+   .update(user.password)
+   .digest("base64");
+```
+
+##### Resultado de Actividad 02
+
+Si corremos `node clase-05/actividad-02` veriamos que el resultado de nuestro usario es lo siguente
+
+```js
+[
+  {
+    name: 'Miguel',
+    lastName: 'Chavez',
+    age: 30,
+    password: 'KfqGTkXnarAQjuBVQdouNzVN7bfs/Ru2vGzSFg4EmzY='
+  }
+]
+```
+
+#### [Actividad 3](/clase-05/actividad-03.js)
+
+En este ejericio lo que hicimos era un calcludador de edad donde recibimos edad y caluclamos cuando leapyears han pasado, yo lo incremente a incluir varias otras vechas usando moment para retornar mas informacion
+
+```js
+function calculateAge(dateOfBirth) {
+const currentDate = moment(); // Store the current date
+const dob = moment(dateOfBirth, "YYYY-MM-DD"); // Store the date of birth
+
+ if (!dob.isValid()) {
+  console.log("Invalid date of birth.");
+  return;
+ }
+
+ const christmas = moment({ month: 11, day: 25 });
+ const halloween = moment({ month: 9, day: 31 });
+
+  // Calculate the number of leap years between DOB and current date
+ let leapYears = 0;
+ for (let year = dob.year(); year <= currentDate.year(); year++) {
+  if (moment({ year }).isLeapYear()) {
+   leapYears++;
+  }
+ }
+
+ console.log(
+  chalk.greenBright(`You've lived through ${leapYears} leap years! `)
+ );
+}
+```
+
+ Primero, verifica si la fecha de nacimiento es válida. Luego, calcula el número de años bisiestos contando cuántos años dentro de ese rango son bisiestos. Finalmente, muestra la cantidad de años bisiestos en la consola.
+
+##### Resultado de Actividad 03
+
+si corremos `node clase-05/actividad-03` con la edad de del usario que tenemos en el codigo
+
+```js
+// Usage example:
+const dateOfBirth = "1990-10-20"; // Replace with your actual date of birth
+calculateAge(dateOfBirth);
+```
+
+Lo que nos retorna seria
+
+```console
+Program started!
+Your age is 32 years.
+That's about 1,036,535,164 seconds!
+You've been alive for 11,996 days.
+You've been alive for 394 months!
+You've lived through 131 seasons!
+You've seen 33 Christmases! 
+You've celebrated 33 Halloweens! 
+You've lived through 8 leap years! 
+```
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.
 - [fs](https://nodejs.org/api/fs.html): para el manejo de archivos
+- [crypto](https://nodejs.org/api/crypto.html): es para la encriptacion de datos usando sha-256
+- [moment](https://momentjs.com/): es para recibir dias y fechas importantes
 
 ## Agradecimientos
 

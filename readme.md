@@ -8,10 +8,13 @@
 - [Clase - 01: Principios de JS](#clase-01-principios-de-js)
 - [Clase - 02: Nuevas Funcionalidades](#clase-02-nuevas-funcionalidades)
 - [Clase - 03: Sincronia y Asincronia](#clase-03-sincronia-y-asincronia)
+- [Clase -04: Manejo de Archivos](#clase-04-manejo-de-archivos)
+
+ [Dependencias](#dependencias)
 
 ## Como usar este repo
 
-iniciamos despues de descargar con `npm i` para instalar dependencias
+iniciamos despues de descargar con `npm i` para instalar las [dependencias](#dependencias)
 
 Puedes correr el código dependiendo de la carpeta utilizando la siguiente estructura: `node clase-[X]/[elarchivo que quieres correr].js.` En cada sección, proporcionaré la ruta de cómo ejecutarlo.
 
@@ -226,7 +229,7 @@ async function calculator() {
 }
 ```
 
-##### Resultado
+##### Resultado de Calculador
 
 y el resultado que podriamos ver seria
 
@@ -236,3 +239,39 @@ y el resultado que podriamos ver seria
 25
 1
 ```
+
+### Clase 04: Manejo de Archivos
+
+Este ejercicio demuestra cómo manipular archivos utilizando Node.js. El código crea un archivo llamado `hello.txt`, escribe "Hello World!" en él, luego sobrescribe ese contenido con "i see you". Luego, verifica la existencia del archivo, lo lee, agrega "Hello Again!" y finalmente elimina el archivo.
+
+#### Archivo
+
+- [archivo.js](/clase-03/archivo.js)
+
+#### Uso
+
+Puedes probar este ejercicio ejecutando el archivo `archivo.js` desde la carpeta `clase-03` utilizando Node.js:
+
+`node clase-04/ejercicio-01-sync.js`
+
+El código mostrará mensajes en la consola para indicar cada paso del proceso.
+
+```js
+File written successfully!
+i see you
+i see you
+Hello Again!
+```
+
+## Dependencias
+
+- [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.
+- [fs](https://nodejs.org/api/fs.html): para el manejo de archivos
+
+## Agradecimientos
+
+Quiero expresar mi sincero agradecimiento a la escuela [Coderhouse](https://coderhouse.com.mx/) por proporcionar valiosa información y recursos que han contribuido en gran medida a mi aprendizaje en el campo de la programación backend. Este repositorio es el resultado de ese aprendizaje y de la oportunidad de poner en práctica lo que he aprendido.
+
+Además, quiero invitar a cualquier persona interesada en este proyecto a contribuir y mejorar. Si tienes correcciones, sugerencias o mejoras, no dudes en realizar un pull request. Estoy dispuesto a revisar y fusionar las contribuciones de manera colaborativa para hacer de este repositorio una fuente de conocimiento más útil.
+
+¡Gracias por tu interés y apoyo!

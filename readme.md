@@ -2,6 +2,8 @@
 
 ## Index
 
+[Modulo - 01](#modulo-1)
+
 - [Clase - 00: Principios de Backend](#clase-0-principios-de-programación-backend)
 - [Clase - 01: Principios de JS](#clase-01-principios-de-js)
 
@@ -12,10 +14,6 @@ iniciamos despues de descargar con `npm i` para instalar dependencias
 Puedes correr el código dependiendo de la carpeta utilizando la siguiente estructura: `node clase-[X]/[elarchivo que quieres correr].js.` En cada sección, proporcionaré la ruta de cómo ejecutarlo.
 
 Asegúrate de reemplazar` [X] `con el número de clase correspondiente y `[elarchivo que quieres correr]` con el nombre del archivo que deseas ejecutar.
-
-### Archivos importantes
-
-- `index.js` - Archivo principal que corre todo
 
 ## Modulo 1
 

@@ -30,3 +30,7 @@ export default function longestWord(string) {
 		return longestWords; // Return the array of longest words
 	}
 }
+
+console.log(longestWord("Hello my name is John"));
+
+console.log(longestWord("The quick brown fox jumps over the lazy dog"));

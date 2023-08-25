@@ -16,3 +16,8 @@ export default function isReverseInt(num1, num2) {
 
 	return false;
 }
+
+console.log(isReverseInt(123, 321)); // true
+console.log(isReverseInt(-123, -321)); // true
+console.log(isReverseInt(123, 123)); // false
+console.log(isReverseInt(-123, 321)); // false

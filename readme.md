@@ -10,6 +10,7 @@
 - [Clase - 03: Sincronia y Asincronia](#clase-03-sincronia-y-asincronia)
 - [Clase - 04: Manejo de Archivos](#clase-04-manejo-de-archivos)
 - [Clase - 05: Administradores de Paquetes](#clase-05-administradores-de-paquetes-npm)
+- [Clase - 06: Servidores Web](#clase-06-servidores-web)
 
  [Dependencias](#dependencias)
 
@@ -404,12 +405,50 @@ You've celebrated 33 Halloweens!
 You've lived through 8 leap years! 
 ```
 
+### Clase 06: Servidores Web
+
+#### Ejercicio [index.js](/clase-06/index.js)
+
+En este ejericcio usamos expres para correar un puerto que retorna a la consola el servidor, luego creamos 2 rutas
+
+```js
+// 04 create server routes
+app.get("/", (req, res) => {
+ res.send("Hello World!");
+});
+app.get("/users", (req, res) => {
+ res.json(users);
+});
+
+app.get("/users/:id", (req, res) => {
+ // get id from url params
+ const id = parseInt(req.params.id);
+ // find user by id
+ const user = users.find((user) => user.id === id);
+ // if no user found, respond with 404
+ if (!user) return res.status(404).send("User not found");
+ // else return user
+ res.json(user);
+});
+```
+
+y cuando vamos a nuestro broweser o algun cliente como postman o thunderclient y ingresamos a las rutas podemos recibir los usarios que estan en una variable.
+
+##### Resultado Index.js
+
+si corremos `node clase-06/index.js` y vamos a la ruta `http://localhost:3000/users/1` reciberiamos u n Json.
+
+```json
+{"id":1,"name":"John","last":"snow","age":30}
+```
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.
 - [fs](https://nodejs.org/api/fs.html): para el manejo de archivos
 - [crypto](https://nodejs.org/api/crypto.html): es para la encriptacion de datos usando sha-256
 - [moment](https://momentjs.com/): es para recibir dias y fechas importantes
+- [express](https://expressjs.com/): es para corerr servidores con node
 
 ## Agradecimientos
 

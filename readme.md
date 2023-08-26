@@ -442,6 +442,67 @@ si corremos `node clase-06/index.js` y vamos a la ruta `http://localhost:3000/us
 {"id":1,"name":"John","last":"snow","age":30}
 ```
 
+### Clase 07: Express Avansado
+
+En esta clase, hemos creado una API REST simple utilizando Express, un marco de aplicación web de Node.js.
+
+#### [Creacion del Servidor](/clase-07/app.js)
+
+Rutas de la API
+
+En este Ejericico defenimos varias rutas para la API que permiten realizar operaciones CRUD en una colección de usuarios.
+
+- *Obtener un Usuario por ID*
+
+```js
+app.get("/users/:id", (req, res) => {
+  const result = users.find((user) => user.id === parseInt(req.params.id));
+  if (result) {
+    res.json({ status: "success", payload: result });
+  } else {
+    res.status(404).send("User not found");
+  }
+});
+
+```
+
+- *Obtener Todos los Usuarios*
+
+```js
+app.get("/users", (req, res) => {
+  res.json({ status: "success", payload: users });
+});
+```
+
+- *Crear un Nuevo Usuario*
+
+```js
+app.post("/users", (req, res) => {
+  // Código para crear un nuevo usuario y agregarlo a la colección
+  res.status(201).json({ status: "success", payload: user });
+});
+```
+
+- *Actualizar un Usuario Existente*
+
+```js
+app.put("/users/:id", (req, res) => {
+  // Código para actualizar un usuario existente
+  res.json({ status: "success", payload: updatedUser });
+});
+```
+
+- *Eliminar un Usuario por ID*
+
+```js
+app.delete("/users/:id", (req, res) => {
+  // Código para eliminar un usuario por ID
+  res.json({ status: "success", payload: deletedUser });
+});
+```
+
+Este código crea una API REST básica que puede manejar solicitudes para obtener, crear, actualizar y eliminar usuarios. Cada ruta realiza una operación específica en la colección de usuarios y responde con un mensaje de éxito o error según corresponda.
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.

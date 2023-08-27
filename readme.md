@@ -513,6 +513,7 @@ En esta clase, hemos introducido una nueva estructura de carpetas para organizar
 
 Hemos reorganizado nuestro proyecto de la siguiente manera:
 
+- **public**: En esta carpeta agregamos un archivo `index.html` que sera usado para un formulado para crear pets.
 - **data**: Esta carpeta contiene el archivo `database.json`, que actúa como nuestra base de datos simulada. Aquí almacenaremos datos relacionados con nuestra aplicación.
 
 - **src**: Esta carpeta contiene el código fuente de nuestra aplicación.

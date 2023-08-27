@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-100">
 
 <head>
     <title>Title</title>
@@ -13,17 +13,32 @@
 
 </head>
 
-<body class="bg-dark  h-100">
+<body class="d-flex flex-column h-100  bg-dark">
+
     <header>
         <!-- place navbar here -->
     </header>
-    <main class="bg-dark m-auto d-flex justify-content-center align-content-center">
-        <section class="bg-light rounded-2 container">
+    <main class="flex-grow-1 d-flex justify-content-center align-items-center">
+        <section class="bg-light rounded-2 container p-4 ">
+            <h1>Add your Doggo's Name</h1>
 
-            <h1>Test</h1>
+            <form action="/pets" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Dog's Name:</label>
+                    <input type="text" id="name" name="name" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="type" class="form-label">Dog's Type:</label>
+                    <input type="text" id="type" name="type" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </section>
     </main>
-    <footer>
+
+
+    <footer class="mt-auto">
         <!-- place footer here -->
     </footer>
     <!-- Bootstrap JavaScript Libraries -->

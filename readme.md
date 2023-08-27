@@ -521,7 +521,7 @@ Hemos reorganizado nuestro proyecto de la siguiente manera:
 
   - **router**: Aquí definiremos las rutas de nuestra API y cómo manejar las solicitudes entrantes.
 
-#### [Archivo app.js](/clase-08/src/app.js)
+##### [Archivo app.js](/clase-08/src/app.js)
 
 Este archivo es el punto de entrada principal de la aplicación Express. Aquí se crean las rutas y se inicia el servidor web.
 
@@ -535,7 +535,7 @@ app.listen(3000, () => {
 });
 ```
 
-#### [Archivo productManager.js](/clase-08/src/models/ProductManager.js)
+##### [Archivo productManager.js](/clase-08/src/models/ProductManager.js)
 
 Este archivo contiene la clase ProductManager, que se encarga de gestionar productos y la base de datos simulada en el archivo database.json.
 
@@ -549,7 +549,7 @@ Algunas de las funciones clave de esta clase incluyen:
 - `deleteProductById`: Elimina un producto por su ID.
 - `updateProductById`: Actualiza un producto por su ID
 
-#### [Archivo product.router.js](/clase-08/src/router/products.router.js)
+##### [Archivo product.router.js](/clase-08/src/router/products.router.js)
 
 Este archivo define las rutas relacionadas con productos utilizando Express Router. También crea una instancia de ProductManager para interactuar con la base de datos simulada.
 

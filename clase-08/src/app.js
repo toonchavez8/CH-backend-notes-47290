@@ -1,14 +1,16 @@
 import chalk from "chalk";
 import express from "express";
-import router from "./router/products.router.js";
+import productrouter from "./router/products.router.js";
 
 const app = express();
 
-app.get("/", (req, res) => {
-	res.json("home page");
-});
+//allow expres to read json
+app.use(express.json());
 
-app.use("/products", router);
+//send html via routes
+app.use(express.static("./clase-08/public"));
+
+app.use("/products", productrouter);
 
 app.listen(3000, () => {
 	console.log(chalk.green("server up"));

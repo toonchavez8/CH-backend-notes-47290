@@ -13,6 +13,7 @@
 - [Clase - 06: Servidores Web](#clase-06-servidores-web)
 - [Clase - 07: Express Avanzado](#clase-07-express-avansado)
 - [Clase - 08: Router y Multer](#clase-08-router-y-multer)
+- [Clase - 09: Motores y Plantilals](#clase-09-motores-y-plantillas)
 
  [Dependencias](#dependencias)
 
@@ -637,6 +638,8 @@ Solo se debe de usar cuando el metodo en un formulario es `method="post"`
 </form>
 ```
 
+### Clase 09: Motores y Plantillas
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.
@@ -645,6 +648,7 @@ Solo se debe de usar cuando el metodo en un formulario es `method="post"`
 - [moment](https://momentjs.com/): es para recibir dias y fechas importantes
 - [express](https://expressjs.com/): es para corerr servidores con node
 - [multer](https://www.npmjs.com/package/multer): se encarga de manuliplar los middlewares
+- [handlebars](https://handlebarsjs.com/guide/#custom-helpers): Handlebars es una forma de escirbir plantillas para que te retorne html
 
 ## Agradecimientos
 

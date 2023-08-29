@@ -561,6 +561,82 @@ Algunas de las rutas definidas incluyen:
 
 La instancia de `ProductManager` se utiliza para realizar operaciones en la base de datos simulada y devolver resultados a través de estas rutas.
 
+##### [pets.router.js](/clase-08/src/router/pets.router.js)
+
+Aqui creamos dos rutas donde permetimos el uso de `get` y `post` y usamos dos tipos de `middlewares`
+
+Dos tipos de `Middleware`
+
+- `allowNewPets`
+
+```js
+const petsActive = true;
+
+const allowNewPets = (req, res, next) => {
+ if (!petsActive)
+  return res.status(500).json({
+   status: "error",
+   error: "its not time to add pets",
+  });
+ next();
+};
+
+router.post("/", allowNewPets, (req, res) => {
+  // rest of the code
+})
+```
+
+aqui creamos un boolean que decidi nos sirve para ver si podemos agregar mas perros en es este ejemplo y si no rechaza la solicitud y si pasa le da `next()` lo cual permite que en el router post continue con la solicitud.
+
+- `multer`
+
+```js
+
+import multer from "multer";
+
+// multer set up middleware
+const storage = multer.diskStorage({
+ destination: function (req, file, cb) {
+  cb(null, "./clase-08/public");
+ },
+ filename: function (req, file, cb) {
+  cb(null, file.originalname);
+ },
+});
+
+const uploader = multer({ storage });
+
+router.post("/", uploader.single("file"), (req, res) => {
+
+  if (!req.file)
+  return res.status(400).json({ status: "error", error: "no file added" });
+
+  // resto del codigo
+})
+```
+
+aqui lo que hacemos es definir si recibmos un archivo y lo pasamos a rguardar con el nombre orignal y en el momemto de hacer el post checmos si tenemos el archivo y si no retornamos un 400
+
+#### [enctype](https://www.w3schools.com/tags/att_form_enctype.asp)
+
+Para hacer que el formulario mande la imagen le tenemos que agregar como atributo `enctype="multipart/form-data"` para que funcione bien y esto va espcificar como los datos del formulario van hacer enviados al servidor.  
+
+Solo se debe de usar cuando el metodo en un formulario es `method="post"`
+
+```html
+<form action="/pets" method="post" enctype="multipart/form-data">
+  <div class="mb-3 px-2">
+    <label for="name" class="form-label">Dog's Name:</label>
+    <input type="text" id="name" name="name" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="type" class="form-label">Dogs Img:</label>
+    <input type="file" id="type" name="file" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+```
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.

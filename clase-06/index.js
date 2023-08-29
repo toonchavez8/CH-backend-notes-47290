@@ -1,24 +1,45 @@
 import chalk from "chalk";
-import http from "http";
 
-// Create an HTTP server using the http.createServer() method
-const server = http.createServer((req, res) => {
-	// This function is a request listener that handles incoming HTTP requests
+// 01 import express from express
+import express from "express";
 
-	// Log a message to the console when a request is received
-	console.log("Request received");
+const users = [
+	{
+		id: 1,
+		name: "John",
+		last: "snow",
+		age: 30,
+	},
+	{
+		id: 2,
+		name: "Jane",
+		last: "Doe",
+		age: 25,
+	},
+];
+// 02 declare express app
+const app = express();
 
-	// Send an HTTP response with a status code of 200 (OK) and a message "hello world"
-	res.end("hello world");
+// 04 create server routes
+app.get("/", (req, res) => {
+	res.send("Hello World!");
+});
+app.get("/users", (req, res) => {
+	res.json(users);
 });
 
-// Define the port number on which the server will listen
-const port = 3000;
+app.get("/users/:id", (req, res) => {
+	// get id from url params
+	const id = parseInt(req.params.id);
+	// find user by id
+	const user = users.find((user) => user.id === id);
+	// if no user found, respond with 404
+	if (!user) return res.status(404).send("User not found");
+	// else return user
+	res.json(user);
+});
 
-// Start the server and listen on the specified port
-server.listen(port, () => {
-	// This callback function is executed when the server starts listening
-
-	// Log a colored message to the console using chalk indicating that the server is running
-	console.log(chalk.green(`Server running on port ${port}`));
+// 03 define port and start server
+app.listen(3000, () => {
+	console.log(chalk.blue("Server started on port 3000"));
 });

@@ -74,7 +74,7 @@ tm.events = {
 };
 console.log(chalk.green("starting... ticketmanager"));
 
-tm.user = { name: "John Doe" };
+tm.user = { name: "John Doe", age: 30, event: 1 };
 
 console.log(chalk.yellow(`name: "John Doe", age: 30, event: 5`));
 console.log("user updated", tm.user);

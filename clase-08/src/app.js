@@ -8,6 +8,9 @@ const app = express();
 //allow expres to read json
 app.use(express.json());
 
+//use encoder
+app.use(express.urlencoded({ extended: true }));
+
 //send html via routes
 app.use(express.static("./clase-08/public"));
 

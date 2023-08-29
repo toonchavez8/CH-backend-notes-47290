@@ -11,6 +11,8 @@
 - [Clase - 04: Manejo de Archivos](#clase-04-manejo-de-archivos)
 - [Clase - 05: Administradores de Paquetes](#clase-05-administradores-de-paquetes-npm)
 - [Clase - 06: Servidores Web](#clase-06-servidores-web)
+- [Clase - 07: Express Avanzado](#clase-07-express-avansado)
+- [Clase - 08: Router y Multer](#clase-08-router-y-multer)
 
  [Dependencias](#dependencias)
 
@@ -503,6 +505,138 @@ app.delete("/users/:id", (req, res) => {
 
 Este código crea una API REST básica que puede manejar solicitudes para obtener, crear, actualizar y eliminar usuarios. Cada ruta realiza una operación específica en la colección de usuarios y responde con un mensaje de éxito o error según corresponda.
 
+### Clase 08: Router y Multer
+
+En esta clase, hemos introducido una nueva estructura de carpetas para organizar mejor nuestro proyecto y hemos comenzado a trabajar en la creación de una base de datos simulada utilizando un archivo JSON.
+
+#### Estructura de Carpetas
+
+Hemos reorganizado nuestro proyecto de la siguiente manera:
+
+- **public**: En esta carpeta agregamos un archivo `index.html` que sera usado para un formulado para crear pets.
+- **data**: Esta carpeta contiene el archivo `database.json`, que actúa como nuestra base de datos simulada. Aquí almacenaremos datos relacionados con nuestra aplicación.
+
+- **src**: Esta carpeta contiene el código fuente de nuestra aplicación.
+
+  - **models**: En esta carpeta, colocaremos los modelos de datos que representan las entidades de nuestra aplicación, como usuarios, productos, etc.
+
+  - **router**: Aquí definiremos las rutas de nuestra API y cómo manejar las solicitudes entrantes.
+
+##### [Archivo app.js](/clase-08/src/app.js)
+
+Este archivo es el punto de entrada principal de la aplicación Express. Aquí se crean las rutas y se inicia el servidor web.
+
+```js
+// Usar el enrutador para las rutas relacionadas con productos
+app.use("/products", router);
+
+// Iniciar el servidor en el puerto 3000
+app.listen(3000, () => {
+  console.log(chalk.green("Server up"));
+});
+```
+
+##### [Archivo productManager.js](/clase-08/src/models/ProductManager.js)
+
+Este archivo contiene la clase ProductManager, que se encarga de gestionar productos y la base de datos simulada en el archivo database.json.
+
+Algunas de las funciones clave de esta clase incluyen:
+
+- `loadDatabase`: Carga los datos desde el archivo database.json en la inicialización.
+- `saveDatabase`: Guarda los datos en el archivo database.json.
+- `getProducts`: Obtiene todos los productos.
+- `addProduct`: Agrega un nuevo producto a la base de datos.
+- `getProductbyId`: Obtiene un producto por su ID.
+- `deleteProductById`: Elimina un producto por su ID.
+- `updateProductById`: Actualiza un producto por su ID
+
+##### [Archivo product.router.js](/clase-08/src/router/products.router.js)
+
+Este archivo define las rutas relacionadas con productos utilizando Express Router. También crea una instancia de ProductManager para interactuar con la base de datos simulada.
+
+Algunas de las rutas definidas incluyen:
+
+- `GET/`: Obtiene una lista de productos con un límite opcional.
+- `GET/:id`: Obtiene un producto por su ID.
+
+La instancia de `ProductManager` se utiliza para realizar operaciones en la base de datos simulada y devolver resultados a través de estas rutas.
+
+##### [pets.router.js](/clase-08/src/router/pets.router.js)
+
+Aqui creamos dos rutas donde permetimos el uso de `get` y `post` y usamos dos tipos de `middlewares`
+
+Dos tipos de `Middleware`
+
+- `allowNewPets`
+
+```js
+const petsActive = true;
+
+const allowNewPets = (req, res, next) => {
+ if (!petsActive)
+  return res.status(500).json({
+   status: "error",
+   error: "its not time to add pets",
+  });
+ next();
+};
+
+router.post("/", allowNewPets, (req, res) => {
+  // rest of the code
+})
+```
+
+aqui creamos un boolean que decidi nos sirve para ver si podemos agregar mas perros en es este ejemplo y si no rechaza la solicitud y si pasa le da `next()` lo cual permite que en el router post continue con la solicitud.
+
+- `multer`
+
+```js
+
+import multer from "multer";
+
+// multer set up middleware
+const storage = multer.diskStorage({
+ destination: function (req, file, cb) {
+  cb(null, "./clase-08/public");
+ },
+ filename: function (req, file, cb) {
+  cb(null, file.originalname);
+ },
+});
+
+const uploader = multer({ storage });
+
+router.post("/", uploader.single("file"), (req, res) => {
+
+  if (!req.file)
+  return res.status(400).json({ status: "error", error: "no file added" });
+
+  // resto del codigo
+})
+```
+
+aqui lo que hacemos es definir si recibmos un archivo y lo pasamos a rguardar con el nombre orignal y en el momemto de hacer el post checmos si tenemos el archivo y si no retornamos un 400
+
+#### [enctype](https://www.w3schools.com/tags/att_form_enctype.asp)
+
+Para hacer que el formulario mande la imagen le tenemos que agregar como atributo `enctype="multipart/form-data"` para que funcione bien y esto va espcificar como los datos del formulario van hacer enviados al servidor.  
+
+Solo se debe de usar cuando el metodo en un formulario es `method="post"`
+
+```html
+<form action="/pets" method="post" enctype="multipart/form-data">
+  <div class="mb-3 px-2">
+    <label for="name" class="form-label">Dog's Name:</label>
+    <input type="text" id="name" name="name" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="type" class="form-label">Dogs Img:</label>
+    <input type="file" id="type" name="file" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+```
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.
@@ -510,6 +644,7 @@ Este código crea una API REST básica que puede manejar solicitudes para obtene
 - [crypto](https://nodejs.org/api/crypto.html): es para la encriptacion de datos usando sha-256
 - [moment](https://momentjs.com/): es para recibir dias y fechas importantes
 - [express](https://expressjs.com/): es para corerr servidores con node
+- [multer](https://www.npmjs.com/package/multer): se encarga de manuliplar los middlewares
 
 ## Agradecimientos
 

@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-console.log(chalk.green("starting Ejecicio 01...  "));
+console.log(chalk.green("starting Keys...  "));
 
 const objetos = [
 	{

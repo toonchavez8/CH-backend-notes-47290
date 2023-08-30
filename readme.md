@@ -640,6 +640,29 @@ Solo se debe de usar cuando el metodo en un formulario es `method="post"`
 
 ### Clase 09: Motores y Plantillas
 
+En esta Clase metimos `handlebars` que nos ayudar retornar html desde variables que vienen desde el server.
+
+#### Estrucutra de Handlebars
+
+para este clase creamos una nueva carpeta llamada `Views` de lo cual tenia dos achivos `home.handlebars` y `foods.handlebars` y esa se mandan a llamar desde nuestro routers
+
+```js
+
+router.get("/", (req, res) => {
+ res.render("home", { user: "miguel" });
+});
+```
+
+Por ejemplo la ruta `get` `/users/` nos retorna la pagina de `main.handlebars` que es la plantilla y remplza su `body` por el `home.handlebars`
+
+```html
+ <span
+    class="capitalize bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-500"
+   >{{user}}!</span>
+```
+
+usando `{{user}}` que viene desde la ruta `/users/` por el router aqui se imprime de forma dinamica y lo pasa a la pagina como un Json y el valiable lo usa y recibe.
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.

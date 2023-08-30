@@ -14,6 +14,7 @@
 - [Clase - 07: Express Avanzado](#clase-07-express-avansado)
 - [Clase - 08: Router y Multer](#clase-08-router-y-multer)
 - [Clase - 09: Motores y Plantilals](#clase-09-motores-y-plantillas)
+- [Clase - 10: WebSockets](#clase-10-websockets)
 
  [Dependencias](#dependencias)
 
@@ -663,6 +664,68 @@ Por ejemplo la ruta `get` `/users/` nos retorna la pagina de `main.handlebars` q
 
 usando `{{user}}` que viene desde la ruta `/users/` por el router aqui se imprime de forma dinamica y lo pasa a la pagina como un Json y el valiable lo usa y recibe.
 
+### Clase 10: Websockets
+
+En esta clase importamos `socket io` a nuestro `pkg.jsn` iniciamos un servidor con `express` y luego creamos un `socket server` en nuestro `app.js`
+
+#### [app.js](/clase-10/src/app.js)
+
+Se inicia el servidor en el puerto 3000 y se muestra un mensaje en la consola para indicar que el servidor está en funcionamiento. y luego usando el Server de socket lo declaramos nuesto server local como el nuevo server.
+
+```js
+import { Server } from "socket.io";
+
+const httpServer = app.listen(port, () => {
+ console.log(chalk.green(`Server running on port ${port}`));
+});
+
+const socketServer = new Server(httpServer);
+```
+
+Se establece una conexión de socket cuando un cliente se conecta al servidor. Se emite un evento "history" al cliente que contiene un registro de mensajes anteriores.
+
+```js
+// Aqui en cuanto detecto conection mando 2 eventos y si detecto desconnection mando alerta en la consola
+socketServer.on("connection", (socketClient) => {
+ console.log(chalk.yellow(`Client ${socketClient.id} connected ` ));
+
+ // Aqui en cuanto se connecta un cliente emitimos de entrada todo el log en un evento llamado history
+ socketClient.emit("history", log);
+
+ socketClient.on("message", (data) => {socketServer.emit("message", log);})
+
+ // aqui aviso que alguien se desconecto por si mas adelanto mandamos alerta de ya no esta en linea el usario
+ socketClient.on("disconnect", () => {
+  console.log(chalk.red(`Client ${socketClient.id} disconnected`));
+ });
+});
+
+```
+
+#### [index.html](/clase-10/public/index.html)
+
+Aqui en este index solo uso tailwind para hacerlo ver bonito y luego tengo un script que de socket y un index.js en public tambien que se conecta socket server como socket client
+
+#### [index.js](/clase-10/public/index.js)
+
+Aqui lo que pasa es en cuanto en cliente detecta un evento de desde `history` o `message` corre una funcion llamada `displaymessages(data)` donde le pasamos los datos desde que emiten los eventos.
+
+```js
+
+// Aqui en cada ves que se modifique el historial que es en cuanto carga el chat, se renderean todos los mensajes que es una funcion
+socketClient.on("history", (data) => {
+ displayMessages(data);
+});
+
+
+// aqui cuando el cliente detecte que el server mando mensaje se hace un render denuevo actualizando en tiempo real
+socketClient.on("message", (data) => {
+ displayMessages(data);
+ history.scrollTop = history.scrollHeight; // Scroll to the bottom
+});
+
+```
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.
@@ -672,6 +735,7 @@ usando `{{user}}` que viene desde la ruta `/users/` por el router aqui se imprim
 - [express](https://expressjs.com/): es para corerr servidores con node
 - [multer](https://www.npmjs.com/package/multer): se encarga de manuliplar los middlewares
 - [handlebars](https://handlebarsjs.com/guide/#custom-helpers): Handlebars es una forma de escirbir plantillas para que te retorne html
+- [socket.io](https://socket.io/) - maneja los websockets y los puertos para conection entre clientes
 
 ## Agradecimientos
 

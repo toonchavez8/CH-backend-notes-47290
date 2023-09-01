@@ -38,4 +38,7 @@ const io = new Server(server);
 
 io.on("connection", (socket) => {
 	console.log(chalk.yellow("New client connected"));
+	socket.on("productList", (data) => {
+		io.emit("updatedProducts", data);
+	});
 });

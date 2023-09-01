@@ -1,6 +1,6 @@
-<main class="">
-	<section class="max-w-lg mx-auto">
-		<h1 class="text-2xl font-bold mb-4">RealTime products</h1>
+<main class="px-4">
+	<section class="max-w-lg mx-auto mt-10">
+		<h1 class="text-2xl font-bold mb-4 text-white">RealTime products</h1>
 
 		<form
 			action=""
@@ -12,7 +12,7 @@
 					Title
 				</label>
 				<input
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					class="shadow appearance-none border-1 border-bottom border-purple-600 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 					id="title"
 					type="text"
 					placeholder="Title"
@@ -70,59 +70,55 @@
 			</div>
 
 			<div class="mb-4">
-				<label
-					class="block text-gray-700 text-sm font-bold mb-2"
-					for="category"
-				>
-					Category
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="image">
+					Image
 				</label>
 				<input
 					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-					id="category"
+					id="image"
 					type="text"
-					placeholder="Category"
+					placeholder="Image link"
 				/>
 			</div>
 
 			<button
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-				type="submit"
+				id="createBtn"
 			>
 				Create
 			</button>
 		</form>
 	</section>
 
-	<section class="flex-grow">
+	<section class="flex-grow pt-12 pb-24">
 		<div
-			class="table-container mx-auto max-w-4xl border border-1 border-purple-600 rounded-lg"
+			class="table-container mx-auto max-w-4xl rounded-lg border border-purple-600 snap-x snap-start"
+			style="max-height: 600px; overflow-y: scroll;"
 		>
-
-			<table class="table-auto w-full">
+			<table class="table-auto w-full" id="realProductsTable">
 				<thead>
 					<tr class="bg-purple-600 text-white">
 						<th class="px-4 py-2 text-left">ID</th>
 						<th class="px-4 py-2 text-left">Title</th>
-						<th class="px-4 py-2 text-left">Image</th>
-						<th class="px-4 py-2 text-left">Description</th>
-						<th class="px-4 py-2 text-left">Code</th>
-						<th class="px-4 py-2 text-left">Stock</th>
+						<th class="px-4 py-2 text-left hidden md:table-cell">Image</th>
+						<th
+							class="px-4 py-2 text-left hidden md:table-cell"
+						>Description</th>
+						<th class="px-4 py-2 text-left hidden sm:table-cell">Code</th>
+						<th class="px-4 py-2 text-left hidden sm:table-cell">Stock</th>
 						<th class="px-4 py-2 text-left">Price</th>
+						<th class="px-4 py-2 text-center md:text-left">Actions</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody class="text-white">
 					{{#each products}}
-						<tr>
-							<td class="border">
-								<p class="text-lg text-purple-600 text-center">{{this.id}}</p>
-							</td>
-							<td class="border">
-								<p
-									class="text-xl text-purple-600 font-semibold mb-2"
-								>{{this.title}}</p>
-							</td>
-							<td class="border">
-								<div class="aspect-square w-32 h-32 mb-2">
+						<tr class="even:bg-gray-600 even:bg-opacity-10">
+							<td class="border-b border-purple-600 px-4 py-2">{{this.id}}</td>
+							<td
+								class="border-b border-purple-600 px-4 py-2"
+							>{{this.title}}</td>
+							<td class="hidden md:table-cell border-b border-purple-600">
+								<div class="aspect-square w-24 h-24">
 									<img
 										src="{{this.thumbnail}}"
 										alt="{{this.title}}"
@@ -130,23 +126,28 @@
 									/>
 								</div>
 							</td>
-							<td class="border">
-								<p
-									class="text-lg text-purple-600 text-center"
-								>{{this.description}}</p>
+							<td class="hidden md:table-cell border-b border-purple-600">
+								<p class="text-center">{{this.description}}</p>
 							</td>
-							<td class="border">
-								<p class="text-lg text-purple-600 text-center">{{this.code}}</p>
-							</td>
-							<td class="border">
-								<p
-									class="text-lg text-purple-600 text-center"
-								>{{this.stock}}</p>
-							</td>
-							<td class="border">
-								<p
-									class="text-lg text-purple-600 text-center"
-								>{{this.price}}</p>
+							<td
+								class="border-b border-purple-600 px-4 py-2 hidden sm:table-cell"
+							>{{this.code}}</td>
+							<td
+								class="border-b border-purple-600 px-4 py-2 hidden sm:table-cell"
+							>{{this.stock}}</td>
+							<td
+								class="border-b border-purple-600 px-4 py-2"
+							>{{this.price}}</td>
+							<td
+								class="border-b border-purple-600 px-4 py-2 text-center md:text-left"
+							>
+								<button
+									class="text-lg text-white-600 bg-red-600 rounded px-4 py-0 md:py-2 delete-product-btn"
+									data-product-id="{{this.id}}"
+								>
+									Delete
+								</button>
+
 							</td>
 						</tr>
 					{{/each}}
@@ -154,12 +155,11 @@
 			</table>
 		</div>
 	</section>
-</main>
 
+</main>
+<script src="/index.js" type="module"></script>
 <style>
-	.table-container { max-height: 600px; /* Set the maximum height for the table
-	*/ overflow-y: scroll; /* Enable vertical scrolling */ } th { position:
-	sticky; top: 0; background-color: #6b46c1; /* Your header background color */
-	color: white; /* Header text color */ z-index: 2; /* Ensure it's above the
-	table content */ }
+	.table-container { max-height: 600px; */ overflow-y: scroll; } th {
+	position:sticky; top: 0; background-color: rgb(147, 51, 234); color: white;
+	z-index: 2; }
 </style>

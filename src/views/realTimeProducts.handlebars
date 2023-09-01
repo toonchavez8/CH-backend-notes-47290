@@ -1,0 +1,165 @@
+<main class="">
+	<section class="max-w-lg mx-auto">
+		<h1 class="text-2xl font-bold mb-4">RealTime products</h1>
+
+		<form
+			action=""
+			id="createForm"
+			class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+		>
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+					Title
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="title"
+					type="text"
+					placeholder="Title"
+				/>
+			</div>
+
+			<div class="mb-4">
+				<label
+					class="block text-gray-700 text-sm font-bold mb-2"
+					for="description"
+				>
+					Description
+				</label>
+				<textarea
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="description"
+					placeholder="Description"
+				></textarea>
+			</div>
+
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="price">
+					Price
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="price"
+					type="number"
+					placeholder="Price"
+				/>
+			</div>
+
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="code">
+					Code
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="code"
+					type="text"
+					placeholder="Code"
+				/>
+			</div>
+
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2" for="stock">
+					Stock
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="stock"
+					type="number"
+					placeholder="Stock"
+				/>
+			</div>
+
+			<div class="mb-4">
+				<label
+					class="block text-gray-700 text-sm font-bold mb-2"
+					for="category"
+				>
+					Category
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="category"
+					type="text"
+					placeholder="Category"
+				/>
+			</div>
+
+			<button
+				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+				type="submit"
+			>
+				Create
+			</button>
+		</form>
+	</section>
+
+	<section class="flex-grow">
+		<div
+			class="table-container mx-auto max-w-4xl border border-1 border-purple-600 rounded-lg"
+		>
+
+			<table class="table-auto w-full">
+				<thead>
+					<tr class="bg-purple-600 text-white">
+						<th class="px-4 py-2 text-left">ID</th>
+						<th class="px-4 py-2 text-left">Title</th>
+						<th class="px-4 py-2 text-left">Image</th>
+						<th class="px-4 py-2 text-left">Description</th>
+						<th class="px-4 py-2 text-left">Code</th>
+						<th class="px-4 py-2 text-left">Stock</th>
+						<th class="px-4 py-2 text-left">Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each products}}
+						<tr>
+							<td class="border">
+								<p class="text-lg text-purple-600 text-center">{{this.id}}</p>
+							</td>
+							<td class="border">
+								<p
+									class="text-xl text-purple-600 font-semibold mb-2"
+								>{{this.title}}</p>
+							</td>
+							<td class="border">
+								<div class="aspect-square w-32 h-32 mb-2">
+									<img
+										src="{{this.thumbnail}}"
+										alt="{{this.title}}"
+										class="w-full h-full object-cover"
+									/>
+								</div>
+							</td>
+							<td class="border">
+								<p
+									class="text-lg text-purple-600 text-center"
+								>{{this.description}}</p>
+							</td>
+							<td class="border">
+								<p class="text-lg text-purple-600 text-center">{{this.code}}</p>
+							</td>
+							<td class="border">
+								<p
+									class="text-lg text-purple-600 text-center"
+								>{{this.stock}}</p>
+							</td>
+							<td class="border">
+								<p
+									class="text-lg text-purple-600 text-center"
+								>{{this.price}}</p>
+							</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</section>
+</main>
+
+<style>
+	.table-container { max-height: 600px; /* Set the maximum height for the table
+	*/ overflow-y: scroll; /* Enable vertical scrolling */ } th { position:
+	sticky; top: 0; background-color: #6b46c1; /* Your header background color */
+	color: white; /* Header text color */ z-index: 2; /* Ensure it's above the
+	table content */ }
+</style>

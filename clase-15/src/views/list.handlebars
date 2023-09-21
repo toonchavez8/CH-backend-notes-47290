@@ -1,0 +1,23 @@
+<section class="container mx-auto py-8 px-4">
+	<h1 class="text-4xl font-semibold text-center mb-8">Pokemon List</h1>
+	<div class="overflow-x-auto">
+		<table
+			class="w-full bg-white border-collapse border border-gray-300 rounded-lg shadow-md"
+		>
+			<thead>
+				<tr>
+					<th class="border border-gray-300 p-3 text-left">Name</th>
+					<th class="border border-gray-300 p-3 text-left">Type</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each Pokemon}}
+					<tr>
+						<td class="border border-gray-300 p-3">{{this.name}}</td>
+						<td class="border border-gray-300 p-3">{{this.type}}</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</section>

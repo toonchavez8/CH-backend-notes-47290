@@ -1,4 +1,4 @@
-# Notas Clase 12
+# Notas
 
 ## Instalamos MongoDb Local
 
@@ -79,3 +79,44 @@ Aquí tienes una lista de comandos adicionales de MongoDB que podrían ser útil
 
 5. **Corroborar la persistencia**:
    - Observa la lista de estudiantes que se muestra en la salida. Deberías ver los 5 estudiantes que agregaste en el paso anterior. Esto confirma que los datos se han persistido en la base de datos "estudiantes".
+
+```bash
+estudiantes> db.estudiantes.find()
+[
+  {
+    _id: ObjectId("650bab89e0e7a076399c30e9"),
+    nombre: 'Miguel',
+    apellido: 'Chavez',
+    curso: 'Backend',
+    correo: 'toonchavez@gmail.com'
+  },
+  {
+    _id: ObjectId("650badc8e0e7a076399c30ea"),
+    name: 'user01',
+    apellido: 'lastname',
+    curso: 'ch01',
+    correo: 'user01@gmail.com'
+  },
+  {
+    _id: ObjectId("650badc8e0e7a076399c30eb"),
+    name: 'user02',
+    apellido: 'lastname',
+    curso: 'ch01',
+    correo: 'user01@gmail.com'
+  },
+  {
+    _id: ObjectId("650badc8e0e7a076399c30ec"),
+    name: 'user03',
+    apellido: 'lastname',
+    curso: 'ch01',
+    correo: 'user03@gmail.com'
+  },
+  {
+    _id: ObjectId("650badc8e0e7a076399c30ed"),
+    name: 'user05',
+    apellido: 'lastname',
+    curso: 'ch01',
+    correo: 'user04@gmail.com'
+  }
+]
+```

@@ -15,6 +15,7 @@
 - [Clase - 08: Router y Multer](#clase-08-router-y-multer)
 - [Clase - 09: Motores y Plantilals](#clase-09-motores-y-plantillas)
 - [Clase - 10: WebSockets](#clase-10-websockets)
+- [Clase - 11: Chat App con WebSockets](#11-chat-app-con-websockets)
 
  [Dependencias](#dependencias)
 
@@ -725,6 +726,8 @@ socketClient.on("message", (data) => {
 });
 
 ```
+
+### 11 Chat app con webSockets
 
 ## Dependencias
 

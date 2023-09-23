@@ -10,7 +10,7 @@ Swal.fire({
 	allowOutsideClick: false,
 }).then((result) => {
 	let user = result.value;
-	document.getElementById("username").innerHTML = user;
+	document.getElementById("username").innerHTML = `Hello ${user}`;
 	let socket = io();
 
 	let chatbox = document.getElementById("chatbox");

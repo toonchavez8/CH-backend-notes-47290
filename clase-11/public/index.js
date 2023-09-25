@@ -21,6 +21,7 @@ function initializeChat(user) {
 	const socket = io();
 	const chatbox = document.getElementById("chatBox");
 	const submitBtn = document.getElementById("submitBtn");
+	const log = document.getElementById("log");
 
 	chatbox.addEventListener("keyup", (event) => {
 		if (event.key === "Enter") {
@@ -39,6 +40,7 @@ function initializeChat(user) {
 		const divLogs = document.getElementById("log");
 		const messages = generateMessages(data, user);
 		divLogs.innerHTML = messages;
+		divLogs.scrollTo(0, divLogs.scrollHeight);
 	});
 }
 

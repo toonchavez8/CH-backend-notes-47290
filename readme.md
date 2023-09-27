@@ -729,6 +729,63 @@ socketClient.on("message", (data) => {
 
 ### 11 Chat app con webSockets
 
+En esta clase hicimos un chat app con websockets usando express y socket.io.
+
+al correr el servidor con `nodemon` y luego abrir el navegador en `http://localhost:3000/` se abre una pagina donde tenemos un chat app donde podemos enviar mensajes y se renderiza en tiempo real, despues de pretuntarte tu nombre con `sweetalert`.
+
+#### [app.js](/clase-11/src/app.js)
+
+Se inicia el servidor en el puerto 3000 y se muestra un mensaje en la consola para indicar que
+el servidor está en funcionamiento. y luego usando el Server de socket lo declaramos nuesto server local como el nuevo server.
+
+```js
+const httpServer = app.listen(port, () => {
+ console.log(`App listening on port ${port}!`);
+});
+
+
+io.on("connection", (socket) => {
+ socket.on("message", (data) => {
+  messages.push(data);
+  io.emit("logs", messages);
+ });
+});
+
+```
+
+#### [index.js](/clase-11/public/index.js)
+
+- **Autenticación de Usuario:**
+  - Cuando la página se carga, SweetAlert2 solicita al usuario que establezca un nombre de usuario para el chat.
+  - Un validador de entrada (`validateUsername`) verifica si el nombre de usuario ingresado es válido (no está vacío).
+
+```js
+   function validateUsername(value) {
+ return !value.trim() && "Please, write a valid username";
+}
+```
+
+- El nombre de usuario se convierte a minúsculas y se utiliza para inicializar el chat.
+
+- **Inicialización del Chat:**
+  - Una vez que se establece un nombre de usuario válido, se inicializa el chat.
+  - El nombre de usuario se muestra en el HTML como un mensaje de bienvenida.
+  - Se establece una conexión WebSocket con el servidor utilizando Socket.io.
+
+- **Envío de Mensajes:**
+  - Los usuarios pueden enviar mensajes presionando Enter o haciendo clic en el botón de envío.
+  - La función `sendMessage` emite el mensaje al servidor.
+
+- **Visualización de Mensajes:**
+  - Los mensajes recibidos del servidor se muestran en un registro de chat.
+  - Los mensajes se formatean y se les aplica estilo según el remitente.
+  - Los mensajes de usuario se muestran a la derecha con un fondo azul, mientras que los mensajes de otros tienen un fondo gris.
+  - Se muestran las iniciales del avatar para el primer mensaje de cada usuario.
+
+- **Eventos de Socket.io:**
+  - La aplicación escucha los eventos "logs" del servidor, que contienen datos del registro de chat.
+  - Cuando se recibe un nuevo mensaje, se actualiza el registro de chat y el chat se desplaza para mostrar el mensaje más reciente.
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.

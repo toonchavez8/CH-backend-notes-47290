@@ -18,6 +18,7 @@
 - [Clase - 11: Chat App con WebSockets](#11-chat-app-con-websockets)
 - [Clase - 12: MongoDB](#clase-12-mongodb)
 - [Clase - 13: Crud con MongoDb](#clase-13-crud-con-mongodb)
+- [Clase - 14: Mongoose](#clase-14-mongoose)
 
  [Dependencias](#dependencias)
 
@@ -826,6 +827,8 @@ Crud es Acronimo que hace referencia a cuatro operaciones fundamentales de una b
 - Delete: Eliminar datos y removerla de la base.
 
 #### [Notas en Clase 13](/clase-13/notes.md)
+
+### Clase 14: Mongoose
 
 ## Dependencias
 

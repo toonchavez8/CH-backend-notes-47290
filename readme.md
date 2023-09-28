@@ -818,6 +818,15 @@ Aqui realize mis notas en un documento md de los comomandos mas importantes.
 
 ### Clase 13: CRUD con MongoDb
 
+Crud es Acronimo que hace referencia a cuatro operaciones fundamentales de una base de datos
+
+- Create: Crear datos y insertarlo en la base de datos
+- Read: Leer datos
+- Update: Actualizar datos, cambiar su informacion
+- Delete: Eliminar datos y removerla de la base.
+
+#### [Notas en Clase 13](/clase-13/notes.md)
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.

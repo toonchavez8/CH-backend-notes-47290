@@ -830,6 +830,20 @@ Crud es Acronimo que hace referencia a cuatro operaciones fundamentales de una b
 
 ### Clase 14: Mongoose
 
+En esta clase vimos como conectarnos a MongoDb Atlas desde el CLI usando
+`mongosh "mongodb+srv://cluster0.aotpgnu.mongodb.net/" --apiVersion 1 --username toonchavez8`
+lo cual despues nos pide nuestra contresa y creamos un collection llamada `manor` con el comando
+`use manor` como prueba inicial
+Luego creamos una collecion usando el comando `db.createCollection('users')`
+y para verla usamos `db.collections`
+
+Luego nos conectamos con el compass de mongo para ver la GUI de mongo y usamos el comando
+`mongodb+srv://toonchavez8:<password>@cluster0.aotpgnu.mongodb.net/`
+
+ ahi buscamos nuestro db y vimos que tenemos una collecion llamada `users`
+
+#### Mongoose
+
 ## Dependencias
 
 - [chalk](https://www.npmjs.com/package/chalk): es para colores en la consola.
@@ -840,6 +854,7 @@ Crud es Acronimo que hace referencia a cuatro operaciones fundamentales de una b
 - [multer](https://www.npmjs.com/package/multer): se encarga de manuliplar los middlewares
 - [handlebars](https://handlebarsjs.com/guide/#custom-helpers): Handlebars es una forma de escirbir plantillas para que te retorne html
 - [socket.io](https://socket.io/) - maneja los websockets y los puertos para conection entre clientes
+- [mongoose](https://mongoosejs.com/) - es un framework para manejar bases de datos de mongoDB
 
 ## Agradecimientos
 

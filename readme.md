@@ -17,6 +17,7 @@
 - [Clase - 10: WebSockets](#clase-10-websockets)
 - [Clase - 11: Chat App con WebSockets](#11-chat-app-con-websockets)
 - [Clase - 12: MongoDB](#clase-12-mongodb)
+- [Clase - 13: Crud con MongoDb](#clase-13-crud-con-mongodb)
 
  [Dependencias](#dependencias)
 
@@ -728,7 +729,6 @@ socketClient.on("message", (data) => {
 
 ```
 
-
 ### 11 Chat app con webSockets
 
 En esta clase hicimos un chat app con websockets usando express y socket.io.
@@ -816,6 +816,7 @@ Aqui realize mis notas en un documento md de los comomandos mas importantes.
 - `db.collection.findOne(filter)`: Encuentra un documento que coincida con el filtro especificado.
 - `db.collection.find(filter)`: Encuentra varios documentos que coincidan con el filtro especificado.
 
+### Clase 13: CRUD con MongoDb
 
 ## Dependencias
 

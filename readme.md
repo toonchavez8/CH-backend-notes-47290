@@ -15,6 +15,7 @@
 - [Clase - 08: Router y Multer](#clase-08-router-y-multer)
 - [Clase - 09: Motores y Plantilals](#clase-09-motores-y-plantillas)
 - [Clase - 10: WebSockets](#clase-10-websockets)
+- [Clase - 12: MongoDB](#clase-12-mongodb)
 
  [Dependencias](#dependencias)
 
@@ -725,6 +726,34 @@ socketClient.on("message", (data) => {
 });
 
 ```
+
+### Clase 12: MongoDb
+
+En esta clase revisamos MongoDb Vimos como instalar MongoDb y como usar los comandos basicos
+
+#### [Notas](/clase-12/Notes.md)
+
+Aqui realize mis notas en un documento md de los comomandos mas importantes.
+
+## Comandos de Mongo
+
+- `show dbs` para ver las bases de datos
+- `use <base_de_datos>` para seleccionar una base de datos
+- `db.createCollection <nombre>` para dcrear colleciones
+- `show collections` para ver las colecciones
+- `db.collection.find()` para ver los documentos de una coleccion
+- `insertOne` para agregar un objeto
+- `help`: Muestra una lista de comandos disponibles en la consola de MongoDB.
+- `exit` o `quit`: Sale de la consola de MongoDB.
+- `db.dropDatabase()`: Elimina la base de datos actual.
+- `db.collection.insertOne(document)`: Inserta un documento en una colección específica.
+- `db.collection.insertMany([document1, document2, ...])`: Inserta varios documentos en una colección.
+- `db.collection.updateOne(filter, update)`: Actualiza un documento en una colección.
+- `db.collection.updateMany(filter, update)`: Actualiza varios documentos en una colección.
+- `db.collection.deleteOne(filter)`: Elimina un documento de una colección.
+- `db.collection.deleteMany(filter)`: Elimina varios documentos de una colección.
+- `db.collection.findOne(filter)`: Encuentra un documento que coincida con el filtro especificado.
+- `db.collection.find(filter)`: Encuentra varios documentos que coincidan con el filtro especificado.
 
 ## Dependencias
 

@@ -22,7 +22,6 @@ tambien podemos correr el comando `mongod` para conectarnos a la base de datos d
 - `db.collection.updateOne(filter, update)`: Actualiza un documento en una colección.
 - `db.collection.updateMany(filter, update)`: Actualiza varios documentos en una colección.
 - `db.collection.deleteOne(filter)`: Elimina un documento de una colección.
-- `db.collection.deleteMany(filter)`: Elimina varios documentos de una colección.
 - `db.collection.findOne(filter)`: Encuentra un documento que coincida con el filtro especificado.
 - `db.collection.find(filter)`: Encuentra varios documentos que coincidan con el filtro especificado.
 

@@ -17,6 +17,8 @@
 - [Clase - 10: WebSockets](#clase-10-websockets)
 - [Clase - 11: Chat App con WebSockets](#11-chat-app-con-websockets)
 - [Clase - 12: MongoDB](#clase-12-mongodb)
+- [Clase - 13: Crud con MongoDb](#clase-13-crud-con-mongodb)
+- [Clase - 14: Mongoose](#clase-14-mongoose)
 
  [Dependencias](#dependencias)
 
@@ -728,7 +730,6 @@ socketClient.on("message", (data) => {
 
 ```
 
-
 ### 11 Chat app con webSockets
 
 En esta clase hicimos un chat app con websockets usando express y socket.io.
@@ -816,6 +817,90 @@ Aqui realize mis notas en un documento md de los comomandos mas importantes.
 - `db.collection.findOne(filter)`: Encuentra un documento que coincida con el filtro especificado.
 - `db.collection.find(filter)`: Encuentra varios documentos que coincidan con el filtro especificado.
 
+### Clase 13: CRUD con MongoDb
+
+Crud es Acronimo que hace referencia a cuatro operaciones fundamentales de una base de datos
+
+- Create: Crear datos y insertarlo en la base de datos
+- Read: Leer datos
+- Update: Actualizar datos, cambiar su informacion
+- Delete: Eliminar datos y removerla de la base.
+
+#### [Notas en Clase 13](/clase-13/notes.md)
+
+### Clase 14: Mongoose
+
+En esta clase vimos como conectarnos a MongoDb Atlas desde el CLI usando
+`mongosh "mongodb+srv://cluster0.aotpgnu.mongodb.net/" --apiVersion 1 --username toonchavez8`
+lo cual despues nos pide nuestra contresa y creamos un collection llamada `manor` con el comando
+`use manor` como prueba inicial
+Luego creamos una collecion usando el comando `db.createCollection('users')`
+y para verla usamos `db.collections`
+
+Luego nos conectamos con el compass de mongo para ver la GUI de mongo y usamos el comando
+`mongodb+srv://toonchavez8:<password>@cluster0.aotpgnu.mongodb.net/`
+
+ ahi buscamos nuestro db y vimos que tenemos una collecion llamada `users`
+
+#### [Mongoose](/clase-14/index.js)
+
+En la primera iteracion siguendo el profe creamos nuestro data dentro de un `const` luego llama
+
+creamos nuestro `Schema`
+
+```js
+const personajesGOTSchema = new mongoose.Schema({
+ nombre: String,
+ edad: Number,
+ nota: Number,
+});
+```
+
+despues creamos un `DAO` o Data Access Object
+
+`const personajesGOTDAO = mongoose.model("personajesGOT", personajesGOTSchema);
+f`
+
+y al final creamos un `try catch` block que usa await para conecectarse al db luego usamos un for loop para crear cada documento.
+
+```js
+for (const personajeGOT of personajesGOT) {
+  await personajesGOTDAO.create(personajeGOT);
+ }
+ ```
+
+y esto agrega los datos a nuesta conecion de mongoDb
+
+#### Refactorizacion
+
+- Creamos un archivo `config.js` donde ahi almacenamos nuestra informacion sencible por el momento.
+
+```js
+async function connectToDatabase() {
+ try {
+  await mongoose.connect(config.mongoURI, {
+   dbName: "personajesGOT",
+  });
+  console.log(chalk.green("db Connected"));
+ } catch (error) {
+  console.log(chalk.red(error.message));
+  throw error;
+ }
+}
+```
+
+Luego creamos un async function que se conecta a la db usando el config pero si algo falla tira error completo que luego cuando alguna funcion mas lo use se podra ver en la consola, y se cancela el processo.
+
+despues creo una funcion llamada `populateDatabase` donde primero declaro una variable llamada
+`errorOccured` que guarda un bolleano falso
+
+despues usamos un `try catch` block para ver si hay un error en la coneccion a la db y si hay lo tira en la consola y si no hay nada hace nada. pero si no hayra un error se ejecuta
+
+`await personajesGOTDAO.insertMany(personajesGOT);`
+
+que inserta por objeto en el array de personajesGOT
+
+y si dectetamos un error luego en el catch block marcamos `errorOccured` como true y luego en el `finally` block se ejecuta `await mongoose.connection.close();` para cerrar la coneccion a la db.
 
 ## Dependencias
 
@@ -827,6 +912,7 @@ Aqui realize mis notas en un documento md de los comomandos mas importantes.
 - [multer](https://www.npmjs.com/package/multer): se encarga de manuliplar los middlewares
 - [handlebars](https://handlebarsjs.com/guide/#custom-helpers): Handlebars es una forma de escirbir plantillas para que te retorne html
 - [socket.io](https://socket.io/) - maneja los websockets y los puertos para conection entre clientes
+- [mongoose](https://mongoosejs.com/) - es un framework para manejar bases de datos de mongoDB
 
 ## Agradecimientos
 

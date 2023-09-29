@@ -1,18 +1,10 @@
 import { Router } from "express";
-
-const pokemons = [
-	{ name: "pikachu", type: "electric" },
-	{ name: "charizard", type: "fire" },
-	{ name: "squirtle", type: "water" },
-	{ name: "bulbasaur", type: "grass" },
-	{ name: "mewtwo", type: "psychic" },
-	{ name: "mew", type: "psychic" },
-	{ name: "snorlax", type: "normal" },
-];
+import pokemonModel from "../models/pokemon.model.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
+	const pokemons = await pokemonModel.find();
 	res.json(pokemons);
 });
 

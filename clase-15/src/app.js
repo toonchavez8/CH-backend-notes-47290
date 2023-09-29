@@ -1,7 +1,9 @@
 import express from "express";
+import handlebars from "express-handlebars";
+import mongoose from "mongoose";
 import pokemonRouter from "./routers/pokemon.router.js";
 import viewsRouter from "./routers/views.router.js";
-import handlebars from "express-handlebars";
+import chalk from "chalk";
 
 const app = express();
 
@@ -15,6 +17,17 @@ app.get("/", (req, res) => res.json({ status: "OK" }));
 app.use("/api/pokemon", pokemonRouter);
 app.use("/pokemon", viewsRouter);
 
-app.listen(3000, () => {
-	console.log("Server is running on port 3000");
-});
+try {
+	await mongoose.connect(
+		"mongodb+srv://toonchavez8:Iac3b3br.@cluster0.aotpgnu.mongodb.net/",
+		{
+			dbName: "pokedex",
+		}
+	);
+	app.listen(3000, () => {
+		console.log("Server is running on port 3000");
+	});
+} catch (error) {
+	console.log(chalk.red(error.message));
+	throw error;
+}

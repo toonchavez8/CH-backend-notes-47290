@@ -5,8 +5,9 @@ import handlebars from "express-handlebars";
 const app = express();
 
 app.engine("handlebars", handlebars.engine());
-app.set("views", "./case-15/src/views");
+app.set("views", "./clase-15/src/views");
 app.set("view engine", "handlebars");
+app.use(express.static("./clase-15/public"));
 
 app.get("/", (req, res) => res.json({ status: "OK" }));
 

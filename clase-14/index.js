@@ -52,10 +52,15 @@ async function populateDatabase() {
 		errorOccured = true;
 	} finally {
 		if (errorOccured) {
-			console.log(chalk.yellow("Error occurred during await request."));
+			console.log(
+				chalk.yellow("Error occurred during await request, connection closed.")
+			);
 		} else {
-			console.log(chalk.green("await request successful"));
+			console.log(
+				chalk.green("await request successful, connection will now close")
+			);
 		}
+		await mongoose.connection.close();
 	}
 }
 

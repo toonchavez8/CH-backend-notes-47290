@@ -6,7 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node --watch clase-11/app.js"
+		"start": "node --watch clase-15/src/app.js"
 	},
 	"author": "",
 	"license": "ISC",

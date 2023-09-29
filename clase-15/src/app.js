@@ -7,6 +7,9 @@ import chalk from "chalk";
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.engine("handlebars", handlebars.engine());
 app.set("views", "./clase-15/src/views");
 app.set("view engine", "handlebars");

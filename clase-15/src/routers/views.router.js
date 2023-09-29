@@ -4,15 +4,13 @@ import pokemonModel from "../models/pokemon.model.js";
 const router = Router();
 
 router.get("/", async (req, res) => {
-	const pokemons = await pokemonModel.find();
+	// when i view we need to add lean and exec to find into readable by handlebars
+	const pokemons = await pokemonModel.find().lean().exec();
 	res.render("list", { tittle: "Pokemon List", pokemons });
 });
 
-router.get("/:name", (req, res) => {
-	res.send(`showing pokemon ${req.params.name}`);
-});
-router.post("/", (req, res) => {
-	res.send("creating pokemon");
+router.get("/create", (req, res) => {
+	res.render("create", { tittle: "create a pokemon" });
 });
 
 export default router;

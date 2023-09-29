@@ -1,3 +1,15 @@
 <section>
 	<h1>List of pokemon</h1>
+	<table>
+		<tr>
+			<td>Name</td>
+			<td>Type</td>
+		</tr>
+		{{#each pokemons}}
+			<tr>
+				<td>{{this.name}}</td>
+				<td>{{this.type}}</td>
+			</tr>
+		{{/each}}
+	</table>
 </section>

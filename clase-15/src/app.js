@@ -1,5 +1,6 @@
 import express from "express";
 import pokemonRouter from "./routers/pokemon.router.js";
+import viewsRouter from "./routers/views.router.js";
 import handlebars from "express-handlebars";
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.static("./clase-15/public"));
 app.get("/", (req, res) => res.json({ status: "OK" }));
 
 app.use("/api/pokemon", pokemonRouter);
+app.use("/pokemon", viewsRouter);
 
 app.listen(3000, () => {
 	console.log("Server is running on port 3000");

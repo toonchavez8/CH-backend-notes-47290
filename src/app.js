@@ -29,7 +29,7 @@ app.use((err, req, res, next) => {
 	res.status(500).send("Something went wrong!");
 });
 
-const port = process.env.PORT || 3000;
+const port = 3000;
 const server = app.listen(port, () =>
 	console.log(chalk.green(`Server connected to port ${port}`))
 );

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CartManager } from "../managers/cartManager.js";
+import { CartManager } from "../dao/managers/cartManager.js";
 import chalk from "chalk";
 import router from "./product.router.js";
 

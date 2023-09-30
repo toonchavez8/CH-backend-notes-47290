@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { ProductManager } from "../dao/managers/ProductManager.js";
 import chalk from "chalk";
+import productModel from "../dao/models/products.model.js";
+import mongoose from "mongoose";
 
 // declared variables
 const router = Router();
@@ -11,7 +13,7 @@ const PM = new ProductManager(databaseFilePath);
 
 // router path to get all products
 router.get("/", async (req, res) => {
-	const products = await PM.getProducts();
+	const products = await productModel.find().lean().exec();
 	const limit = parseInt(req.query.limit);
 
 	console.log("limit", limit);
@@ -30,42 +32,63 @@ router.get("/", async (req, res) => {
 
 // router path to get product by id
 router.get("/:pid", async (req, res) => {
-	const id = parseInt(req.params.pid);
-	const products = await PM.getProductbyId(id);
+	try {
+		// Extract the product ID from the request parameters
+		const id = req.params.pid;
 
-	if (!products || Object.keys(products).length === 0) {
-		return res.status(404).json({ error: "Product not found." });
+		// Check if the provided ID is a valid ObjectId
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			return res.status(400).json({ error: "Invalid product ID." });
+		}
+
+		// Find the product by ID using findById
+		const product = await productModel.findById(id).lean().exec();
+
+		if (!product) {
+			return res.status(404).json({ error: "Product not found." });
+		}
+
+		res.status(200).json({ payload: product });
+	} catch (error) {
+		console.log(chalk.red("Error fetching product:", error.message));
+		res.status(500).json({ error: error.message });
 	}
-	res.status(200).json({ payload: products });
 });
 
 // Create a new POST route for adding products
 router.post("/", async (req, res) => {
 	try {
 		// Extract product data from the request body
-		const { title, description, price, thumbnail, code, stock } = req.body;
+		const { title, description, price, thumbnail, code, stock, category } =
+			req.body;
 
-		const addedProduct = await PM.addProduct(
+		// Create a new product using the productModel
+		const newProduct = new productModel({
 			title,
 			description,
 			price,
 			thumbnail,
 			code,
-			stock
-		);
+			stock,
+			category,
+		});
 
-		// Respond with a success message and try to add product
-		res
-			.status(201)
-			.json({ message: "Product added successfully.", payload: addedProduct });
+		// Save the new product to the database
+		const addedProduct = await newProduct.save();
+
+		// Respond with a success message and the added product
+		res.status(201).json({
+			message: "Product added successfully.",
+			payload: addedProduct,
+		});
 	} catch (error) {
 		console.log(chalk.red("Error adding product:", error.message));
 		res.status(500).json({ error: error.message });
 	} finally {
 		if (res.statusCode == 201) {
-			console.log(chalk.green("post completed succesfully"));
+			console.log(chalk.green("Post completed successfully"));
 		} else {
-			console.log(chalk.yellow("post failed"));
+			console.log(chalk.yellow("Post failed"));
 		}
 	}
 });
@@ -75,41 +98,47 @@ router.post("/", async (req, res) => {
 router.put("/:pid", async (req, res) => {
 	try {
 		// Extract the product ID from the request parameters
-		const id = parseInt(req.params.pid);
+		const id = req.params.pid;
 
 		// Create an object with the updated product data
-		const updatedProduct = req.body;
+		const updatedProductdata = req.body;
 
 		// Call the updateProductById method to update the product by ID
-		const updated = await PM.updateProductById(id, updatedProduct);
+		const updatedProduct = await productModel.findByIdAndUpdate(
+			id,
+			updatedProductdata,
+			{
+				new: true,
+			}
+		);
 
 		// Check if the product was successfully updated
-		if (!updated) {
+		if (!updatedProduct) {
 			return res
 				.status(404)
 				.json({ error: `Product with ID ${id} not found.` });
 		}
 
 		// Respond with a success message and the updated product
-		res
-			.status(200)
-			.json({ message: "Product updated successfully.", product: updated });
+		res.status(200).json({
+			message: "Product updated successfully.",
+			product: updatedProduct,
+		});
 	} catch (error) {
 		console.log(chalk.red("Error updating product:", error.message));
 		res.status(500).json({ error: error.message });
 	}
 });
 
-// Router to delete by product id
 router.delete("/:pid", async (req, res) => {
 	let deletedProduct; // Declare the variable here
 
 	try {
 		// Extract the product ID from the request parameters
-		const id = parseInt(req.params.pid);
+		const id = req.params.pid;
 
-		// Call the deleteProductById method to delete the product by ID
-		deletedProduct = await PM.deleteProductById(id);
+		// Use productModel.findByIdAndRemove to delete the product by ID
+		deletedProduct = await productModel.findByIdAndRemove(id);
 
 		// Check if the product was successfully deleted
 		if (!deletedProduct) {
@@ -129,7 +158,9 @@ router.delete("/:pid", async (req, res) => {
 	} finally {
 		// Display the deleted product in the console
 		if (deletedProduct) {
-			console.log(chalk.green(`Product with ID ${deletedProduct.id} deleted:`));
+			console.log(
+				chalk.green(`Product with ID ${deletedProduct._id} deleted:`)
+			);
 			console.log(deletedProduct);
 		}
 	}

@@ -139,6 +139,142 @@ deleteButtons.forEach((deleteButton) => {
 	});
 });
 
+// select all edit buttons by their common class
+const editButtons = document.querySelectorAll(".edit-product-btn");
+
+// Attach a click event listener to each edit button
+editButtons.forEach((editButton) => {
+	editButton.addEventListener("click", (event) => {
+		event.preventDefault();
+		const productId = editButton.getAttribute("data-product-id");
+		// Call the editProduct function with the product ID
+		editProduct(productId);
+	});
+});
+
+function updateProduct(id) {
+	// Retrieve the updated product data from the form
+	const updatedProduct = {
+		title: document.getElementById("title").value,
+		description: document.getElementById("description").value,
+		price: document.getElementById("price").value,
+		code: document.getElementById("code").value,
+		stock: document.getElementById("stock").value,
+		thumbnail: document.getElementById("image").value,
+	};
+	console.log(updatedProduct);
+
+	// Send a PUT request to update the product with the provided ID
+	fetch(`/api/products/${id}`, {
+		method: "put",
+		body: JSON.stringify(updatedProduct),
+		headers: {
+			"Content-type": "application/json",
+		},
+	})
+		.then((result) => result.json())
+		.then((result) => {
+			if (result.error) {
+				throw new Error(result.error);
+			}
+
+			// Reset the form after successful update
+			document.getElementById("createForm").reset();
+
+			// Hide the "Update" button
+			const updateBtn = document.getElementById("updateBtn");
+			updateBtn.style.display = "none";
+
+			// Enable the "Create" button
+			const createBtn = document.getElementById("createBtn");
+			createBtn.disabled = false;
+
+			// Fetch and update the product list (similar to what you do after creation)
+			return fetch("/api/products");
+		})
+		.then((result) => result.json())
+		.then((result) => {
+			if (result.error) throw new Error(result.error);
+			socket.emit("productList", result.payload);
+			let timerInterval;
+
+			Swal.fire({
+				title: "Success",
+				icon: "success",
+				text: `Product with id ${id} updated`,
+				timer: 2000,
+				timerProgressBar: true,
+				didOpen: () => {
+					Swal.showLoading();
+					const b = Swal.getHtmlContainer().querySelector("b");
+					if (b) {
+						timerInterval = setInterval(() => {
+							b.textContent = Swal.getTimerLeft();
+						}, 100);
+					}
+				},
+				willClose: () => {
+					clearInterval(timerInterval);
+				},
+			}).then((result) => {
+				if (result.dismiss === Swal.DismissReason.timer) {
+					console.log("I was closed by the timer");
+				}
+			});
+		})
+		.catch((err) => {
+			Swal.fire({
+				title: "Error!",
+				text: err,
+				icon: "error",
+				confirmButtonText: "Oh ok",
+			});
+		});
+}
+
+function editProduct(id) {
+	console.log(`Editing product with id ${id}`);
+
+	window.scrollTo({ top: 0, behavior: "smooth" });
+	// Retrieve the product data by product ID (use an API call if needed)
+	fetch(`/api/products/${id}`)
+		.then((result) => result.json())
+		.then((productData) => {
+			// Populate the form fields with the product data
+			console.log(productData);
+			const product = productData.payload;
+			document.getElementById("title").value = product.title;
+			document.getElementById("description").value = product.description;
+			document.getElementById("price").value = product.price;
+			document.getElementById("code").value = product.code;
+			document.getElementById("stock").value = product.stock;
+			document.getElementById("image").value = product.thumbnail;
+
+			// Disable the "Create" button
+			const createBtn = document.getElementById("createBtn");
+			createBtn.classList.add("pointer-events-none", "opacity-50");
+			createBtn.disabled = true;
+
+			// Show the "Update" button and add a click event listener
+			const updateBtn = document.getElementById("updateBtn");
+			updateBtn.style.display = "inline-block";
+
+			// Add a click event listener for updating the product and scrolling to the top of the page
+			updateBtn.addEventListener("click", (event) => {
+				event.preventDefault();
+				console.log("Updating product");
+				// Call the updateProduct function with the product ID
+				updateProduct(id);
+
+				// Scroll to the top of the page
+			});
+		})
+		.catch((err) => {
+			// Handle errors if the fetch request fails
+			console.error(err);
+		});
+}
+
 function updateTable(processedProducts) {
 	const tbody = document.querySelector("#realProductsTable tbody");
 
@@ -270,9 +406,9 @@ function updateTable(processedProducts) {
 		);
 		editButton.setAttribute("data-product-id", product._id);
 		editButton.addEventListener("click", () => {
-			// Add your logic to edit the product here
-			// For example, you can open an edit modal for the product
-			// and populate it with the product data
+			const productId = editButton.getAttribute("data-product-id");
+			// Call the editProduct function with the product ID
+			editProduct(productId);
 		});
 
 		// Append buttons to the button container

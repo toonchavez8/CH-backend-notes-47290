@@ -99,8 +99,16 @@
 			<button
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 				id="createBtn"
+				type="submit"
 			>
 				Create
+			</button>
+			<button
+				class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hidden"
+				id="updateBtn"
+				type="submit"
+			>
+				Update
 			</button>
 		</form>
 
@@ -121,6 +129,8 @@
 							class="px-4 py-2 text-left hidden md:table-cell"
 						>Description</th>
 						<th class="px-4 py-2 text-left hidden sm:table-cell">Code</th>
+						<th class="px-4 py-2 text-left hidden sm:table-cell">Categories</th>
+						<!-- Add this column -->
 						<th class="px-4 py-2 text-left hidden sm:table-cell">Stock</th>
 						<th class="px-4 py-2 text-left">Price</th>
 						<th class="px-4 py-2 text-center md:text-left">Actions</th>
@@ -150,6 +160,17 @@
 							<td
 								class="border-b border-purple-600 px-4 py-2 hidden sm:table-cell"
 							>{{this.code}}</td>
+							<td
+								class="border-b border-purple-600 px-4 py-2 hidden sm:table-cell"
+							>
+								<div class="flex flex-col gap-1 w-full grow">
+									{{#each this.category}}
+										<span
+											class="bg-gray-800 text-white px-2 py-1 rounded-full text-xs mr-1 hover:bg-purple-500 transition-colors duration-300 ease-in-out grow text-center whitespace-nowrap"
+										>{{this}}</span>
+									{{/each}}
+								</div>
+							</td>
 							<td
 								class="border-b border-purple-600 px-4 py-2 hidden sm:table-cell"
 							>{{this.stock}}</td>

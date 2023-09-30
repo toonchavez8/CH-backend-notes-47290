@@ -81,6 +81,21 @@
 				/>
 			</div>
 
+			<div class="mb-4">
+				<label
+					class="block text-gray-700 text-sm font-bold mb-2"
+					for="categories"
+				>
+					Categories (Separate with commas)
+				</label>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="categories"
+					type="text"
+					placeholder="Categories"
+				/>
+			</div>
+
 			<button
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 				id="createBtn"
@@ -88,6 +103,7 @@
 				Create
 			</button>
 		</form>
+
 	</section>
 
 	<section class="flex-grow pt-12 pb-24">
@@ -111,9 +127,11 @@
 					</tr>
 				</thead>
 				<tbody class="text-white">
-					{{#each products}}
+					{{#each processedProducts}}
 						<tr class="even:bg-gray-600 even:bg-opacity-10">
-							<td class="border-b border-purple-600 px-4 py-2">{{this.id}}</td>
+							<td
+								class="border-b border-purple-600 px-4 py-2"
+							>{{this.shortId}}</td>
 							<td
 								class="border-b border-purple-600 px-4 py-2"
 							>{{this.title}}</td>
@@ -138,16 +156,22 @@
 							<td
 								class="border-b border-purple-600 px-4 py-2"
 							>{{this.price}}</td>
+
 							<td
-								class="border-b border-purple-600 px-4 py-2 text-center md:text-left"
+								class="border-b border-purple-600 px-4 py-2 text-center md:text-left flex flex-row"
 							>
 								<button
 									class="text-lg text-white-600 bg-red-600 rounded px-4 py-0 md:py-2 delete-product-btn"
-									data-product-id="{{this.id}}"
+									data-product-id="{{this._id}}"
 								>
 									Delete
 								</button>
-
+								<button
+									class="text-lg text-white bg-blue-500 hover:bg-blue-700 rounded px-4 py-0 md:py-2 ml-2 edit-product-btn"
+									data-product-id="{{this._id}}"
+								>
+									Edit
+								</button>
 							</td>
 						</tr>
 					{{/each}}

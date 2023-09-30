@@ -5,6 +5,11 @@ document.getElementById("createBtn").addEventListener("click", (event) => {
 	event.preventDefault();
 	console.log("Button clicked!");
 
+	const categoryInput = document.getElementById("categories");
+	const categories = categoryInput.value
+		.split(",")
+		.map((category) => category.trim());
+
 	const body = {
 		title: document.getElementById("title").value,
 		description: document.getElementById("description").value,
@@ -12,6 +17,7 @@ document.getElementById("createBtn").addEventListener("click", (event) => {
 		code: document.getElementById("code").value,
 		stock: document.getElementById("stock").value,
 		thumbnail: document.getElementById("image").value,
+		category: [categories],
 	};
 
 	fetch("/api/products", {
@@ -153,6 +159,10 @@ editButtons.forEach((editButton) => {
 });
 
 function updateProduct(id) {
+	const categoryInput = document.getElementById("categories");
+	const categories = categoryInput.value
+		.split(",")
+		.map((category) => category.trim());
 	// Retrieve the updated product data from the form
 	const updatedProduct = {
 		title: document.getElementById("title").value,
@@ -161,6 +171,7 @@ function updateProduct(id) {
 		code: document.getElementById("code").value,
 		stock: document.getElementById("stock").value,
 		thumbnail: document.getElementById("image").value,
+		category: categories,
 	};
 	console.log(updatedProduct);
 
@@ -249,6 +260,8 @@ function editProduct(id) {
 			document.getElementById("code").value = product.code;
 			document.getElementById("stock").value = product.stock;
 			document.getElementById("image").value = product.thumbnail;
+			const categories = product.category.join(",");
+			document.getElementById("categories").value = categories;
 
 			// Disable the "Create" button
 			const createBtn = document.getElementById("createBtn");
@@ -276,6 +289,7 @@ function editProduct(id) {
 }
 
 function updateTable(processedProducts) {
+	console.log("processed products", processedProducts);
 	const tbody = document.querySelector("#realProductsTable tbody");
 
 	// Clear the existing table rows
@@ -333,6 +347,49 @@ function updateTable(processedProducts) {
 			"hidden",
 			"sm:table-cell"
 		);
+		const categoryCell = document.createElement("td");
+		categoryCell.classList.add(
+			"border-b",
+			"border-purple-600",
+			"px-4",
+			"py-2",
+			"hidden",
+			"sm:table-cell"
+		);
+
+		const categoryContainer = document.createElement("div");
+		categoryContainer.classList.add("flex", "flex-col", "gap-1", "w-full");
+
+		console.log("product", product.category);
+
+		// Loop through product categories and create span elements
+		product.category.forEach((category) => {
+			const categoryElement = document.createElement("span");
+			categoryElement.textContent = category;
+			categoryElement.classList.add(
+				"bg-gray-800",
+				"text-white",
+				"px-2",
+				"py-1",
+				"rounded-full",
+				"text-xs",
+				"mr-1",
+				"hover:bg-purple-500",
+				"transition-colors",
+				"duration-300",
+				"ease-in-out",
+				"grow",
+				"text-center",
+				"whitespace-nowrap"
+			);
+
+			// Append each category element to the category container
+			categoryContainer.appendChild(categoryElement);
+		});
+
+		console.log("category container", categoryContainer);
+		// Append the category container to the category cell
+		categoryCell.appendChild(categoryContainer);
 
 		const stockCell = document.createElement("td");
 		stockCell.textContent = product.stock;
@@ -424,6 +481,7 @@ function updateTable(processedProducts) {
 		row.appendChild(imageCell);
 		row.appendChild(descriptionCell);
 		row.appendChild(codeCell);
+		row.appendChild(categoryCell);
 		row.appendChild(stockCell);
 		row.appendChild(priceCell);
 		row.appendChild(actionsCell);

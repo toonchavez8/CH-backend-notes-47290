@@ -5,6 +5,7 @@ import cartRouter from "./routers/cart.router.js";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import viewsRouter from "./routers/view.router.js";
+import mongoose from "mongoose";
 
 const app = express();
 
@@ -30,15 +31,28 @@ app.use((err, req, res, next) => {
 });
 
 const port = 3000;
-const server = app.listen(port, () =>
-	console.log(chalk.green(`Server connected to port ${port}`))
-);
 
-const io = new Server(server);
+try {
+	await mongoose.connect(
+		"mongodb+srv://toonchavez8:Iac3b3br.@cluster0.aotpgnu.mongodb.net/",
+		{
+			dbName: "ecommerce",
+		}
+	);
 
-io.on("connection", (socket) => {
-	console.log(chalk.yellow("New client connected"));
-	socket.on("productList", (data) => {
-		io.emit("updatedProducts", data);
+	const server = app.listen(port, () =>
+		console.log(chalk.green(`Server connected to port ${port}`))
+	);
+
+	const io = new Server(server);
+
+	io.on("connection", (socket) => {
+		console.log(chalk.yellow("New client connected"));
+		socket.on("productList", (data) => {
+			io.emit("updatedProducts", data);
+		});
 	});
-});
+} catch (error) {
+	console.log(chalk.red(error.message));
+	throw error;
+}

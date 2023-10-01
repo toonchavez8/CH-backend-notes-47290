@@ -3,7 +3,6 @@ const socket = io();
 document.getElementById("createBtn").addEventListener("click", (event) => {
 	// Prevent the default form submission behavior
 	event.preventDefault();
-	console.log("Button clicked!");
 
 	const categoryInput = document.getElementById("categories");
 	const categories = categoryInput.value
@@ -255,7 +254,6 @@ function editProduct(id) {
 		.then((result) => result.json())
 		.then((productData) => {
 			// Populate the form fields with the product data
-			console.log(productData);
 			const product = productData.payload;
 			document.getElementById("title").value = product.title;
 			document.getElementById("description").value = product.description;
@@ -292,7 +290,6 @@ function editProduct(id) {
 }
 
 function updateTable(processedProducts) {
-	console.log("processed products", processedProducts);
 	const tbody = document.querySelector("#realProductsTable tbody");
 
 	// Clear the existing table rows
@@ -390,7 +387,6 @@ function updateTable(processedProducts) {
 			categoryContainer.appendChild(categoryElement);
 		});
 
-		console.log("category container", categoryContainer);
 		// Append the category container to the category cell
 		categoryCell.appendChild(categoryContainer);
 

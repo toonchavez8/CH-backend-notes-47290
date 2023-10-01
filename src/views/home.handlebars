@@ -21,23 +21,31 @@
 			>Products</h3>
 			<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
 				{{#each products}}
-					<article class="bg-white rounded-lg shadow-md p-4">
+					<article
+						class="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between items-center group border-gray-100"
+					>
 						<!-- Title -->
 						<p
-							class="text-xl text-purple-600 font-semibold mb-2"
+							class="text-xl text-purple-600 text-center font-semibold mb-2"
 						>{{this.title}}</p>
 
 						<!-- Square Image -->
-						<div class="aspect-square mb-2">
+						<div class="aspect-square mb-2 overflow-hidden rounded">
 							<img
 								src="{{this.thumbnail}}"
 								alt="{{this.title}}"
-								class="w-full h-full object-cover"
+								class="w-full h-full object-cover group-hover:scale-110 transition ease"
 							/>
 						</div>
 
 						<!-- Price -->
-						<p class="text-lg text-purple-600 text-center">{{this.price}}</p>
+						<p class="text-lg text-purple-600 text-center">${{this.price}}</p>
+
+						<button
+							class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105"
+						>
+							add to cart
+						</button>
 					</article>
 				{{/each}}
 			</div>

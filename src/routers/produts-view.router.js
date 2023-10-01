@@ -9,7 +9,6 @@ productsViewsRouter.get("/", async (req, res) => {
 	const products = await productModel.find().lean().exec();
 
 	res.render("home", { products });
-	console.log(products);
 });
 
 productsViewsRouter.get("/realtimeproducts", async (req, res) => {

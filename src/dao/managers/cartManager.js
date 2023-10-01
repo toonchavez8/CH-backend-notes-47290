@@ -83,7 +83,6 @@ export class CartManager {
 	async addProductToCart(cid, pid) {
 		try {
 			const product = await productmanager.getProductbyId(pid);
-			console.log(product);
 
 			if (typeof product !== "object" || !product.id || !product.title) {
 				throw new Error(

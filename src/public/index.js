@@ -334,7 +334,7 @@ function updateTable(processedProducts) {
 		descriptionCell.textContent = product.description;
 		descriptionCell.classList.add(
 			"hidden",
-			"md:table-cell",
+			"lg:table-cell",
 			"border-b",
 			"border-purple-600",
 			"text-center"

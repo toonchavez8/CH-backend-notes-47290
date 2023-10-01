@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import messageModel from "./dao/models/messages.model.js";
 
 const Sockets = (io) => {

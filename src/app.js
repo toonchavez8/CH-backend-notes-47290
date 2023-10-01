@@ -1,15 +1,18 @@
 import chalk from "chalk";
 import express from "express";
+import handlebars from "express-handlebars";
+import mongoose from "mongoose";
+import { Server } from "socket.io";
+import Sockets from "./sockets.js";
 import productRouter from "./routers/product.router.js";
 import cartRouter from "./routers/cart.router.js";
-import { Server } from "socket.io";
-import handlebars from "express-handlebars";
-import viewsRouter from "./routers/view.router.js";
-import mongoose from "mongoose";
+import productsViewsRouter from "./routers/produts-view.router.js";
 import chatRouter from "./routers/chat.router.js";
 import messageModel from "./dao/models/messages.model.js";
+import cartsViewsRouter from "./routers/chat-viewsRouter.js";
 
 const app = express();
+const port = 3000;
 
 // Middleware
 app.use(express.json());
@@ -18,29 +21,20 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", "./src/views");
 app.set("view engine", "handlebars");
 
-// Routes
-app.use("/", chatRouter);
-app.use("/api/products", productRouter);
-app.use("/api/cart", cartRouter);
-app.use("/products", viewsRouter);
-
 // Error handling middleware
 app.use((err, req, res, next) => {
 	console.error(err.stack);
 	res.status(500).send("Something went wrong!");
 });
 
-const port = 3000;
+// Database configuration
+const dbUrl =
+	"mongodb+srv://toonchavez8:Iac3b3br.@cluster0.aotpgnu.mongodb.net/";
+const dbName = "ecommerce";
 
 async function startServer() {
 	try {
-		await mongoose.connect(
-			"mongodb+srv://toonchavez8:Iac3b3br.@cluster0.aotpgnu.mongodb.net/",
-			{
-				dbName: "ecommerce",
-				useUnifiedTopology: true,
-			}
-		);
+		await mongoose.connect(dbUrl, { dbName, useUnifiedTopology: true });
 
 		const server = app.listen(port, () =>
 			console.log(chalk.green(`Server connected to port ${port}`))
@@ -48,21 +42,24 @@ async function startServer() {
 
 		const io = new Server(server);
 
-		io.on("connection", async (socket) => {
-			console.log(chalk.yellow("New client connected"));
-			socket.on("productList", (data) => {
-				io.emit("updatedProducts", data);
-			});
-
-			let message = await messageModel.find().lean().exec();
-
-			socket.emit("logs", message);
-			socket.on("message", async (data) => {
-				await messageModel.create(data);
-				message = await messageModel.find().lean().exec();
-				io.emit("logs", message);
-			});
+		// Attach socket.io to request object
+		app.use((req, res, next) => {
+			req.io = io;
+			next();
 		});
+
+		// Routes
+		app.get("/", (req, res) => {
+			res.render("index");
+		});
+		app.use("/api/products", productRouter);
+		app.use("/api/cart", cartRouter);
+		app.use("/products", productsViewsRouter);
+		app.use("/carts", cartsViewsRouter);
+		app.use("/chat", chatRouter);
+
+		// Initialize sockets
+		Sockets(io, messageModel);
 	} catch (error) {
 		console.log(chalk.red(error.message));
 		throw error;

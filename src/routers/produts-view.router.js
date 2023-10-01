@@ -2,17 +2,17 @@ import { Router } from "express";
 import { ProductManager } from "../dao/managers/ProductManager.js";
 import productModel from "../dao/models/products.model.js";
 
-const viewsRouter = Router();
+const productsViewsRouter = Router();
 const productmanager = new ProductManager("./data/database.json");
 
-viewsRouter.get("/", async (req, res) => {
+productsViewsRouter.get("/", async (req, res) => {
 	const products = await productModel.find().lean().exec();
 
 	res.render("home", { products });
 	console.log(products);
 });
 
-viewsRouter.get("/realtimeproducts", async (req, res) => {
+productsViewsRouter.get("/realtimeproducts", async (req, res) => {
 	try {
 		const products = await productModel.find().lean().exec();
 		const processedProducts = products.map((product) => ({
@@ -27,4 +27,4 @@ viewsRouter.get("/realtimeproducts", async (req, res) => {
 	}
 });
 
-export default viewsRouter;
+export default productsViewsRouter;

@@ -38,7 +38,6 @@ async function startServer() {
 			"mongodb+srv://toonchavez8:Iac3b3br.@cluster0.aotpgnu.mongodb.net/",
 			{
 				dbName: "ecommerce",
-				useNewUrlParser: true,
 				useUnifiedTopology: true,
 			}
 		);

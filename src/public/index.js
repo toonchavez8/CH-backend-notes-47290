@@ -17,7 +17,7 @@ document.getElementById("createBtn").addEventListener("click", (event) => {
 		code: document.getElementById("code").value,
 		stock: document.getElementById("stock").value,
 		thumbnail: document.getElementById("image").value,
-		category: [categories],
+		category: categories,
 	};
 
 	fetch("/api/products", {
@@ -97,11 +97,13 @@ function deleteProduct(id) {
 			if (result.error) throw new Error(result.error);
 			socket.emit("productList", result.payload);
 			let timerInterval;
-
+			console.log(deletedProduct.productDeleted);
 			Swal.fire({
 				title: "Success",
 				icon: "success",
-				text: `Product with id ${deletedProduct.productDeleted.id} called ${deletedProduct.productDeleted.title} Deleted`,
+				text: `Product with id ${deletedProduct.productDeleted._id.slice(
+					-4
+				)} called ${deletedProduct.productDeleted.title} Deleted`,
 				timer: 2000,
 				timerProgressBar: true,
 				didOpen: () => {
@@ -199,6 +201,7 @@ function updateProduct(id) {
 			// Enable the "Create" button
 			const createBtn = document.getElementById("createBtn");
 			createBtn.disabled = false;
+			createBtn.classList.remove("pointer-events-none", "opacity-50");
 
 			// Fetch and update the product list (similar to what you do after creation)
 			return fetch("/api/products");
@@ -426,21 +429,10 @@ function updateTable(processedProducts) {
 		  </path>
 		</svg>
 	  `;
-		deleteButton.classList.add(
-			"rounded",
-			"p-2",
-			"md:py-2",
-			"delete-product-btn",
-			"text-white",
-			"hover:bg-red-500",
-			"transition-colors",
-			"duration-300",
-			"ease-in-out"
-		);
+		deleteButton.classList.add("rounded", "p-2", "delete-product-btn");
 		deleteButton.setAttribute("data-product-id", product._id);
 		deleteButton.addEventListener("click", () => {
-			// Add your logic to delete the product here
-			// For example, you can call a deleteProduct function passing the product ID
+			// Call the deleteProduct function with the product ID
 			deleteProduct(product._id);
 		});
 

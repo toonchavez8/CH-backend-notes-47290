@@ -6,6 +6,8 @@ import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import viewsRouter from "./routers/view.router.js";
 import mongoose from "mongoose";
+import chatRouter from "./routers/chat.router.js";
+import messageModel from "./dao/models/messages.model.js";
 
 const app = express();
 
@@ -17,9 +19,7 @@ app.set("views", "./src/views");
 app.set("view engine", "handlebars");
 
 // Routes
-app.get("/", (req, res) => {
-	res.render("index");
-});
+app.use("/", chatRouter);
 app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/products", viewsRouter);
@@ -32,27 +32,42 @@ app.use((err, req, res, next) => {
 
 const port = 3000;
 
-try {
-	await mongoose.connect(
-		"mongodb+srv://toonchavez8:Iac3b3br.@cluster0.aotpgnu.mongodb.net/",
-		{
-			dbName: "ecommerce",
-		}
-	);
+async function startServer() {
+	try {
+		await mongoose.connect(
+			"mongodb+srv://toonchavez8:Iac3b3br.@cluster0.aotpgnu.mongodb.net/",
+			{
+				dbName: "ecommerce",
+				useNewUrlParser: true,
+				useUnifiedTopology: true,
+			}
+		);
 
-	const server = app.listen(port, () =>
-		console.log(chalk.green(`Server connected to port ${port}`))
-	);
+		const server = app.listen(port, () =>
+			console.log(chalk.green(`Server connected to port ${port}`))
+		);
 
-	const io = new Server(server);
+		const io = new Server(server);
 
-	io.on("connection", (socket) => {
-		console.log(chalk.yellow("New client connected"));
-		socket.on("productList", (data) => {
-			io.emit("updatedProducts", data);
+		io.on("connection", async (socket) => {
+			console.log(chalk.yellow("New client connected"));
+			socket.on("productList", (data) => {
+				io.emit("updatedProducts", data);
+			});
+
+			let message = await messageModel.find().lean().exec();
+
+			socket.emit("logs", message);
+			socket.on("message", async (data) => {
+				await messageModel.create(data);
+				message = await messageModel.find().lean().exec();
+				io.emit("logs", message);
+			});
 		});
-	});
-} catch (error) {
-	console.log(chalk.red(error.message));
-	throw error;
+	} catch (error) {
+		console.log(chalk.red(error.message));
+		throw error;
+	}
 }
+
+startServer();

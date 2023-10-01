@@ -1,4 +1,6 @@
-const Sockets = (io, messageModel) => {
+import messageModel from "./dao/models/messages.model.js";
+
+const Sockets = (io) => {
 	io.on("connection", async (socket) => {
 		console.log(chalk.yellow("New client connected"));
 		socket.on("productList", (data) => {

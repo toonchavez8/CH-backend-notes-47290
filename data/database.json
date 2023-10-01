@@ -1,1 +1,194 @@
-[{"id":3,"title":"Professional Lighting Set","description":"Illuminate your photography with our advanced lighting set.","price":449.99,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"PLS003","stock":8},{"id":4,"title":"Film Development Kit","description":"Process and develop your own film with our comprehensive kit.","price":179.5,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"FDK004","stock":20},{"id":5,"title":"Travel Photography Backpack","description":"Carry your gear comfortably with our specialized backpack.","price":129.99,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"TPB005","stock":25},{"id":6,"title":"Camera Stabilizer Rig","description":"Achieve steady shots with our professional stabilizer rig.","price":299,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"CSR006","stock":12},{"id":7,"title":"Wide-angle Lens","description":"Capture expansive scenes with our high-quality wide-angle lens.","price":199.95,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"WAL007","stock":18},{"id":8,"title":"Film Scanner","description":"Digitize your film negatives with our efficient film scanner.","price":159.99,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"FS008","stock":7},{"id":9,"title":"Camera Remote Shutter","description":"Capture shots remotely with our reliable remote shutter.","price":49.5,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"CRS009","stock":30},{"id":10,"title":"Photography Reflector Set","description":"Enhance your lighting with our versatile reflector set.","price":69.99,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"PRS010","stock":22},{"id":11,"title":"Film Roll Storage Case","description":"Organize and protect your film rolls with our storage case.","price":39.95,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"FRSC011","stock":14},{"id":12,"title":"Camera Lens Cleaning Kit","description":"Keep your lenses spotless with our comprehensive cleaning kit.","price":29.99,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"CLCK012","stock":40},{"id":13,"title":"Film Editing Software","description":"Edit your film projects with our user-friendly editing software.","price":89,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"FES013","stock":5},{"id":14,"title":"Camera Lens Filter Kit","description":"Explore creative effects with our versatile lens filter kit.","price":59.95,"thumbnail":["https://picsum.photos/seed/picsum/200/300"],"code":"CLFK014","stock":28},{"id":15,"title":"Film Camera Model X","description":299.99,"price":"A classic film camera for photography enthusiasts.","thumbnail":["camera-image.jpg"],"code":"FCM12345","stock":50}]
+[
+	{
+		"title": "Rokinon Lens Kit",
+		"description": "A series of high-quality lenses available for rent per day. Includes 16mm, 24mm, 50mm, 85mm, and 35mm lenses.",
+		"price": 75.99,
+		"thumbnail": [
+			"https://rokinon.com/cdn/shop/collections/cine-dsx-847466.jpg?v=1647618265"
+		],
+		"code": "RLK001",
+		"stock": 10,
+		"category": ["Lenses"]
+	},
+	{
+		"title": "Canon EOS Rebel T6i",
+		"description": "Capture stunning photos and videos with the Canon EOS Rebel T6i. An ideal camera for beginners.",
+		"price": 549.99,
+		"thumbnail": [
+			"https://www.tiendacanon.com.mx/wcsstore/CMEXCatalogAssetStore/Precio-RPG-T100-tienda-canon-XL-3-min.jpg"
+		],
+		"code": "CET006",
+		"stock": 15,
+		"category": ["Cameras"]
+	},
+	{
+		"title": "Arri Alexa Mini LF",
+		"description": "Experience the industry-standard Arri Alexa Mini LF camera for professional filmmaking.",
+		"price": 4999.99,
+		"thumbnail": [
+			"https://cinetecnico.com/wp-content/uploads/2019/11/arri-alexa-mini-lf.jpg"
+		],
+		"code": "AAMLF002",
+		"stock": 5,
+		"category": ["Cameras"]
+	},
+	{
+		"title": "Manfrotto Aluminum Tripod",
+		"description": "Sturdy and versatile aluminum tripod for stable camera support during photography and videography.",
+		"price": 149.95,
+		"thumbnail": [
+			"https://cdn.manfrotto.com/media/catalog/product/cache/1e774dca205198565016e92bdb88ad55/m/k/mk055xpro3-3w.jpg"
+		],
+		"code": "MAT003",
+		"stock": 20,
+		"category": ["Accessories"]
+	},
+	{
+		"title": "Arri SkyPanel S60-C LED Light",
+		"description": "Illuminate your scenes with the powerful Arri SkyPanel S60-C LED light. Perfect for professional lighting setups.",
+		"price": 2499.99,
+		"thumbnail": [
+			"https://images.squarespace-cdn.com/content/v1/5344b090e4b0dccfc34c6374/1585575334226-ZVDWIBEMBGDI4HWFFAIA/s60.2.jpg?format=2500w"
+		],
+		"code": "ASL004",
+		"stock": 8,
+		"category": ["Lighting"]
+	},
+	{
+		"title": "DJI Ronin-S Gimbal Stabilizer",
+		"description": "Achieve smooth and stable shots with the DJI Ronin-S Gimbal Stabilizer. Ideal for filmmakers and photographers.",
+		"price": 549.95,
+		"thumbnail": [
+			"https://5.imimg.com/data5/SELLER/Default/2021/6/YL/QP/RP/63875151/163401753-3794501723952364-8515362526496124275-n-500x500.jpg"
+		],
+		"code": "DRS005",
+		"stock": 12,
+		"category": ["Accessories"]
+	},
+	{
+		"title": "Sony Alpha a7R IV Mirrorless Camera",
+		"description": "Experience high-resolution photography with the Sony Alpha a7R IV Mirrorless Camera. Ideal for professionals.",
+		"price": 2999.99,
+		"thumbnail": [
+			"https://unitedbroadcast.com/media/catalog/product/cache/24d15840cc6e5cbb343b5cce2cff5719/s/o/sony_alpha_a7r_iv_mirrorless_digital_camera_body_only_7oEG2.jpg"
+		],
+		"code": "SAAMC006",
+		"stock": 7,
+		"category": ["Cameras"]
+	},
+	{
+		"title": "Blackmagic Pocket Cinema Camera 6K",
+		"description": "Capture cinematic-quality video with the Blackmagic Pocket Cinema Camera 6K. A versatile filmmaking tool.",
+		"price": 1999.99,
+		"thumbnail": [
+			"https://www.mpb.com/media-service/bda97dee-34b1-45c2-aabe-c68ffe1a94e5"
+		],
+		"code": "BMPC6K007",
+		"stock": 3,
+		"category": ["Cameras"]
+	},
+	{
+		"title": "Nikon D850 DSLR Camera",
+		"description": "Experience the excellence of the Nikon D850 DSLR camera. A high-resolution powerhouse for photographers and videographers.",
+		"price": 2799.99,
+		"thumbnail": [
+			"https://i.ebayimg.com/thumbs/images/g/NCUAAOSwEkxkJsCA/s-l640.jpg"
+		],
+		"code": "ND850001",
+		"stock": 6,
+		"category": ["Cameras"]
+	},
+	{
+		"title": "Sigma 24-70mm f/2.8 DG OS HSM Art Lens",
+		"description": "Achieve sharp and versatile shots with the Sigma 24-70mm f/2.8 Art Lens. Ideal for a wide range of photography styles.",
+		"price": 1199.95,
+		"thumbnail": [
+			"https://profoto.com.mx/cdn/shop/products/lente-sigma-24-70mm-f2-n_1.jpg?v=1682032027&width=720"
+		],
+		"code": "S2470AL002",
+		"stock": 14,
+		"category": ["Lenses"]
+	},
+	{
+		"title": "GoPro HERO10 Black Action Camera",
+		"description": "Capture incredible action shots with the GoPro HERO10 Black. The ultimate action camera for adventure enthusiasts.",
+		"price": 499.99,
+		"thumbnail": ["https://m.media-amazon.com/images/I/51WLTziEOvL.jpg"],
+		"code": "GH10AC003",
+		"stock": 18,
+		"category": ["Cameras"]
+	},
+	{
+		"title": "DJI Mavic Air 2 Drone",
+		"description": "Explore the skies and capture stunning aerial footage with the DJI Mavic Air 2 drone. Perfect for aerial photography and videography.",
+		"price": 799.95,
+		"thumbnail": [
+			"https://www.droneworksireland.ie/wp-content/uploads/2022/09/M3E__1.jpg"
+		],
+		"code": "DMA2D004",
+		"stock": 10,
+		"category": ["Drones"]
+	},
+	{
+		"title": "Sachtler Ace M Tripod System",
+		"description": "Achieve professional-level stability with the Sachtler Ace M Tripod System. Ideal for video production and filmmaking.",
+		"price": 799.99,
+		"thumbnail": [
+			"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk2XXcUQqiHXjlIvgCAL3BEPOHAxXMdlK8Le_HWDDoh5Rul_jqpj9YHNZp76qsB5vHpdw&usqp=CAU"
+		],
+		"code": "SAMTS005",
+		"stock": 5,
+		"category": ["Accessories"]
+	},
+	{
+		"title": "Godox AD200Pro Portable Flash Strobe",
+		"description": "Enhance your lighting setup with the Godox AD200Pro Portable Flash Strobe. Perfect for studio and on-location photography.",
+		"price": 299.99,
+		"thumbnail": ["https://m.media-amazon.com/images/I/61thoeBRhaL.jpg"],
+		"code": "GAFS006",
+		"stock": 12,
+		"category": ["Lighting"]
+	},
+	{
+		"title": "Panasonic Lumix GH5 Mirrorless Camera",
+		"description": "Experience 4K video and high-quality photography with the Panasonic Lumix GH5. A versatile choice for content creators.",
+		"price": 1999.95,
+		"thumbnail": ["https://img.vistek.net/prodimg/large/445125.jpg"],
+		"code": "PLGH5MC007",
+		"stock": 8,
+		"category": ["Cameras"]
+	},
+	{
+		"title": "Rode NTG3 Shotgun Microphone",
+		"description": "Capture pristine audio with the Rode NTG3 Shotgun Microphone. Perfect for film and video production.",
+		"price": 699.95,
+		"thumbnail": [
+			"https://allpromedia.com/wordpress/assets/rode-ntg-3-shotgun-mic.jpg"
+		],
+		"code": "RNTG3A008",
+		"stock": 15,
+		"category": ["Audio"]
+	},
+	{
+		"title": "DJI Ronin-MX 3-Axis Gimbal Stabilizer",
+		"description": "Achieve cinematic stability with the DJI Ronin-MX 3-Axis Gimbal Stabilizer. Ideal for professional filmmakers.",
+		"price": 1399.99,
+		"thumbnail": [
+			"https://www1.djicdn.com/cms/uploads/8947ab995057f822f112585bad2e1eab@374*374.jpg"
+		],
+		"code": "DRMGS009",
+		"stock": 7,
+		"category": ["Accessories"]
+	},
+	{
+		"title": "Sony FE 100-400mm f/4.5-5.6 GM OSS Lens",
+		"description": "Capture distant subjects with the Sony FE 100-400mm GM OSS Lens. Ideal for wildlife and sports photography.",
+		"price": 2499.95,
+		"thumbnail": [
+			"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTReQXThOJz29I4muthSpLHMTCoHjLZJ80HLemCY3CPkzaQP2PVIGSXjxhipDLhLPJYVcs&usqp=CAU"
+		],
+		"code": "SFE1004GS010",
+		"stock": 9,
+		"category": ["Lenses"]
+	}
+]

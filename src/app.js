@@ -8,7 +8,6 @@ import productRouter from "./routers/product.router.js";
 import cartRouter from "./routers/cart.router.js";
 import productsViewsRouter from "./routers/produts-view.router.js";
 import chatRouter from "./routers/chat.router.js";
-import messageModel from "./dao/models/messages.model.js";
 import cartsViewsRouter from "./routers/chat-viewsRouter.js";
 
 const app = express();
@@ -59,7 +58,7 @@ async function startServer() {
 		app.use("/chat", chatRouter);
 
 		// Initialize sockets
-		Sockets(io, messageModel);
+		Sockets(io);
 	} catch (error) {
 		console.log(chalk.red(error.message));
 		throw error;

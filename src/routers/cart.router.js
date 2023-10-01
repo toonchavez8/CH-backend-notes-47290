@@ -2,7 +2,6 @@ import { Router } from "express";
 import chalk from "chalk";
 import { CartManager } from "../dao/managers/cartManager.js";
 import cartModel from "../dao/models/carts.model.js";
-import { mongoose } from "mongoose";
 import productModel from "../dao/models/products.model.js";
 
 const cartRouter = Router();

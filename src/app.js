@@ -4,7 +4,7 @@ import handlebars from "express-handlebars";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
 import Sockets from "./sockets.js";
-import productRouter from "./routers/product.router.js";
+import { productRouter } from "./routers/product.router.js";
 import cartRouter from "./routers/cart.router.js";
 import productsViewsRouter from "./routers/produts-view.router.js";
 import chatRouter from "./routers/chat.router.js";

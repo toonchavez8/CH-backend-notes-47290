@@ -5,15 +5,81 @@ import productModel from "../dao/models/products.model.js";
 import mongoose from "mongoose";
 
 // declared variables
-const router = Router();
+const productRouter = Router();
 const databaseFilePath = "./data/database.json";
 
 // create new class with db file path
 const PM = new ProductManager(databaseFilePath);
 
+const getProducts = async (req, res) => {
+	try {
+		const limit = req.query.limit || 10;
+		const page = req.query.page || 1;
+
+		const filterOptions = {};
+
+		if (req.query.stock) filterOptions.stock = req.query.stock;
+		if (req.query.category) filterOptions.category = req.query.category;
+
+		const paginateOptions = { lean: true, limit, page };
+
+		if (req.query.sort === "asc") paginateOptions.sort = { price: 1 };
+		if (req.query.sort === "desc") paginateOptions.sort = { price: -1 };
+
+		const result = await productModel.paginate(filterOptions, paginateOptions);
+
+		let prevLink;
+
+		if (!req.query.page) {
+			prevLink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.prevPage}`;
+		} else {
+			const modifiedUrl = req.originalUrl.replace(
+				`page=${req.query.page}`,
+				`page=${result.prevPage}`
+			);
+			prevLink = `http://${req.hostname}:${PORT}${modifiedUrl}`;
+		}
+		let nextLink;
+
+		if (!req.query.page) {
+			nextLink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.nextPage}`;
+		} else {
+			const modifiedUrl = req.originalUrl.replace(
+				`page=${req.query.page}`,
+				`page=${result.nextPage}`
+			);
+			nextLink = `http://${req.hostname}:${PORT}${modifiedUrl}`;
+		}
+
+		return {
+			statusCode: 200,
+			response: {
+				status: "success",
+				payload: result.docs,
+				totalPages: result.totalPages,
+				prevPage: result.prevPage,
+				nextPage: result.nextPage,
+				page: result.page,
+				hasPrevPage: result.hasPrevPage,
+				hasNextPage: result.hasNextPage,
+				prevLink: result.hasPrevPage ? prevLink : null,
+				nextLink: result.hasNextPage ? nextLink : null,
+			},
+		};
+	} catch (error) {
+		return {
+			statusCode: 500,
+			response: {
+				status: "error",
+				error: error.message,
+			},
+		};
+	}
+};
+
 // router path to get all products
-router.get("/", async (req, res) => {
-	const products = await productModel.find().lean().exec();
+productRouter.get("/", async (req, res) => {
+	const products = await getProducts(req, res);
 	const limit = parseInt(req.query.limit);
 
 	console.log("limit", limit);
@@ -30,8 +96,8 @@ router.get("/", async (req, res) => {
 	}
 });
 
-// router path to get product by id
-router.get("/:pid", async (req, res) => {
+// productRouter path to get product by id
+productRouter.get("/:pid", async (req, res) => {
 	try {
 		// Extract the product ID from the request parameters
 		const id = req.params.pid;
@@ -56,7 +122,7 @@ router.get("/:pid", async (req, res) => {
 });
 
 // Create a new POST route for adding products
-router.post("/", async (req, res) => {
+productRouter.post("/", async (req, res) => {
 	try {
 		// Extract product data from the request body
 		const { title, description, price, thumbnail, code, stock, category } =
@@ -95,7 +161,7 @@ router.post("/", async (req, res) => {
 
 // route to update product by id
 
-router.put("/:pid", async (req, res) => {
+productRouter.put("/:pid", async (req, res) => {
 	try {
 		// Extract the product ID from the request parameters
 		const id = req.params.pid;
@@ -130,7 +196,7 @@ router.put("/:pid", async (req, res) => {
 	}
 });
 
-router.delete("/:pid", async (req, res) => {
+productRouter.delete("/:pid", async (req, res) => {
 	let deletedProduct; // Declare the variable here
 
 	try {
@@ -166,4 +232,4 @@ router.delete("/:pid", async (req, res) => {
 	}
 });
 
-export default router;
+export { getProducts, productRouter };

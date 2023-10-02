@@ -52,17 +52,39 @@
 
 			</section>
 
-			<aside>
+			<aside class="flex items-center justify-center space-x-2 mt-4">
 				{{#if paginateInfo.hasPrevPage}}
-					<a href="{{paginateInfo.prevLink}}">Previous</a>
+					<a
+						href="{{paginateInfo.prevLink}}"
+						class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+					>
+						Previous
+					</a>
 				{{/if}}
-				{{#each paginateInfo.totalPages}}
-					<a href="{{this.link}}">{{this.page}}</a>
+				{{#each paginateInfo.pages}}
+					{{#if this.isCurrent}}
+						<span
+							class="bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+						>{{this.page}}</span>
+					{{else}}
+						<a
+							href="{{this.link}}"
+							class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full"
+						>
+							{{this.page}}
+						</a>
+					{{/if}}
 				{{/each}}
 				{{#if paginateInfo.hasNextPage}}
-					<a href="{{paginateInfo.nextLink}}">Next</a>
+					<a
+						href="{{paginateInfo.nextLink}}"
+						class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+					>
+						Next
+					</a>
 				{{/if}}
 			</aside>
+
 		</div>
 
 	</section>

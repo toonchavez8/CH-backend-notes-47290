@@ -11,7 +11,7 @@ import chatRouter from "./routers/chat.router.js";
 import cartsViewsRouter from "./routers/chat-viewsRouter.js";
 
 const app = express();
-const port = 3000;
+export const PORT = 3000;
 
 // Middleware
 app.use(express.json());
@@ -35,8 +35,8 @@ async function startServer() {
 	try {
 		await mongoose.connect(dbUrl, { dbName, useUnifiedTopology: true });
 
-		const server = app.listen(port, () =>
-			console.log(chalk.green(`Server connected to port ${port}`))
+		const server = app.listen(PORT, () =>
+			console.log(chalk.green(`Server connected to PORT ${PORT}`))
 		);
 
 		const io = new Server(server);

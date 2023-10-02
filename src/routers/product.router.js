@@ -3,6 +3,7 @@ import { ProductManager } from "../dao/managers/ProductManager.js";
 import chalk from "chalk";
 import productModel from "../dao/models/products.model.js";
 import mongoose from "mongoose";
+import { PORT } from "../app.js";
 
 // declared variables
 const productRouter = Router();
@@ -79,20 +80,12 @@ const getProducts = async (req, res) => {
 
 // router path to get all products
 productRouter.get("/", async (req, res) => {
-	const products = await getProducts(req, res);
-	const limit = parseInt(req.query.limit);
-
-	console.log("limit", limit);
-	if (products.length === 0) {
-		return res
-			.status(404)
-			.json({ error: "No products found in the database." });
-	}
-
-	if (!isNaN(limit) && limit >= 0) {
-		res.status(200).json({ payload: products.slice(0, limit) });
-	} else {
-		res.status(200).json({ payload: products });
+	try {
+		const products = await getProducts(req, res);
+		res.status(200).json(products); // Return the entire result object
+	} catch (error) {
+		console.log("Error:", error);
+		res.status(500).json({ error: "Internal server error" });
 	}
 });
 

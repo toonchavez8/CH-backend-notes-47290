@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ProductManager } from "../dao/managers/ProductManager.js";
 import productModel from "../dao/models/products.model.js";
 import { getProducts } from "./product.router.js";
+import { PORT } from "../app.js";
 
 const productsViewsRouter = Router();
 const productmanager = new ProductManager("./data/database.json");
@@ -10,30 +11,34 @@ productsViewsRouter.get("/", async (req, res) => {
 	try {
 		const products = await getProducts(req, res);
 
-		// Extract pagination information from the products result
-		const { totalPages, prevLink, nextLink, page } = products.response;
+		if (products.statusCode === 200) {
+			const totalPages = [];
+			let link;
+			const currentPage = parseInt(req.query.page || 1); // Get the current page from the query or default to 1
 
-		// Create an array of page objects for rendering
-		const pages = [];
-		for (let i = 1; i <= totalPages; i++) {
-			pages.push({
-				page: i,
-				link: `/products/page/${i}`,
-				isCurrent: i === page,
-			});
+			for (let index = 1; index <= products.response.totalPages; index++) {
+				const isCurrent = index === currentPage; // Check if this page is the current page
+
+				if (!req.query.page) {
+					link = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${index}`;
+				} else {
+					const modifiedUrl = req.originalUrl.replace(
+						`page=${req.query.page}`,
+						`page=${index}`
+					);
+					link = `http://${req.hostname}:${PORT}${modifiedUrl}`;
+				}
+				totalPages.push({ page: index, link, isCurrent });
+			}
+			const paginateInfo = {
+				hasPrevPage: products.response.hasPrevPage,
+				hasNextPage: products.response.hasNextPage,
+				prevLink: products.response.prevLink,
+				nextLink: products.response.nextLink,
+				totalPages,
+			};
+			res.render("home", { products: products.response.payload, paginateInfo });
 		}
-
-		// Include pagination information in the rendering context
-		const paginateInfo = {
-			hasPrevPage: page > 1,
-			hasNextPage: page < totalPages,
-			prevLink,
-			nextLink,
-			totalPages,
-			pages,
-		};
-
-		res.render("home", { products: products.response.payload, paginateInfo });
 	} catch (error) {
 		// Handle any potential errors here
 		console.error("Error:", error);

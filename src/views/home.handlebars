@@ -15,6 +15,21 @@
 	</section>
 
 	<section class="py-8">
+		<!-- Category Filter -->
+		<section class="mb-4">
+			<label for="categoryFilter" class="font-semibold text-white">Filter by
+				Category:</label>
+			<select
+				id="categoryFilter"
+				name="categoryFilter"
+				onchange="filterProducts(this.value)"
+			>
+				<option value="">All Categories</option>
+				{{#each categories}}
+					<option value="{{this}}">{{this}}</option>
+				{{/each}}
+			</select>
+		</section>
 		<div class="container mx-auto px-16 max-w-screen-lg">
 			<h3
 				class="text-3xl font-semibold text-center mb-6 text-white"
@@ -40,12 +55,21 @@
 						</div>
 
 						<!-- Price -->
-						<p class="text-lg text-purple-600 text-center">${{this.price}}</p>
+						<p
+							class="text-xl font-bold text-purple-600 text-center"
+						>${{this.price}}</p>
+
+						<!-- Category Button -->
+						<button
+							class="bg-indigo-500 hover:bg-indigo-700 text-white px-4 rounded-full mt-2"
+						>
+							{{this.category}}
+						</button>
 
 						<button
-							class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105"
+							class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105 mt-2"
 						>
-							add to cart
+							Add to cart
 						</button>
 					</article>
 				{{/each}}
@@ -89,3 +113,5 @@
 
 	</section>
 </main>
+
+<script src="/home.js"></script>

@@ -9,7 +9,14 @@ const productmanager = new ProductManager("./data/database.json");
 
 productsViewsRouter.get("/", async (req, res) => {
 	try {
-		const products = await getProducts(req, res);
+		const filterOptions = {}; // Initialize an empty filter object
+
+		// Check if the 'category' query parameter exists and add it to filterOptions if provided
+		if (req.query.category) {
+			filterOptions.category = req.query.category;
+		}
+
+		const products = await getProducts(req, res, filterOptions); // Pass the filterOptions to getProducts
 
 		if (products.statusCode === 200) {
 			const totalPages = [];
@@ -30,6 +37,10 @@ productsViewsRouter.get("/", async (req, res) => {
 				}
 				totalPages.push({ page: index, link, isCurrent });
 			}
+
+			// Fetch the list of unique categories from the products
+			const categories = await productModel.distinct("category").exec();
+
 			const paginateInfo = {
 				hasPrevPage: products.response.hasPrevPage,
 				hasNextPage: products.response.hasNextPage,
@@ -37,7 +48,11 @@ productsViewsRouter.get("/", async (req, res) => {
 				nextLink: products.response.nextLink,
 				totalPages,
 			};
-			res.render("home", { products: products.response.payload, paginateInfo });
+			res.render("home", {
+				products: products.response.payload,
+				paginateInfo,
+				categories,
+			});
 		}
 	} catch (error) {
 		// Handle any potential errors here

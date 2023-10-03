@@ -3,6 +3,7 @@ import { ProductManager } from "../dao/managers/ProductManager.js";
 import productModel from "../dao/models/products.model.js";
 import { getProducts } from "./product.router.js";
 import { PORT } from "../app.js";
+import mongoose from "mongoose";
 
 const productsViewsRouter = Router();
 const productmanager = new ProductManager("./data/database.json");
@@ -58,6 +59,31 @@ productsViewsRouter.get("/", async (req, res) => {
 		// Handle any potential errors here
 		console.error("Error:", error);
 		res.status(500).send("Internal Server Error");
+	}
+});
+
+productsViewsRouter.get("/id/:pid", async (req, res) => {
+	try {
+		// Extract the product ID from the request parameters
+		const id = req.params.pid;
+
+		// Check if the provided ID is a valid ObjectId
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			return res.status(400).json({ error: "Invalid product ID." });
+		}
+
+		// Find the product by ID using findById
+		const product = await productModel.findById(id).lean().exec();
+
+		if (!product) {
+			return res.status(404).json({ error: "Product not found." });
+		}
+
+		console.log("Product:", product);
+		res.render("productPage", { product }); // Pass the product object to the template
+	} catch (error) {
+		console.log("Error fetching product:", error.message);
+		res.status(500).json({ error: error.message });
 	}
 });
 

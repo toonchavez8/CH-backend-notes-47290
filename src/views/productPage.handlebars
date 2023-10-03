@@ -1,0 +1,33 @@
+<main class="py-8 mt-12">
+	<section class="container mx-auto px-4 max-w-screen-lg">
+		<div class="bg-white shadow-md rounded-lg p-6 md:p-10">
+			<h1 class="text-3xl font-semibold mb-4">{{product.title}}</h1>
+			<p class="text-gray-600">{{product.description}}</p>
+			<div
+				class="mt-6 flex flex-col md:flex-row md:items-center md:justify-between"
+			>
+				<div class="md:w-1/2">
+					<img
+						src="{{product.thumbnail}}"
+						alt="{{product.title}}"
+						class="w-full rounded-lg shadow-md"
+					/>
+				</div>
+				<div class="md:w-1/2 mt-6 md:mt-0">
+					<p
+						class="text-2xl font-semibold text-purple-600"
+					>${{product.price}}</p>
+					<p class="text-gray-600 mt-2">Code: {{product.code}}</p>
+					<p class="text-gray-600 mt-2">In Stock: {{product.stock}}</p>
+					<p class="text-gray-600 mt-2">Category: {{product.category}}</p>
+
+					<!-- Add to Cart Button -->
+					<button
+						class="bg-indigo-500 hover:bg-indigo-700 text-white px-4 py-2 rounded-md mt-4"
+						id="addToCart"
+					>Add to Cart</button>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>

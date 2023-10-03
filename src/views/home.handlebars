@@ -44,30 +44,30 @@
 						<p
 							class="text-xl text-purple-600 text-center font-semibold mb-2"
 						>{{this.title}}</p>
-
 						<!-- Square Image -->
-						<div class="aspect-square mb-2 overflow-hidden rounded">
+						<a
+							href="/products/id/{{this.id}}"
+							class="aspect-square mb-2 overflow-hidden rounded"
+						>
 							<img
 								src="{{this.thumbnail}}"
 								alt="{{this.title}}"
 								class="w-full h-full object-cover group-hover:scale-110 transition ease"
 							/>
-						</div>
-
+						</a>
 						<!-- Price -->
 						<p
 							class="text-xl font-bold text-purple-600 text-center"
 						>${{this.price}}</p>
-
 						<!-- Category Button -->
 						<button
 							class="bg-indigo-500 hover:bg-indigo-700 text-white px-4 rounded-full mt-2"
 						>
 							{{this.category}}
 						</button>
-
 						<button
-							class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105 mt-2"
+							class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105 mt-2 addTocart"
+							data-product-id="{{this.id}}"
 						>
 							Add to cart
 						</button>

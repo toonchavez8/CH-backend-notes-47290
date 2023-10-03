@@ -7,3 +7,16 @@ function filterProducts(category) {
 	}
 	window.location.href = newUrl;
 }
+const addToCartBtns = document.querySelectorAll(".addTocart");
+
+addToCartBtns.forEach((addToCartBtn) => {
+	const productId = addToCartBtn.getAttribute("data-product-id");
+
+	addToCartBtn.addEventListener("click", () => {
+		addToCart(productId);
+	});
+});
+
+function addToCart(product) {
+	console.log(`Product product:`, product);
+}

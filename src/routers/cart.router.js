@@ -9,6 +9,8 @@ const cartDBFilePath = "./data/cartdb.json";
 
 const cartManager = new CartManager(cartDBFilePath);
 
+const getProductsFromCart = async (cart) => {};
+
 // temp to be delated
 cartRouter.get("/", async (req, res) => {
 	try {
@@ -119,4 +121,4 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
 	}
 });
 
-export default cartRouter;
+export { cartRouter, getProductsFromCart };

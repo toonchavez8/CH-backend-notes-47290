@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, response } from "express";
 import chalk from "chalk";
 import { CartManager } from "../dao/managers/cartManager.js";
 import cartModel from "../dao/models/carts.model.js";
@@ -9,9 +9,45 @@ const cartDBFilePath = "./data/cartdb.json";
 
 const cartManager = new CartManager(cartDBFilePath);
 
-const getProductsFromCart = async (cart) => {};
+const getProductsFromCart = async (req, res) => {
+	try {
+		const id = req.params.cid;
+		const result = await cartModel
+			.findById(id)
+			.populate("products.product")
+			.lean();
 
-// temp to be delated
+		if (result === null) {
+			return {
+				statusCode: 404,
+				response: {
+					status: "error",
+					error: "Cart not found.",
+					message: "Cart not found.",
+				},
+			};
+		}
+
+		return {
+			statusCode: 200,
+			response: {
+				status: "success",
+				payload: result,
+			},
+		};
+	} catch (error) {
+		return {
+			statusCode: 500,
+			response: {
+				status: "error",
+				message: "Error retrieving products from cart.",
+				error: error.message,
+			},
+		};
+	}
+};
+
+// temp to be deleted later
 cartRouter.get("/", async (req, res) => {
 	try {
 		// Retrieve all carts from the database
@@ -61,18 +97,8 @@ cartRouter.post("/", async (req, res) => {
 
 cartRouter.get("/:cid", async (req, res) => {
 	try {
-		const id = req.params.cid;
-
-		// Find the cart by its _id using the Cart model
-		const cart = await cartModel.findById(id).exec();
-
-		if (!cart) {
-			// Handle the case where the cart is not found
-			res.status(404).json({ error: `Cart with ID ${id} not found.` });
-		} else {
-			// Respond with the retrieved cart
-			res.status(200).json({ status: "success", payload: cart });
-		}
+		const result = await getProductsFromCart(req, res);
+		res.status(200).json({ status: "Success", payload: result });
 	} catch (error) {
 		// Handle any other errors that occur during the request
 		console.error("Error retrieving cart:", error.message);
@@ -86,9 +112,9 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
 		const productId = req.params.pid;
 
 		// Find the cart by its _id using the Cart model
-		const cart = await cartModel.findById(cartId).exec();
+		const cartToUpdate = await cartModel.findById(cartId).exec();
 
-		if (!cart) {
+		if (!cartToUpdate) {
 			// Handle the case where the cart is not found
 			return res
 				.status(404)
@@ -104,19 +130,67 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
 				.json({ error: `Product with ID ${productId} not found.` });
 		}
 
-		cart.products.push({
+		cartToUpdate.products.push({
 			productId: product._id,
 			quantity: 1, // You can adjust the quantity as needed
 		});
 
 		// Save the updated cart
-		const updatedCart = await cart.save();
+		const updatedCart = await cartToUpdate.save();
 
 		// Respond with the updated cart
 		res.status(200).json(updatedCart);
 	} catch (error) {
 		// Here we handle any other errors that occur during the request
 		console.error("Error adding product to cart:", error.message);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+cartRouter.delete("/:cid/product/:pid", async (req, res) => {
+	try {
+		const cartId = req.params.cid;
+		const productId = req.params.pid;
+		const cartToUpdate = await cartModel.findById(cartId);
+
+		if (!cartToUpdate) {
+			// Handle the case where the cart is not found
+			return res
+				.status(404)
+				.json({ error: `Cart with ID ${cartId} not found.` });
+		}
+		const productToDelete = await productModel.findById(productId);
+
+		if (!productToDelete) {
+			// Handle the case where the product is not found
+			return res
+				.status(404)
+				.json({ error: `Product with ID ${productId} not found.` });
+		}
+
+		const productIndex = cartToUpdate.products.findIndex(
+			(product) => product.productId === productId
+		);
+
+		if (productIndex === -1) {
+			// Handle the case where the product is not found in the cart
+			return res
+				.status(404)
+				.json({ error: `Product with ID ${productId} not found in cart.` });
+		} else {
+			// Remove the product from the cart
+			cartToUpdate.products = cartToUpdate.products.filter(
+				(product) => product.productId !== productId
+			);
+		}
+		const result = await cartToUpdate.findByIdAndUpdate(cartId, cartToUpdate, {
+			returnDocument: "after",
+		});
+		res.status(200).json(result);
+		// Respond with the updated cart
+	} catch (error) {
+		// Here we handle any other errors that occur during the request
+		console.error("Error deleting product from cart:", error.message);
 		res.status(500).json({ error: error.message });
 	}
 });

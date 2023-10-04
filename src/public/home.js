@@ -23,7 +23,7 @@ categoryButtons.forEach((categoryButton) => {
 		// Prevent default behavior
 		event.preventDefault();
 		const category = event.target.textContent.trim();
-		console.log(category);
+
 		filterProducts(category);
 	});
 });
@@ -82,14 +82,8 @@ function addToCart(productId) {
 	// Get the quantity value from the input field
 	const quantity = quantityInput.value;
 
-	// Create a data object to send in the request body
-
-	console.log("productID", productId);
-
 	// Call the getCartFromLocal function to retrieve or create a cart and get the cartId
 	getCartFromLocal().then((cartId) => {
-		console.log("cartId", cartId);
-
 		if (cartId) {
 			// If a cartId is available, send a POST request to add the product to the cart
 			fetch(`/api/cart/${cartId}/product/${productId}`, {

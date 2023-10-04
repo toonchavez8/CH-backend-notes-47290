@@ -83,13 +83,13 @@ function addToCart(productId) {
 	const quantity = quantityInput.value;
 
 	// Create a data object to send in the request body
-	const data = {
-		productId,
-		quantity,
-	};
+
+	console.log("productID", productId);
 
 	// Call the getCartFromLocal function to retrieve or create a cart and get the cartId
 	getCartFromLocal().then((cartId) => {
+		console.log("cartId", cartId);
+
 		if (cartId) {
 			// If a cartId is available, send a POST request to add the product to the cart
 			fetch(`/api/cart/${cartId}/product/${productId}`, {

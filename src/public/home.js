@@ -21,7 +21,8 @@ categoryButtons.forEach((categoryButton) => {
 	categoryButton.addEventListener("click", (event) => {
 		// Prevent default behavior
 		event.preventDefault();
-		const category = event.target.textContent;
+		const category = event.target.textContent.trim();
+		console.log(category);
 		filterProducts(category);
 	});
 });

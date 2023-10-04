@@ -72,6 +72,7 @@
 							<button
 								class="bg-gray-300 text-gray-600 px-3 py-1 rounded-l"
 								onclick="decrementQuantity(this)"
+								data-product-id="{{this.id}}"
 							>-</button>
 							<input
 								type="number"
@@ -79,10 +80,12 @@
 								value="1"
 								class="text-center bg-gray-100 w-12"
 								id="quantityInput_{{this.id}}"
+								data-product-id="{{this.id}}"
 							/>
 							<button
 								class="bg-gray-300 text-gray-600 px-3 py-1 rounded-r"
 								onclick="incrementQuantity(this)"
+								data-product-id="{{this.id}}"
 							>+</button>
 						</div>
 
@@ -137,3 +140,10 @@
 </main>
 
 <script src="/home.js" type="module"></script>
+
+<script>function incrementQuantity(button) { const productId =
+	button.getAttribute("data-product-id"); const input =
+	button.parentNode.querySelector('input[type="number"]'); input.value =
+	parseInt(input.value) + 1; } function decrementQuantity(button) { const input
+	= button.parentNode.querySelector('input[type="number"]'); const value =
+	parseInt(input.value); if (value > 1) { input.value = value - 1; } }</script>

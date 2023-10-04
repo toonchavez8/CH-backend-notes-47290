@@ -62,7 +62,7 @@ cartRouter.get("/", async (req, res) => {
 	}
 });
 
-// get all products in a cart
+// create a cart
 cartRouter.post("/", async (req, res) => {
 	try {
 		const { userEmail } = req.body;

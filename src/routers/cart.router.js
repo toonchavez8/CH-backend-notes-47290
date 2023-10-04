@@ -259,6 +259,25 @@ cartRouter.delete("/:cid/product/:pid", async (req, res) => {
 	}
 });
 
-cartRouter.delete("/:cid", (req, res) => {});
+cartRouter.delete("/:cid", async (req, res) => {
+	try {
+		const cartId = req.params.cid;
+		const cartToUpdate = await cartModel.findById(cartId);
+
+		if (!cartToUpdate) {
+			return res.status(404).json({
+				error: `cart with id ${cartId} not found!`,
+			});
+		}
+
+		cartToUpdate.products = [];
+
+		const updatedCart = await cartToUpdate.save();
+		res.status(200).json({ status: "Success", payload: updatedCart });
+	} catch (error) {
+		console.error(`Error deleting al products from cart ${error.message}`);
+		res.status(500).json({ error: error.message });
+	}
+});
 
 export { cartRouter, getProductsFromCart };

@@ -27,6 +27,10 @@ categoryButtons.forEach((categoryButton) => {
 	});
 });
 
+function addToCart(productId) {
+	alert(productId);
+}
+
 addToCartBtns.forEach((addToCartBtn) => {
 	const productId = addToCartBtn.getAttribute("data-product-id");
 
@@ -34,7 +38,3 @@ addToCartBtns.forEach((addToCartBtn) => {
 		addToCart(productId);
 	});
 });
-
-function addToCart(product) {
-	console.log(`Product product:`, product);
-}

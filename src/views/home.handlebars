@@ -24,7 +24,7 @@
 				name="categoryFilter"
 				onchange="filterProducts(this.value)"
 			>
-				<option value="">All Categories</option>
+				<option value="" class="categoryButton">Categories</option>
 				{{#each categories}}
 					<option value="{{this}}">{{this}}</option>
 				{{/each}}
@@ -44,6 +44,13 @@
 						<p
 							class="text-xl text-purple-600 text-center font-semibold mb-2"
 						>{{this.title}}</p>
+						<!-- Category Button -->
+						<button
+							class="bg-indigo-500 hover:bg-indigo-700 text-white px-4 rounded-full mt-2 categoryButton"
+						>
+							{{this.category}}
+						</button>
+
 						<!-- Square Image -->
 						<a
 							href="/products/id/{{this.id}}"
@@ -59,12 +66,26 @@
 						<p
 							class="text-xl font-bold text-purple-600 text-center"
 						>${{this.price}}</p>
-						<!-- Category Button -->
-						<button
-							class="bg-indigo-500 hover:bg-indigo-700 text-white px-4 rounded-full mt-2"
-						>
-							{{this.category}}
-						</button>
+
+						<!-- Quantity Input with Plus and Minus Buttons -->
+						<div class="flex items-center mt-2">
+							<button
+								class="bg-gray-300 text-gray-600 px-3 py-1 rounded-l"
+								onclick="decrementQuantity(this)"
+							>-</button>
+							<input
+								type="number"
+								min="1"
+								value="1"
+								class="text-center bg-gray-100 w-12"
+								id="quantityInput_{{this.id}}"
+							/>
+							<button
+								class="bg-gray-300 text-gray-600 px-3 py-1 rounded-r"
+								onclick="incrementQuantity(this)"
+							>+</button>
+						</div>
+
 						<button
 							class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105 mt-2 addTocart"
 							data-product-id="{{this.id}}"

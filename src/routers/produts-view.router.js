@@ -42,6 +42,9 @@ productsViewsRouter.get("/", async (req, res) => {
 			// Fetch the list of unique categories from the products
 			const categories = await productModel.distinct("category").exec();
 
+			// Add an "All Categories" option to the categories array
+			categories.unshift("All Categories");
+
 			const paginateInfo = {
 				hasPrevPage: products.response.hasPrevPage,
 				hasNextPage: products.response.hasNextPage,

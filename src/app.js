@@ -8,7 +8,7 @@ import { productRouter } from "./routers/product.router.js";
 import { cartRouter } from "./routers/cart.router.js";
 import productsViewsRouter from "./routers/produts-view.router.js";
 import chatRouter from "./routers/chat.router.js";
-import cartsViewsRouter from "./routers/chat-viewsRouter.js";
+import cartsViewsRouter from "./routers/cart-viewsRouter.js";
 
 const app = express();
 export const PORT = 3000;

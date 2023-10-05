@@ -4,14 +4,37 @@ import UserModel from "../dao/models/users.model.js";
 const sessionsRouter = Router();
 
 sessionsRouter.post("/register", async (req, res) => {
-	const userToRegister = req.body;
+	const { first_name, last_name, email, age, password } = req.body;
 
-	const user = new UserModel(userToRegister);
-	await user.save();
-	res.redirect("/");
+	console.log("REQ BODY", req.body);
+	// Check if all required fields are present and not empty
+	if (!first_name || !last_name || !email || !age || !password) {
+		return res.status(400).json({ error: "All fields are required." });
+	}
+
+	try {
+		// Create a new user document and save it to MongoDB
+		const newUser = new UserModel({
+			first_name,
+			last_name,
+			email,
+			age,
+			password,
+		});
+
+		await newUser.save();
+
+		console.log("User created successfully!");
+		// Send a success response with a message
+		res.redirect("/");
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: "Error saving user." });
+	}
 });
 
-sessionsRouter.post("/login", async (res, req) => {
+sessionsRouter.post("/login", async (req, res) => {
+	console.log("REQ BODY", req.body);
 	const { email, password } = req.body;
 
 	const user = await UserModel.findOne({ email, password }).lean().exec();

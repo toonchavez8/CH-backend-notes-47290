@@ -1,4 +1,29 @@
 <main class="flex flex-col">
+
+	<!-- User Section -->
+	<section class="px-4 text-center bg-indigo-500 py-8 text-white">
+		<h2 class="text-3xl font-semibold mb-4">Hello {{user.first_name}}</h2>
+
+		{{#if isAdmin}}
+			<p class="text-xl">You are an admin!</p>
+		{{/if}}
+
+		<a href="/profile">
+			<button
+				class="bg-indigo-700 hover:bg-indigo-800 text-white py-2 px-4 rounded-full"
+			>
+				{{user.email}}
+			</button>
+		</a>
+		<a href="/api/sessions/logout">
+			<button
+				class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full mt-4"
+			>
+				Logout
+			</button>
+		</a>
+	</section>
+
 	<section class="bg-gray-100 py-24 flex flex-col md:flex-row">
 		<div class="container px-4 text-center max-w-screen-lg">
 			<h1 class="text-3xl font-bold mb-4">All products</h1>

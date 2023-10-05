@@ -12,7 +12,9 @@ sessionsViewRouter.get("/", privateRoutes, (req, res) => {
 });
 
 sessionsViewRouter.get("/profile", publicRoutes, (req, res) => {
-	res.render("sessions/profile");
+	console.log("REQ SESSION", req.session);
+
+	res.render("sessions/profile", req.session.user);
 });
 
 export default sessionsViewRouter;

@@ -48,6 +48,8 @@ productsViewsRouter.get("/", publicRoutes, async (req, res) => {
 
 			const user = req.session.user;
 
+			const isAdmin = user && user.role === "admin"; // Check if the user is an admin
+
 			const paginateInfo = {
 				hasPrevPage: products.response.hasPrevPage,
 				hasNextPage: products.response.hasNextPage,
@@ -56,6 +58,7 @@ productsViewsRouter.get("/", publicRoutes, async (req, res) => {
 				totalPages,
 			};
 			res.render("home", {
+				isAdmin,
 				user,
 				products: products.response.payload,
 				paginateInfo,

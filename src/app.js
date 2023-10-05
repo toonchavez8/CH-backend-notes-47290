@@ -11,6 +11,8 @@ import chatRouter from "./routers/chat.router.js";
 import cartsViewsRouter from "./routers/cart-viewsRouter.js";
 import sessionsRouter from "./routers/sessions.router.js";
 import sessionsViewRouter from "./routers/sessions-view.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 const app = express();
 export const PORT = 3000;
@@ -18,6 +20,8 @@ export const PORT = 3000;
 // Middleware
 app.use(express.json());
 app.use(express.static("./src/public"));
+// Add this line before defining your routes
+app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", handlebars.engine());
 app.set("views", "./src/views");
 app.set("view engine", "handlebars");
@@ -49,8 +53,17 @@ async function startServer() {
 			next();
 		});
 
+		app.use(
+			session({
+				store: MongoStore.create({ mongoUrl: dbUrl, dbName: "sessions" }),
+				secret: "secret",
+				resave: true,
+				saveUninitialized: true,
+			})
+		);
+
 		// Routes
-		app.use("/api/sessions/", sessionsRouter);
+		app.use("/api/sessions", sessionsRouter);
 		app.use("/", sessionsViewRouter);
 		app.use("/api/products", productRouter);
 		app.use("/api/cart", cartRouter);

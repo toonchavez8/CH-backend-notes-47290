@@ -4,11 +4,12 @@ import productModel from "../dao/models/products.model.js";
 import { getProducts } from "./product.router.js";
 import { PORT } from "../app.js";
 import mongoose from "mongoose";
+import { publicRoutes } from "../middlewares/auth.middleware.js";
 
 const productsViewsRouter = Router();
 const productmanager = new ProductManager("./data/database.json");
 
-productsViewsRouter.get("/", async (req, res) => {
+productsViewsRouter.get("/", publicRoutes, async (req, res) => {
 	try {
 		const filterOptions = {}; // Initialize an empty filter object
 
@@ -45,6 +46,8 @@ productsViewsRouter.get("/", async (req, res) => {
 			// Add an "All Categories" option to the categories array
 			categories.unshift("All Categories");
 
+			const user = req.session.user;
+
 			const paginateInfo = {
 				hasPrevPage: products.response.hasPrevPage,
 				hasNextPage: products.response.hasNextPage,
@@ -53,6 +56,7 @@ productsViewsRouter.get("/", async (req, res) => {
 				totalPages,
 			};
 			res.render("home", {
+				user,
 				products: products.response.payload,
 				paginateInfo,
 				categories,

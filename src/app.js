@@ -50,11 +50,8 @@ async function startServer() {
 		});
 
 		// Routes
-		app.get("/", (req, res) => {
-			res.render("index");
-		});
 		app.use("/api/sessions/", sessionsRouter);
-		app.use("/sessions/", sessionsViewRouter);
+		app.use("/", sessionsViewRouter);
 		app.use("/api/products", productRouter);
 		app.use("/api/cart", cartRouter);
 		app.use("/products", productsViewsRouter);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { privateRoutes, publicRoutes } from "../middlewares/auth.middleware";
+import { privateRoutes, publicRoutes } from "../middlewares/auth.middleware.js";
 
 const sessionsViewRouter = Router();
 

@@ -9,6 +9,8 @@ import { cartRouter } from "./routers/cart.router.js";
 import productsViewsRouter from "./routers/produts-view.router.js";
 import chatRouter from "./routers/chat.router.js";
 import cartsViewsRouter from "./routers/cart-viewsRouter.js";
+import sessionsRouter from "./routers/sessions.router.js";
+import sessionsViewRouter from "./routers/sessions-view.js";
 
 const app = express();
 export const PORT = 3000;
@@ -51,12 +53,13 @@ async function startServer() {
 		app.get("/", (req, res) => {
 			res.render("index");
 		});
+		app.use("/api/sessions/", sessionsRouter);
+		app.use("/sessions/", sessionsViewRouter);
 		app.use("/api/products", productRouter);
 		app.use("/api/cart", cartRouter);
 		app.use("/products", productsViewsRouter);
 		app.use("/carts", cartsViewsRouter);
 		app.use("/chat", chatRouter);
-
 		// Initialize sockets
 		Sockets(io);
 	} catch (error) {

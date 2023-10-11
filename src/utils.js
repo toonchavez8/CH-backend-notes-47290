@@ -7,8 +7,8 @@ export const createHash = (password) => {
 };
 
 // Helper function to verify a password against a hash
-export const isValidPassword = (password, hash) =>
-	bcrypt.compareSync(password, hash);
+export const isValidPassword = (user, password) =>
+	bcrypt.compareSync(password, user.password);
 
 export default {
 	createHash,

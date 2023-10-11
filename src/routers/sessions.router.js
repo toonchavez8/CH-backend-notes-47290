@@ -1,16 +1,18 @@
 import { Router } from "express";
 import UserModel from "../dao/models/users.model.js";
+import { createHash, isValidPassword } from "../utils.js";
 
 const sessionsRouter = Router();
 
 sessionsRouter.post("/register", async (req, res) => {
-	const { first_name, last_name, email, age, password } = req.body;
+	let { first_name, last_name, email, age, password } = req.body;
 
-	console.log("REQ BODY", req.body);
 	// Check if all required fields are present and not empty
 	if (!first_name || !last_name || !email || !age || !password) {
 		return res.status(400).json({ error: "All fields are required." });
 	}
+	// hashpassword
+	password = createHash(password);
 
 	try {
 		// Create a new user document and save it to MongoDB
@@ -34,13 +36,16 @@ sessionsRouter.post("/register", async (req, res) => {
 });
 
 sessionsRouter.post("/login", async (req, res) => {
-	console.log("REQ BODY", req.body);
 	const { email, password } = req.body;
 
-	const user = await UserModel.findOne({ email, password }).lean().exec();
+	const user = await UserModel.findOne({ email }).lean().exec();
 
 	if (!user) {
-		return res.redirect("/");
+		return res.status(401).render("error", { error: "user not found" });
+	}
+
+	if (!isValidPassword(user, password)) {
+		return res.status(401).render("error", { error: "Invalid password" });
 	}
 
 	if (

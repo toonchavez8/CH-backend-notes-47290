@@ -1,5 +1,4 @@
 import { Router } from "express";
-import UserModel from "../dao/models/users.model.js";
 
 import passport from "passport";
 

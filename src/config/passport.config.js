@@ -2,7 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import { createHash, isValidPassword } from "../utils.js";
 import UserModel from "../dao/models/users.model.js";
-
+import GitHubStrategy from "passport-github2";
 const LocalStrategy = local.Strategy;
 
 const InitializePassport = () => {
@@ -63,6 +63,48 @@ const InitializePassport = () => {
 					return done(null, user);
 				} catch (error) {
 					console.error(error);
+					return done(error);
+				}
+			}
+		)
+	);
+
+	passport.use(
+		"github",
+		new GitHubStrategy(
+			{
+				clientID: "Iv1.ec6bd7aadc18d422",
+				clientSecret: "ab1eb3a0e2a445da50c4a6aaf2d43795e670a7a6",
+				callbackURL: "http://localhost:3000/session/githubcallback",
+				scope: ["user:email"],
+			},
+			async (accessToken, refreshToken, profile, done) => {
+				try {
+					const email = profile.emails[0].value; // Get the email from the first item in the emails array
+					console.log("email", email);
+
+					// Check if a user with this email already exists
+					const existingUser = await UserModel.findOne({ email });
+
+					if (existingUser) {
+						// User already exists, you can update their information if needed
+						// Example: existingUser.first_name = profile._json.name;
+						// Then save the updated user: await existingUser.save();
+						return done(null, existingUser);
+					}
+
+					// Create a new user if no user with this email exists
+					const newUser = await UserModel.create({
+						first_name: profile._json.name,
+						last_name: "GitHub User",
+						email: email,
+						// You can set a temporary or default password here
+						password: "github-user-password",
+					});
+
+					return done(null, newUser);
+				} catch (error) {
+					console.error("Error logging into GitHub:", error);
 					return done(error);
 				}
 			}

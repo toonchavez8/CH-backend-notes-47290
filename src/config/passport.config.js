@@ -87,9 +87,6 @@ const InitializePassport = () => {
 					const existingUser = await UserModel.findOne({ email });
 
 					if (existingUser) {
-						// User already exists, you can update their information if needed
-						// Example: existingUser.first_name = profile._json.name;
-						// Then save the updated user: await existingUser.save();
 						return done(null, existingUser);
 					}
 
@@ -98,7 +95,6 @@ const InitializePassport = () => {
 						first_name: profile._json.name,
 						last_name: "GitHub User",
 						email: email,
-						// You can set a temporary or default password here
 						password: "github-user-password",
 					});
 

@@ -7,6 +7,10 @@ sessionsViewRouter.get("/register", privateRoutes, (req, res) => {
 	res.render("sessions/register");
 });
 
+sessionsViewRouter.get("/failregister", (req, res) => {
+	res.status(401).render("error", { error: "passport register failed" });
+});
+
 sessionsViewRouter.get("/", privateRoutes, (req, res) => {
 	res.render("sessions/login");
 });

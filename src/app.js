@@ -14,6 +14,9 @@ import sessionsViewRouter from "./routers/sessions-view.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
+import passport from "passport";
+import InitializePassport from "./config/passport.config.js";
+
 const app = express();
 export const PORT = 3000;
 
@@ -61,6 +64,10 @@ async function startServer() {
 				saveUninitialized: true,
 			})
 		);
+
+		InitializePassport();
+		app.use(passport.initialize());
+		app.use(passport.session());
 
 		// Routes
 		app.use("/api/sessions", sessionsRouter);

@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import passport from "passport";
+import { JWT_COOKIE_NAME } from "../utils.js";
 
 const sessionsRouter = Router();
 
@@ -27,7 +28,7 @@ sessionsRouter.post(
 
 		console.log("REQ SESSION", req.session);
 		console.log("Req.user", req.user);
-		res.redirect("/products");
+		res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
 	}
 );
 

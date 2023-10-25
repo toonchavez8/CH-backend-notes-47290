@@ -1,9 +1,19 @@
 import passport from "passport";
 import local from "passport-local";
-import { createHash, isValidPassword } from "../utils.js";
+import {
+	createHash,
+	extractCookies,
+	generateToken,
+	isValidPassword,
+	JWT_SECRET,
+} from "../utils.js";
 import UserModel from "../dao/models/users.model.js";
 import GitHubStrategy from "passport-github2";
+import PassPortJWT from "passport-jwt";
+
 const LocalStrategy = local.Strategy;
+
+const JWTStrategy = PassPortJWT.Strategy;
 
 const InitializePassport = () => {
 	passport.use(
@@ -60,6 +70,10 @@ const InitializePassport = () => {
 						return done(null, false, { message: "Invalid password" });
 					}
 
+					const token = generateToken(user);
+					console.log("token", token);
+					user.token = token;
+
 					return done(null, user);
 				} catch (error) {
 					console.error(error);
@@ -103,6 +117,19 @@ const InitializePassport = () => {
 					console.error("Error logging into GitHub:", error);
 					return done(error);
 				}
+			}
+		)
+	);
+
+	passport.use(
+		"jwt",
+		new JWTStrategy(
+			{
+				secretOrKey: JWT_SECRET,
+				jwtFromRequest: PassPortJWT.ExtractJwt.fromExtractors([extractCookies]),
+			},
+			async (jwt_payload, done) => {
+				done(null, jwt_payload);
 			}
 		)
 	);

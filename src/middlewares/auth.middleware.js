@@ -1,10 +1,14 @@
 export const privateRoutes = (req, res, next) => {
-	if (req.session.user) return res.redirect("/profile");
+	console.log("req from private routes", req.user);
+	if (req.user.user) return res.redirect("/profile");
 	next();
 };
 
 export const publicRoutes = (req, res, next) => {
-	if (!req.session.user) return res.redirect("/");
+	if (!req.user.user) {
+		console.log("User is not logged in");
+		return res.redirect("/");
+	}
 	next();
 };
 

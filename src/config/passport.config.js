@@ -10,6 +10,7 @@ import {
 import UserModel from "../dao/models/users.model.js";
 import GitHubStrategy from "passport-github2";
 import PassPortJWT from "passport-jwt";
+import cartModel from "../dao/models/carts.model.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -27,23 +28,46 @@ const InitializePassport = () => {
 				let { first_name, last_name, email, age } = req.body;
 
 				try {
-					const user = await UserModel.findOne({ email: username });
+					const existingUser = await UserModel.findOne({ email: username });
 
-					if (user) {
+					if (existingUser) {
 						return done(null, false, { message: "User already exists" });
 					}
 
+					// Create a new user
 					const newUser = {
 						first_name,
 						last_name,
 						email,
 						age,
 						password: createHash(password),
+						role: email === "adminCoder@coder.com" ? "admin" : "user",
 					};
+
+					// Generate a JWT token for the new user
+					const token = generateToken(newUser);
+
+					console.log("newUser", newUser);
+					console.log("token", token);
+
+					// Add the token to the user object
+					newUser.token = token;
+
+					// Create a cart for the user
+					const newCart = new cartModel({ userEmail: email, products: [] });
+					await newCart.save();
+
+					console.log("newCart", newCart);
+
+					newUser.cart = newCart._id;
 
 					const result = await UserModel.create(newUser);
 
-					return done(null, result);
+					const user = result;
+
+					user.token = token;
+
+					return done(null, user);
 				} catch (error) {
 					console.error(error);
 					return done(error);
@@ -95,22 +119,40 @@ const InitializePassport = () => {
 			async (accessToken, refreshToken, profile, done) => {
 				try {
 					const email = profile.emails[0].value; // Get the email from the first item in the emails array
-					console.log("email", email);
 
 					// Check if a user with this email already exists
 					const existingUser = await UserModel.findOne({ email });
 
 					if (existingUser) {
-						return done(null, existingUser);
+						const token = generateToken(existingUser); // Generate a JWT token for the existing user
+						console.log("User already exists. Generating JWT token.");
+
+						// Add the token to the user object
+						existingUser.token = token;
+
+						return done(null, existingUser); // Pass the user and token to the callback
 					}
 
+					const newCart = new cartModel({ userEmail: email, products: [] });
 					// Create a new user if no user with this email exists
 					const newUser = await UserModel.create({
 						first_name: profile._json.name,
 						last_name: "GitHub User",
 						email: email,
 						password: "github-user-password",
+						role: "user",
+						cart: newCart,
 					});
+
+					await newCart.save();
+					const token = generateToken(newUser); // Generate a JWT token for the new user
+					console.log("New user created. Generating JWT token.");
+					// Create a cart for the user
+
+					// Add the token to the user object
+					newUser.token = token;
+
+					console.log("newUser", newUser);
 
 					return done(null, newUser);
 				} catch (error) {
@@ -133,7 +175,6 @@ const InitializePassport = () => {
 			}
 		)
 	);
-
 	passport.serializeUser((user, done) => {
 		done(null, user._id);
 	});

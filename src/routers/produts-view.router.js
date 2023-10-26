@@ -46,9 +46,10 @@ productsViewsRouter.get("/", publicRoutes, async (req, res) => {
 			// Add an "All Categories" option to the categories array
 			categories.unshift("All Categories");
 
-			const user = req.session.user;
+			const user = req.user?.user; // Safely access the user object using optional chaining
 
-			const isAdmin = user && user.role === "admin"; // Check if the user is an admin
+			// Check if the user is logged in and if they are an admin
+			const isAdmin = user?.role === "admin"; // Check if the user is an admin
 
 			const paginateInfo = {
 				hasPrevPage: products.response.hasPrevPage,

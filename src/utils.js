@@ -16,31 +16,35 @@ export const isValidPassword = (user, password) =>
 	bcrypt.compareSync(password, user.password);
 
 export const generateToken = (user) => {
-	const token = JWT.sign(
-		{
-			id: user.id,
-			email: user.email,
-			role: user.role,
-		},
-		JWT_SECRET,
-		{ expiresIn: "24h" }
-	);
+	const token = JWT.sign({ user }, JWT_SECRET, { expiresIn: "24h" });
 	return token;
 };
 
 export const extractCookies = (req) => req?.cookies?.[JWT_COOKIE_NAME] ?? null;
 
 export const passportCall = (strategy) => {
-	return async (req, res, next) => {
+	return (req, res, next) => {
 		passport.authenticate(strategy, function (err, user, info) {
 			if (err) {
 				return next(err);
 			}
 			if (!user) {
-				return res.status(401).render("error", { error: info.message });
+				const errorMessage = info.message || "Authentication failed";
+				return res.render("error", {
+					error: errorMessage,
+				});
+			} else {
+				req.user = user;
+				next();
 			}
-			req.user = user;
-			next();
 		})(req, res, next);
 	};
+};
+
+export const handlePolicies = (policies) => (req, res, next) => {
+	const user = req.user || null;
+	if (!policies.includes(user.role)) {
+		return res.status(401).render("error", { error: "Unauthorized" });
+	}
+	return next();
 };

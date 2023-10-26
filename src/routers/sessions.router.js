@@ -11,7 +11,9 @@ sessionsRouter.post(
 		failureRedirect: "/failregister",
 	}),
 	async (req, res) => {
-		res.redirect("/");
+		console.log("REQ SESSION from register", req.user);
+		console.log("req.token", req.token);
+		res.redirect("/session/login");
 	}
 );
 
@@ -24,21 +26,12 @@ sessionsRouter.post(
 				.status(401)
 				.render("error", { error: "passport login failed" });
 		}
-		req.session.user = req.user;
-
-		console.log("REQ SESSION", req.session);
-		console.log("Req.user", req.user);
 		res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
 	}
 );
 
 sessionsRouter.get("/logout", (req, res) => {
-	req.session.destroy((error) => {
-		if (error) {
-			console.log(error);
-			res.status(500).render("error", { error: error });
-		} else res.redirect("/");
-	});
+	res.clearCookie(JWT_COOKIE_NAME).redirect("/session/login");
 });
 
 export default sessionsRouter;

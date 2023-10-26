@@ -12,22 +12,20 @@ import cartsViewsRouter from "./routers/cart-viewsRouter.js";
 import sessionsRouter from "./routers/sessions.router.js";
 import sessionsViewRouter from "./routers/sessions-view.js";
 import session from "express-session";
-import MongoStore from "connect-mongo";
 
 import passport from "passport";
 import InitializePassport from "./config/passport.config.js";
 import { passportCall } from "./utils.js";
 import cookieParser from "cookie-parser";
-import { isAdminCheck } from "./middlewares/auth.middleware.js";
 
 const app = express();
 export const PORT = 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./src/public"));
-app.use(cookieParser());
 // Add this line before defining your routes
 app.engine("handlebars", handlebars.engine());
 app.set("views", "./src/views");
@@ -62,7 +60,6 @@ async function startServer() {
 
 		app.use(
 			session({
-				store: MongoStore.create({ mongoUrl: dbUrl, dbName: "sessions" }),
 				secret: "secret",
 				resave: true,
 				saveUninitialized: true,
@@ -79,13 +76,7 @@ async function startServer() {
 		app.use("/api/products", productRouter);
 		app.use("/api/cart", cartRouter);
 		// Middleware to check if the user is an admin
-		app.use(isAdminCheck);
-		app.use(
-			"/products",
-			passportCall("jwt"),
-
-			productsViewsRouter
-		);
+		app.use("/products", passportCall("jwt"), productsViewsRouter);
 		app.use("/carts", cartsViewsRouter);
 		app.use("/chat", chatRouter);
 		// Initialize sockets

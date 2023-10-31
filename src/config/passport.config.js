@@ -99,6 +99,9 @@ const InitializePassport = () => {
 					console.log("token", token);
 					user.token = token;
 
+					// save cartID to localsession for later use
+					req.session.cartID = user.cart;
+
 					return done(null, user);
 				} catch (error) {
 					console.error(error);
@@ -131,6 +134,8 @@ const InitializePassport = () => {
 						// Add the token to the user object
 						existingUser.token = token;
 
+						// save existing user cartId to local session
+						req.session.cartID = existingUser.cart;
 						return done(null, existingUser); // Pass the user and token to the callback
 					}
 
@@ -154,6 +159,9 @@ const InitializePassport = () => {
 					newUser.token = token;
 
 					console.log("newUser", newUser);
+
+					// save cartID to localsession for later use
+					req.session.cartID = newUser.cart;
 
 					return done(null, newUser);
 				} catch (error) {

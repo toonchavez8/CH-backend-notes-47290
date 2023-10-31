@@ -251,6 +251,8 @@ export const getProductsView = async (req, res) => {
 
 			const user = req.user?.user; // Safely access the user object using optional chaining
 
+			const cartID = user?.cart; // Safely access the cart object using optional chaining
+
 			// Check if the user is logged in and if they are an admin
 			const isAdmin = user?.role === "admin"; // Check if the user is an admin
 
@@ -267,6 +269,7 @@ export const getProductsView = async (req, res) => {
 				products: products.response.payload,
 				paginateInfo,
 				categories,
+				cartID,
 			});
 		}
 	} catch (error) {
@@ -292,8 +295,11 @@ export const getProductByIDView = async (req, res) => {
 		if (!product) {
 			return res.status(404).json({ error: "Product not found." });
 		}
+		const user = req.user?.user; // Safely access the user object using optional chaining
 
-		res.render("productPage", { product }); // Pass the product object to the template
+		const cartID = user?.cart; // Safely access the cart object using optional chaining
+
+		res.render("productPage", { product, cartID }); // Pass the product object to the template
 	} catch (error) {
 		console.log("Error fetching product:", error.message);
 		res.status(500).json({ error: error.message });

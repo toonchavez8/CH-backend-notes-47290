@@ -28,106 +28,57 @@ categoryButtons.forEach((categoryButton) => {
 	});
 });
 
-async function getCartFromLocal() {
-	const cartId = localStorage.getItem("cartId");
-
-	if (cartId) {
-		// if found return cartid
-		return cartId;
-	} else {
-		const userEmail = prompt("please enter your email");
-
-		if (!userEmail) {
-			alert(
-				"no cart was found so we need to make one for you, please provide your email"
-			);
-			return null;
-		}
-
-		try {
-			// send a post request to api
-			const response = await fetch("/api/cart", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ userEmail }),
-			});
-			if (response.ok) {
-				// If the cart is successfully created, parse the response JSON
-				const cartData = await response.json();
-
-				// Store the cart ID in local storage
-				localStorage.setItem("cartId", cartData._id);
-
-				// Return the cart ID
-				return cartData._id;
-			} else {
-				// Handle the case where there was an error creating the cart
-				console.error("Error creating cart:", response.statusText);
-				return null;
-			}
-		} catch (error) {
-			// Handle any other errors that occur during the request
-			console.error("Error creating cart:", error);
-			return null;
-		}
-	}
-}
-
-function addToCart(productId) {
+function addToCart(productId, cartID) {
 	// Get the quantity input field associated with this product
 	const quantityInput = document.getElementById(`quantityInput_${productId}`);
 
 	// Get the quantity value from the input field
 	const quantity = quantityInput.value;
 
-	// Call the getCartFromLocal function to retrieve or create a cart and get the cartId
-	getCartFromLocal().then((cartId) => {
-		if (cartId) {
-			// If a cartId is available, send a POST request to add the product to the cart
-			fetch(`/api/cart/${cartId}/product/${productId}`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ quantity }),
-			})
-				.then((response) => {
-					if (response.ok) {
-						// Handle the success case where the product is added to the cart
-						console.log("Product added to cart successfully");
+	// Send a POST request to add the product to the cart
+	fetch(`/api/cart/${cartID}/product/${productId}`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ quantity }),
+	})
+		.then((response) => {
+			if (response.ok) {
+				// Handle the success case where the product is added to the cart
+				console.log("Product added to cart successfully");
 
-						// Show SweetAlert message
-						Swal.fire({
-							icon: "success",
-							title: "Product added to cart!",
-							showCancelButton: true,
-							confirmButtonText: "View Cart",
-							cancelButtonText: "Close",
-						}).then((result) => {
-							if (result.isConfirmed) {
-								// Redirect to the cart page with the cartId
-								window.location.href = `/carts/${cartId}`;
-							}
-						});
-					} else {
-						// Handle the case where there was an error adding the product to the cart
-						console.error("Error adding product to cart:", response.statusText);
+				// Show SweetAlert message
+				Swal.fire({
+					icon: "success",
+					title: "Product added to cart!",
+					showCancelButton: true,
+					confirmButtonText: "View Cart",
+					cancelButtonText: "Close",
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// Redirect to the cart page with the cartId
+						window.location.href = `/carts/${cartID}`;
 					}
-				})
-				.catch((error) => {
-					// Handle any other errors that occur during the request
-					console.error("Error adding product to cart:", error);
 				});
-		}
-	});
+			} else {
+				// Handle the case where there was an error adding the product to the cart
+				console.error("Error adding product to cart:", response.statusText);
+			}
+		})
+		.catch((error) => {
+			// Handle any other errors that occur during the request
+			console.error("Error adding product to cart:", error);
+		});
 }
 
 addToCartBtns.forEach((addToCartBtn) => {
 	const productId = addToCartBtn.getAttribute("data-product-id");
+	const cartID = addToCartBtn.getAttribute("data-cartID");
 
 	addToCartBtn.addEventListener("click", () => {
-		addToCart(productId);
+		console.log("Product ID:", productId);
+		console.log("Cart ID:", cartID);
+		addToCart(productId, cartID);
 	});
 });

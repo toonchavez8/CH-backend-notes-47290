@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
-import { JWT_COOKIE_NAME, passportCall } from "../utils.js";
-
+import { passportCall } from "../utils.js";
+import * as sessionController from "../controllers/sessionController.js";
 const sessionsViewRouter = Router();
 
 sessionsViewRouter.get("/register", (req, res) => {
@@ -18,8 +18,6 @@ sessionsViewRouter.get("/", passportCall("jwt"), (req, res) => {
 });
 
 sessionsViewRouter.get("/profile", passportCall("jwt"), (req, res) => {
-	console.log("REQ SESSION", req.user);
-
 	res.render("sessions/profile", req.user.user);
 });
 
@@ -38,16 +36,9 @@ sessionsViewRouter.get("/session/login", (req, res) => {
 sessionsViewRouter.get(
 	"/session/githubcallback",
 	passport.authenticate("github", {
-		failureRedirect: "/failregister", // Handle failed GitHub authentication
+		failureRedirect: "/failregister",
 	}),
-	async (req, res) => {
-		if (!req.user) {
-			return res
-				.status(401)
-				.render("error", { error: "passport login failed" });
-		}
-		res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
-	}
+	sessionController.login
 );
 
 export default sessionsViewRouter;

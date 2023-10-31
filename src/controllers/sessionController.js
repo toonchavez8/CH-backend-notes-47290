@@ -1,8 +1,6 @@
 import { JWT_COOKIE_NAME } from "../utils.js";
 
 export const register = async (req, res) => {
-	console.log("registering user");
-
 	res.redirect("/session/login");
 };
 

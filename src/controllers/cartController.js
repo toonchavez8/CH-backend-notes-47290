@@ -1,4 +1,3 @@
-import { CartManager } from "../dao/managers/cartManager.js";
 import cartModel from "../dao/models/carts.model.js";
 import productModel from "../dao/models/products.model.js";
 

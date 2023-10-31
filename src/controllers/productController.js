@@ -252,6 +252,7 @@ export const getProductsView = async (req, res) => {
 			const user = req.user?.user; // Safely access the user object using optional chaining
 
 			const cartID = user?.cart; // Safely access the cart object using optional chaining
+			console.log("carid from home", cartID);
 
 			// Check if the user is logged in and if they are an admin
 			const isAdmin = user?.role === "admin"; // Check if the user is an admin
@@ -263,10 +264,16 @@ export const getProductsView = async (req, res) => {
 				nextLink: products.response.nextLink,
 				totalPages,
 			};
+
+			// Include cartID in the products payload
+			const updatedProducts = products.response.payload.map((product) => ({
+				...product,
+				cartID: cartID,
+			}));
 			res.render("home", {
 				isAdmin,
 				user,
-				products: products.response.payload,
+				products: updatedProducts,
 				paginateInfo,
 				categories,
 				cartID,

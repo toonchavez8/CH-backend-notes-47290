@@ -117,6 +117,7 @@
 						<button
 							class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105 mt-2 addTocart"
 							data-product-id="{{this.id}}"
+							data-cartID="{{this.cartID}}"
 						>
 							Add to cart
 						</button>
@@ -124,7 +125,6 @@
 				{{/each}}
 
 			</section>
-
 			<aside class="flex items-center justify-center space-x-2 mt-4">
 				{{#if paginateInfo.hasPrevPage}}
 					<a

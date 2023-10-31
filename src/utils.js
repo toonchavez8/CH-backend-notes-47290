@@ -1,9 +1,10 @@
 import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import passport from "passport";
+import config from "./config/config.js";
 
-export const JWT_SECRET = "secret";
-export const JWT_COOKIE_NAME = "mycookie";
+export const JWT_SECRET = config.JWT.SECRET;
+export const JWT_COOKIE_NAME = config.JWT.COOKIE_NAME;
 
 // Helper function to create a hash from a password
 export const createHash = (password) => {
@@ -16,7 +17,9 @@ export const isValidPassword = (user, password) =>
 	bcrypt.compareSync(password, user.password);
 
 export const generateToken = (user) => {
-	const token = JWT.sign({ user }, JWT_SECRET, { expiresIn: "24h" });
+	const token = JWT.sign({ user }, JWT_SECRET, {
+		expiresIn: config.JWT.EXPIRES_IN,
+	});
 	return token;
 };
 

@@ -11,6 +11,7 @@ import UserModel from "../dao/models/users.model.js";
 import GitHubStrategy from "passport-github2";
 import PassPortJWT from "passport-jwt";
 import cartModel from "../dao/models/carts.model.js";
+import config from "./config.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -41,7 +42,7 @@ const InitializePassport = () => {
 						email,
 						age,
 						password: createHash(password),
-						role: email === "adminCoder@coder.com" ? "admin" : "user",
+						role: email === config.ADMIN.EMAIL ? "admin" : "user",
 					};
 
 					// Generate a JWT token for the new user
@@ -111,9 +112,9 @@ const InitializePassport = () => {
 		"github",
 		new GitHubStrategy(
 			{
-				clientID: "Iv1.ec6bd7aadc18d422",
-				clientSecret: "ab1eb3a0e2a445da50c4a6aaf2d43795e670a7a6",
-				callbackURL: "http://localhost:3000/session/githubcallback",
+				clientID: config.GitHub.CLIENT_ID,
+				clientSecret: config.GitHub.CLIENT_SECRET,
+				callbackURL: config.GitHub.CALLBACK_URL,
 				scope: ["user:email"],
 			},
 			async (accessToken, refreshToken, profile, done) => {

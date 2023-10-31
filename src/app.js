@@ -17,9 +17,10 @@ import passport from "passport";
 import InitializePassport from "./config/passport.config.js";
 import { passportCall } from "./utils.js";
 import cookieParser from "cookie-parser";
+import CONFIG from "./config/config.js";
 
 const app = express();
-export const PORT = 3000;
+export const PORT = CONFIG.APISERVER.PORT;
 
 // Middleware
 app.use(express.json());
@@ -38,9 +39,8 @@ app.use((err, req, res, next) => {
 });
 
 // Database configuration
-const dbUrl =
-	"mongodb+srv://toonchavez8:Iac3b3br.@cluster0.aotpgnu.mongodb.net/";
-const dbName = "ecommerce";
+const dbUrl = CONFIG.MONGO.URI;
+const dbName = CONFIG.MONGO.DB;
 
 async function startServer() {
 	try {
@@ -60,7 +60,7 @@ async function startServer() {
 
 		app.use(
 			session({
-				secret: "secret",
+				secret: process.env.SECRET,
 				resave: true,
 				saveUninitialized: true,
 			})

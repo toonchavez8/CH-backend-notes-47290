@@ -1,11 +1,9 @@
 import { Router } from "express";
-import messageModel from "../dao/models/messages.model.js";
+import { chatController } from "../controllers/chatController.js";
+import { passportCall } from "../utils.js";
 
 const chatRouter = Router();
 
-chatRouter.get("/", async (req, res) => {
-	const messages = await messageModel.find().lean().exec();
-	res.render("chat", { messages });
-});
+chatRouter.get("/", passportCall("jwt"), chatController);
 
 export default chatRouter;

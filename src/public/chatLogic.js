@@ -1,19 +1,32 @@
 // Function to initialize the chat
 function initializeChat() {
 	// Show a prompt to set a username
-	Swal.fire({
-		title: "Authentication",
-		input: "text",
-		text: "Set a username for the chat",
-		inputValidator: validateUsername,
-		allowOutsideClick: false,
-	}).then((result) => {
-		if (result.value) {
-			const user = result.value.toLowerCase();
-			console.log(user);
-			initializeChatUI(user);
-		}
-	});
+	const username = document.getElementById("username");
+	const userData = username.getAttribute("data-user");
+
+	// Use the user object in your chat logic
+	const user = userData;
+	console.log(user);
+	if (!user) {
+		Swal.fire({
+			title: "Authentication",
+			input: "text",
+			text: "Set a username for the chat",
+			inputValidator: validateUsername,
+			allowOutsideClick: false,
+		}).then((result) => {
+			if (result.value) {
+				const user = result.value.toLowerCase();
+				console.log(user);
+				initializeChatUI(user);
+			}
+		});
+	}
+
+	// If the user is already logged in, show the chat UI
+	else {
+		initializeChatUI(user);
+	}
 }
 
 // Validate username

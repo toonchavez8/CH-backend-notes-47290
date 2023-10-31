@@ -1,6 +1,12 @@
 <main class="w-full flex flex-col items-center justify-center h-full">
 
-	<h1 id="username" class="text-white text-3xl mb-10"></h1>
+	<h1
+		id="username"
+		class="text-white text-3xl mb-10"
+		data-user="{{user.first_name}} {{user.last_name}}"
+	>
+
+	</h1>
 	<figure class="bg-white p-4 rounded-lg shadow-md w-96">
 
 		<section class="h-96 overflow-y-scroll" id="log">
@@ -26,3 +32,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/chatLogic.js" type="module"></script>
+
+<script>
+</script>

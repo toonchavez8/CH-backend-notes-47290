@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { ProductManager } from "../dao/managers/ProductManager.js";
 import productModel from "../dao/models/products.model.js";
-import { getProducts } from "./product.router.js";
-import { PORT } from "../app.js";
+import { getAllProducts } from "../controllers/productController.js";
+import config from "../config/config.js";
 import mongoose from "mongoose";
 import { publicRoutes } from "../middlewares/auth.middleware.js";
 
+const PORT = config.APISERVER.PORT;
 const productsViewsRouter = Router();
 const productmanager = new ProductManager("./data/database.json");
 
@@ -18,7 +19,7 @@ productsViewsRouter.get("/", publicRoutes, async (req, res) => {
 			filterOptions.category = req.query.category;
 		}
 
-		const products = await getProducts(req, res, filterOptions); // Pass the filterOptions to getProducts
+		const products = await getAllProducts(req, res, filterOptions); // Pass the filterOptions to getAllProducts
 
 		if (products.statusCode === 200) {
 			const totalPages = [];

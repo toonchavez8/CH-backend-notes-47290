@@ -9,7 +9,9 @@ try {
 	});
 	console.log("Connected to MongoDB");
 
-	const response = await userModel.find().explain("executionStats");
+	const response = await userModel
+		.find({ first_name: "Hyacinth" })
+		.explain("executionStats");
 	console.log(response);
 } catch (error) {
 	console.log("Error connecting to MongoDB");

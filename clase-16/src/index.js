@@ -10,25 +10,12 @@ try {
 	});
 	console.log("Connected to MongoDB");
 
-	const Courseresponse = await courseModel.create({
-		title: "Curso de Node.js",
-		description: "Curso de Node.js en Platzi",
-		difficulty: 1,
-		proffesor: "Doc OC",
-	});
-
-	const response = await studentModel.create({
-		first_name: "Juan",
-		last_name: "Perez",
-		email: "jperez@gmail.com",
-		courses: [
-			{
-				course: Courseresponse._id,
-			},
-		],
-	});
-	console.log(Courseresponse);
-	console.log(response);
+	const response = await studentModel
+		.findOne({
+			_id: "654d87772c86a40a6d1aaa49",
+		})
+		.populate("courses.course");
+	console.log(JSON.stringify(response, null, 2));
 } catch (error) {
 	console.log("Error connecting to MongoDB");
 }

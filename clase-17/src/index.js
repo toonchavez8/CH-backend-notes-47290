@@ -7,6 +7,9 @@ await mongoose.connect("mongodb://localhost:27017", {
 
 console.log("Connected to MongoDB");
 
-const users = await userModel.find();
+const users = await userModel.paginate(
+	{ gender: "Female" },
+	{ limit: 5, page: 2 }
+);
 
 console.log(users);

@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use(cookieParser());
+app.use(cookieParser("secret"));
 
 app.get("/", (req, res) => {
 	const user = {
@@ -12,12 +12,12 @@ app.get("/", (req, res) => {
 		gender: "Male",
 		role: "admin",
 	};
-	res.cookie("user", user).send("Hello World!");
+	res.cookie("user", user, { signed: true }).send("Hello World!");
 });
 
 app.get("/user", (req, res) => {
-	if (req.cookies.user?.role === "admin") {
-		const user = req.cookies.user;
+	if (req.signedCookies.user?.role === "admin") {
+		const user = req.signedCookies.user;
 		res.send(user);
 	} else {
 		res.send("No user found");

@@ -1,7 +1,28 @@
 [
 	{
-		"name": "toon",
+		"first_name": "Miguel",
+		"last_name": "chavez",
+		"email": "toonchavez8@gmail.com",
+		"languages": [
+			"js",
+			"rust",
+			"typescript"
+		],
+		"salary": 47800,
 		"role": "user",
 		"id": 1
+	},
+	{
+		"first_name": "cristy",
+		"last_name": "chavez",
+		"email": "toonchavez8@gmail.com",
+		"languages": [
+			"js",
+			"rust",
+			"typescript"
+		],
+		"salary": 47800,
+		"role": "user",
+		"id": 2
 	}
 ]

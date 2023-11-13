@@ -1940,8 +1940,8 @@
         "type": 2
       },
       "seed": 1017206880,
-      "version": 326,
-      "versionNonce": 640068000,
+      "version": 327,
+      "versionNonce": 1634511264,
       "isDeleted": false,
       "boundElements": [
         {
@@ -1949,7 +1949,7 @@
           "id": "9VWPEatiwPWbuDJKdZKvX"
         }
       ],
-      "updated": 1699844228566,
+      "updated": 1699844734964,
       "link": null,
       "locked": false,
       "points": [
@@ -1983,9 +1983,9 @@
     {
       "id": "9VWPEatiwPWbuDJKdZKvX",
       "type": "text",
-      "x": 377.85201585914547,
-      "y": 35.02814122506173,
-      "width": 95.73991394042969,
+      "x": 362.8609959986219,
+      "y": 39.22694582326427,
+      "width": 102.95989990234375,
       "height": 25,
       "angle": 0,
       "strokeColor": "#1971c2",
@@ -1999,21 +1999,21 @@
       "frameId": "CG0_UwAXjXulW89UnWUJE",
       "roundness": null,
       "seed": 1196761504,
-      "version": 26,
-      "versionNonce": 1764671904,
+      "version": 43,
+      "versionNonce": 882301024,
       "isDeleted": false,
       "boundElements": null,
-      "updated": 1699844185075,
+      "updated": 1699844731686,
       "link": null,
       "locked": false,
-      "text": "daoSwitch",
+      "text": "Persitance",
       "fontSize": 20,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "baseline": 18,
       "containerId": "TUiqn5QEEQz6-jouJueqU",
-      "originalText": "daoSwitch",
+      "originalText": "Persitance",
       "lineHeight": 1.25
     },
     {

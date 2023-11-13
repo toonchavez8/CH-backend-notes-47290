@@ -1,11 +1,13 @@
 // This class represents a service for managing users, using a UsersDaoArray as the data access layer.
 
-import UsersDaoArray from "../dao/usersDao.js";
+import UsersDaoArray from "../dao/usersDaoArray.js";
+
+import UsersDaoFile from "../dao/usersDaoFile.js";
 
 export default class UsersService {
 	constructor() {
 		// Initialize the UsersDaoArray to interact with user data.
-		this.usersDao = new UsersDaoArray();
+		this.usersDao = new UsersDaoFile();
 	}
 
 	// Retrieve all users from the data access layer (DAO).

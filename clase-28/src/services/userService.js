@@ -1,14 +1,17 @@
 // This class represents a service for managing users, using a UsersDaoArray as the data access layer.
 
-import UsersDaoArray from "../dao/usersDaoArray.js";
-
-import UsersDaoFile from "../dao/usersDaoFile.js";
-
+import PersistenceFactory from "../dao/persistanceFactory.js";
 export default class UsersService {
 	constructor() {
 		// Initialize the UsersDaoArray to interact with user data.
-		this.usersDao = new UsersDaoFile();
+		this.usersDao;
+		this.init();
 	}
+
+	init = async () => {
+		// Initialize the UsersDaoArray to interact with user data.
+		this.usersDao = await PersistenceFactory.getPersistance();
+	};
 
 	// Retrieve all users from the data access layer (DAO).
 	getAllUsers = async () => {

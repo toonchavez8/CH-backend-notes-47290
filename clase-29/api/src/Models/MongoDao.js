@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import User from "./Users";
+import User from "./UsersModel";
 
 export default class MongoDao {
 	constructor(config) {

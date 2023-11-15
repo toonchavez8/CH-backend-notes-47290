@@ -1,6 +1,6 @@
 import config from "../Config/config.js";
 import MongoDao from "../Models/MongoDao.js";
-import UserService from "./usersService.js";
+import UserReposity from "./usersService.js";
 
 let dao;
 
@@ -17,4 +17,4 @@ switch (config.app.persistance) {
 		break;
 }
 
-export const userService = new UserService(dao);
+export const userService = new UserReposity(dao);

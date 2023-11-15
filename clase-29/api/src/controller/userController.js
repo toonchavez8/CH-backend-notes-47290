@@ -1,7 +1,7 @@
 import { userService } from "../services/servicesSwitch.js";
 
 const getUsers = async (req, res) => {
-	let results = await userService.getUsers();
+	let results = await userService.get();
 	res.send(results);
 };
 
@@ -12,7 +12,7 @@ const saveUser = async (req, res) => {
 		return;
 	}
 
-	let result = await userService.saveUser({ first_name, last_name, email });
+	let result = await userService.save({ first_name, last_name, email });
 
 	res.send(result);
 };

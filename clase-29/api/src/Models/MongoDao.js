@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
-import User from "./UsersModel";
+import User from "./UsersModel.js";
 
 export default class MongoDao {
 	constructor(config) {
-		this.mongoose = mongoose.connect(config.mongo.URL).catch((err) => {
+		console.log("MongoDao", config);
+		this.mongoose = mongoose.connect(config).catch((err) => {
 			console.log(err);
 			process.exit();
 		});

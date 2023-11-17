@@ -7,10 +7,10 @@ import {
 	isValidPassword,
 	JWT_SECRET,
 } from "../utils.js";
-import UserModel from "../dao/models/users.model.js";
+import UserModel from "../models/users.model.js";
 import GitHubStrategy from "passport-github2";
 import PassPortJWT from "passport-jwt";
-import cartModel from "../dao/models/carts.model.js";
+import cartModel from "../models/carts.model.js";
 import config from "./config.js";
 
 const LocalStrategy = local.Strategy;

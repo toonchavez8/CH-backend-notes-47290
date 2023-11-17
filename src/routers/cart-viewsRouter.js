@@ -1,5 +1,5 @@
 import { Router } from "express";
-import cartModel from "../dao/models/carts.model.js";
+import cartModel from "../models/carts.model.js";
 import { getProductsFromCart } from "../controllers/cartController.js";
 
 const cartsViewsRouter = Router();

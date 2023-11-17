@@ -1,4 +1,4 @@
-import messageModel from "../dao/models/messages.model.js";
+import messageModel from "../models/messages.model.js";
 
 export const chatController = async (req, res) => {
 	const messages = await messageModel.find().lean().exec();

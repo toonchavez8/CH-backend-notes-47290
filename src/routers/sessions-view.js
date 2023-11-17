@@ -20,11 +20,10 @@ sessionsViewRouter.get("/", passportCall("jwt"), (req, res) => {
 
 sessionsViewRouter.get("/profile", passportCall("jwt"), (req, res) => {
 	let user = req.user.user;
-	console.log("before check", user);
+
 	if (user.role === "user") {
 		const userDto = new UserDTO(user);
 		user = userDto;
-		console.log("checking user", user);
 	}
 	res.render("sessions/profile", user);
 });

@@ -1,5 +1,5 @@
 import config from "../config/config.js";
-import productModel from "../dao/models/products.model.js";
+import productModel from "../models/products.model.js";
 import mongoose from "mongoose";
 
 const PORT = config.APISERVER.PORT;

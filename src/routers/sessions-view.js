@@ -2,6 +2,7 @@ import { Router } from "express";
 import passport from "passport";
 import { passportCall } from "../utils.js";
 import * as sessionController from "../controllers/sessionController.js";
+import UserDTO from "../dto/user.DTO.js";
 const sessionsViewRouter = Router();
 
 sessionsViewRouter.get("/register", (req, res) => {
@@ -18,7 +19,14 @@ sessionsViewRouter.get("/", passportCall("jwt"), (req, res) => {
 });
 
 sessionsViewRouter.get("/profile", passportCall("jwt"), (req, res) => {
-	res.render("sessions/profile", req.user.user);
+	let user = req.user.user;
+	console.log("before check", user);
+	if (user.role === "user") {
+		const userDto = new UserDTO(user);
+		user = userDto;
+		console.log("checking user", user);
+	}
+	res.render("sessions/profile", user);
 });
 
 sessionsViewRouter.get(

@@ -7,18 +7,18 @@
 			<label class="block text-gray-700 text-sm font-bold mb-2">First Name:</label>
 			<p class="text-gray-800 text-lg font-medium">{{first_name}}</p>
 		</div>
-		<div class="mb-4">
-			<label class="block text-gray-700 text-sm font-bold mb-2">Last Name:</label>
-			<p class="text-gray-800 text-lg font-medium">{{last_name}}</p>
-		</div>
+		{{#if last_name}}
+			<div class="mb-4">
+				<label class="block text-gray-700 text-sm font-bold mb-2">Last Name:</label>
+				<p class="text-gray-800 text-lg font-medium">{{last_name}}</p>
+			</div>
+		{{/if}}
+
 		<div class="mb-4">
 			<label class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
 			<p class="text-gray-800 text-lg font-medium">{{email}}</p>
 		</div>
-		<div class="mb-4">
-			<label class="block text-gray-700 text-sm font-bold mb-2">Age:</label>
-			<p class="text-gray-800 text-lg font-medium">{{age}}</p>
-		</div>
+
 		<div class="mb-4">
 			<label class="block text-gray-700 text-sm font-bold mb-2">Role:</label>
 			<p class="text-gray-800 text-lg font-medium">{{role}}</p>

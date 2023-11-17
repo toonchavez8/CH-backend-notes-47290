@@ -81,9 +81,10 @@ const InitializePassport = () => {
 		"login",
 		new LocalStrategy(
 			{
+				passReqToCallback: true, // esta linea me faltaba
 				usernameField: "email",
 			},
-			async (username, password, done) => {
+			async (req, username, password, done) => {
 				try {
 					const user = await UserModel.findOne({ email: username });
 
@@ -119,28 +120,26 @@ const InitializePassport = () => {
 				clientSecret: config.GitHub.CLIENT_SECRET,
 				callbackURL: config.GitHub.CALLBACK_URL,
 				scope: ["user:email"],
+				passReqToCallback: true, // Add this line
 			},
-			async (accessToken, refreshToken, profile, done) => {
+			async (req, accessToken, refreshToken, profile, done) => {
 				try {
-					const email = profile.emails[0].value; // Get the email from the first item in the emails array
+					const email = profile.emails[0].value;
 
-					// Check if a user with this email already exists
 					const existingUser = await UserModel.findOne({ email });
 
 					if (existingUser) {
-						const token = generateToken(existingUser); // Generate a JWT token for the existing user
+						const token = generateToken(existingUser);
 						console.log("User already exists. Generating JWT token.");
 
-						// Add the token to the user object
 						existingUser.token = token;
 
-						// save existing user cartId to local session
 						req.session.cartID = existingUser.cart;
-						return done(null, existingUser); // Pass the user and token to the callback
+						return done(null, existingUser);
 					}
 
 					const newCart = new cartModel({ userEmail: email, products: [] });
-					// Create a new user if no user with this email exists
+
 					const newUser = await UserModel.create({
 						first_name: profile._json.name,
 						last_name: "GitHub User",
@@ -151,16 +150,10 @@ const InitializePassport = () => {
 					});
 
 					await newCart.save();
-					const token = generateToken(newUser); // Generate a JWT token for the new user
-					console.log("New user created. Generating JWT token.");
-					// Create a cart for the user
+					const token = generateToken(newUser);
 
-					// Add the token to the user object
 					newUser.token = token;
 
-					console.log("newUser", newUser);
-
-					// save cartID to localsession for later use
 					req.session.cartID = newUser.cart;
 
 					return done(null, newUser);

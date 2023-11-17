@@ -71,10 +71,10 @@ async function startServer() {
 		app.use(passport.session());
 
 		// Routes
-		app.use("/api/sessions", sessionsRouter);
 		app.use("/", sessionsViewRouter);
 		app.use("/api/products", productRouter);
 		app.use("/api/cart", cartRouter);
+		app.use("/api/sessions", sessionsRouter);
 		// Middleware to check if the user is an admin
 		app.use("/products", passportCall("jwt"), productsViewsRouter);
 		app.use("/carts", cartsViewsRouter);

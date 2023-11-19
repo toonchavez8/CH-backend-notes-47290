@@ -26,3 +26,18 @@ export const isAdminCheck = (req, res, next) => {
 	}
 	next();
 };
+
+export const handlePolicies = (policies) => (req, res, next) => {
+	if (policies.includes("PUBLIC")) return next();
+	if (!req.user.user) return res.redirect("/");
+	if (policies.length > 0) {
+		if (!policies.includes(req.user.user.role.toUppercase())) {
+			return res
+				.status(401)
+				.json({
+					status: "unauthorized",
+					error: "you are not authorized to perform this action",
+				});
+		}
+	}
+};

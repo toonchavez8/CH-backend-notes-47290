@@ -1,21 +1,28 @@
 import { Router } from "express";
-import * as ProductController from "../controllers/productController.js";
+import {
+	getProducts,
+	getProductById,
+	addProduct,
+	updateProduct,
+	deleteProduct,
+} from "../controllers/productController.js";
+import { handlePolicies } from "../middlewares/auth.middleware.js";
 
 // declared variables
 const productRouter = Router();
 
 // router path to get all products
-productRouter.get("/", ProductController.getProducts);
+productRouter.get("/", handlePolicies(["USER", "ADMIN"]), getProducts);
 
 // productRouter path to get product by id
-productRouter.get("/:pid", ProductController.getProductById);
+productRouter.get("/:pid", handlePolicies(["USER", "ADMIN"]), getProductById);
 
 // Create a new POST route for adding products
-productRouter.post("/", ProductController.addProduct);
+productRouter.post("/", handlePolicies(["ADMIN"]), addProduct);
 
 // route to update product by id
-productRouter.put("/:pid", ProductController.updateProduct);
+productRouter.put("/:pid", handlePolicies(["ADMIN"]), updateProduct);
 
-productRouter.delete("/:pid", ProductController.deleteProduct);
+productRouter.delete("/:pid", handlePolicies(["ADMIN"]), deleteProduct);
 
 export { productRouter };

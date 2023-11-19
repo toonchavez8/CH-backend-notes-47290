@@ -56,7 +56,8 @@ export class ProductManager {
 		return this.#_products;
 	}
 
-	async addProduct(title, description, price, thumbnail, code, stock) {
+	async addProduct(data) {
+		const { title, description, price, thumbnail, code, stock } = data;
 		// Check for missing properties
 		let errorMessage = "";
 

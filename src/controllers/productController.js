@@ -1,6 +1,7 @@
 import config from "../config/config.js";
 import productModel from "../models/products.model.js";
 import mongoose from "mongoose";
+import { ProductService } from "../repositories/index.js";
 
 const PORT = config.APISERVER.PORT;
 
@@ -72,8 +73,8 @@ export const getAllProducts = async (req, res) => {
 
 export const getProducts = async (req, res) => {
 	try {
-		const products = await getAllProducts(req, res);
-		res.status(200).json(products); // Return the entire result object
+		const products = await ProductService.getAllPaginate(req, PORT);
+		res.status(200).json(products.response); // Return the entire result object
 	} catch (error) {
 		console.log("Error:", error);
 		res.status(500).json({ error: "Internal server error" });

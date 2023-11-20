@@ -1,4 +1,4 @@
-import { product } from "../dao/persitanceFactory";
-import ProductRepository from "./product.respository";
+import { ProductDAO } from "../dao/persitanceFactory.js";
+import ProductRepository from "./product.respository.js";
 
-export const ProductService = new ProductRepository(new product());
+export const ProductService = new ProductRepository(new ProductDAO());

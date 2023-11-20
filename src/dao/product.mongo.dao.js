@@ -1,4 +1,4 @@
-import productModel from "../models/products.model";
+import productModel from "../models/products.model.js";
 
 export default class ProductMongoDAO {
 	getAll = async () => await productModel.find().lean().exec();

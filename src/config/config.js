@@ -24,4 +24,5 @@ export default {
 		EXPIRES_IN: process.env.JWT_EXPIRES_IN,
 		COOKIE_NAME: process.env.JWT_COOKIE_NAME,
 	},
+	PERSISTANCE: process.env.PERSISTANCE,
 };

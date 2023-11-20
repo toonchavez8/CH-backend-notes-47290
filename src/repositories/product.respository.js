@@ -1,8 +1,12 @@
-import productModel from "../models/products.model";
-import Repository from "./repository";
-
-export default class ProductRepository extends Repository {
+export default class ProductRepository {
 	constructor(dao) {
-		super(dao, productModel);
+		this.dao = dao;
 	}
+	getAll = async () => await this.dao.getAll();
+	getById = async (id) => await this.dao.getById(id);
+	getAllPaginate = async (req, PORT) =>
+		await this.dao.getAllPaginate(req, PORT);
+	create = async (data) => await this.dao.create(data);
+	update = async (id, data) => await this.dao.update(id, data);
+	delete = async (id) => await this.dao.delete(id);
 }

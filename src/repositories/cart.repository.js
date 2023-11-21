@@ -3,13 +3,12 @@ export default class CartRepository {
 		this.dao = dao;
 	}
 
-	getAllCarts = async () => {};
-	createCart = async () => {};
-	getProductFromCart = async () => {};
-	addProductFromCart = async () => {};
-	deleteProductFromCart = async () => {};
-	updateCart = async () => {};
-	updateProductQtyFromCart = async () => {};
-	clearCart = async () => {};
-	purchaseCart = async () => {};
+	getAllCarts = async () => await this.dao.getAllCarts();
+	createCart = async (data) => await this.dao.createCart(data);
+	getCartById = async (id) => await this.dao.getCartById(id);
+
+	updateCart = async (data) => await this.dao.updateCart(data);
+
+	clearCart = async () => await this.dao.clearCart();
+	purchaseCart = async () => await this.dao.purchaseCart();
 }

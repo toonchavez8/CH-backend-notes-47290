@@ -1,15 +1,12 @@
+import chalk from "chalk";
 import cartModel from "../models/carts.model.js";
 import productModel from "../models/products.model.js";
+import { CartService, ProductService } from "../repositories/index.js";
 
 export const getProductsFromCartController = async (req, res) => {
 	try {
 		const id = req.params.cid;
-		const result = await cartModel
-			.findById(id)
-			.populate("products.productId")
-			.lean();
-
-		console.log("result:", result);
+		const result = await CartService.getCartById(id);
 		if (result === null) {
 			return {
 				statusCode: 404,
@@ -21,13 +18,7 @@ export const getProductsFromCartController = async (req, res) => {
 			};
 		}
 
-		return {
-			statusCode: 200,
-			response: {
-				status: "success",
-				payload: result,
-			},
-		};
+		return result;
 	} catch (error) {
 		return {
 			statusCode: 500,
@@ -42,7 +33,7 @@ export const getProductsFromCartController = async (req, res) => {
 export const getAllCartsController = async (req, res) => {
 	try {
 		// Retrieve all carts from the database
-		const allCarts = await cartModel.find().lean().exec();
+		const allCarts = await CartService.getAllCarts();
 
 		// Respond with the list of all carts
 		res.status(200).json(allCarts);
@@ -63,13 +54,11 @@ export const createCartController = async (req, res) => {
 		}
 
 		// Create a new cart using the Cart model and the provided userEmail
-		const newCart = new cartModel({
-			userEmail,
-			products: [], // Initialize with an empty array of products
-		});
+
+		const data = { userEmail, products: [] };
 
 		// Save the new cart to the database
-		const savedCart = await newCart.save();
+		const savedCart = await CartService.createCart(data);
 
 		// Respond with the newly created cart
 		res.status(201).json(savedCart);
@@ -84,6 +73,68 @@ export const createCartController = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
+export const getCartByIDController = async (req, res) => {
+	try {
+		const result = await getProductsFromCartController(req, res);
+		res.status(200).json({ status: "Success", payload: result });
+	} catch (error) {
+		// Handle any other errors that occur during the request
+		console.error("Error retrieving cart:", error.message);
+		res.status(500).json({ error: error.message });
+	}
+};
+export const addProductToCartController = async (req, res) => {
+	try {
+		const cartId = req.params.cid;
+		const productId = req.params.pid;
+		const quantity = req.body.quantity || 1; // Get quantity from request body or default to 1
+
+		// Find the cart by its _id using the Cart model
+		const cartToUpdate = await CartService.getCartById(cartId);
+
+		if (!cartToUpdate) {
+			// Handle the case where the cart is not found
+			return res
+				.status(404)
+				.json({ error: `Cart with ID ${cartId} not found.` });
+		}
+
+		const product = await ProductService.getById(productId);
+
+		if (!product) {
+			// Handle the case where the product is not found
+			return res
+				.status(404)
+				.json({ error: `Product with ID ${productId} not found.` });
+		}
+
+		// Check if the product already exists in the cart
+		const existingProduct = cartToUpdate.products.find(
+			(productItem) =>
+				productItem.productId._id.toString() === productId.toString()
+		);
+
+		if (existingProduct) {
+			existingProduct.quantity += quantity;
+		} else {
+			// If the product doesn't exist, add it to the cart
+			cartToUpdate.products.push({
+				productId: product._id,
+				quantity,
+			});
+		}
+
+		// Save the updated cart
+		const updatedCart = await CartService.updateCart(cartToUpdate);
+
+		// Respond with the updated cart
+		res.status(200).json(updatedCart);
+	} catch (error) {
+		// Here we handle any other errors that occur during the request
+		console.error("Error adding product to cart:", error.message);
+		res.status(500).json({ error: error.message });
+	}
+};
 export const updateCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
@@ -91,7 +142,7 @@ export const updateCartController = async (req, res) => {
 		const newQuantity = req.body.quantity;
 
 		// Find the cart by its _id using the Cart model
-		const cartToUpdate = await cartModel.findById(cartId).exec();
+		const cartToUpdate = await CartService.getCartById(cartId);
 
 		if (!cartToUpdate) {
 			// Handle the case where the cart is not found
@@ -102,7 +153,8 @@ export const updateCartController = async (req, res) => {
 
 		// Check if the product exists in the cart
 		const productIndex = cartToUpdate.products.findIndex(
-			(productItem) => productItem.productId.toString() === productId
+			(productItem) =>
+				productItem.productId._id.toString() === productId.toString()
 		);
 
 		if (productIndex === -1) {
@@ -121,8 +173,7 @@ export const updateCartController = async (req, res) => {
 		}
 
 		// Save the updated cart
-		const updatedCart = await cartToUpdate.save();
-
+		const updatedCart = await CartService.updateCart(cartToUpdate);
 		// Respond with the updated cart
 		res.status(200).json(updatedCart);
 	} catch (error) {
@@ -131,73 +182,12 @@ export const updateCartController = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export const getCartByIDController = async (req, res) => {
-	try {
-		const result = await getProductsFromCart(req, res);
-		res.status(200).json({ status: "Success", payload: result });
-	} catch (error) {
-		// Handle any other errors that occur during the request
-		console.error("Error retrieving cart:", error.message);
-		res.status(500).json({ error: error.message });
-	}
-};
-export const addProductToCartController = async (req, res) => {
-	try {
-		const cartId = req.params.cid;
-		const productId = req.params.pid;
-		const quantity = req.body.quantity || 1; // Get quantity from request body or default to 1
 
-		// Find the cart by its _id using the Cart model
-		const cartToUpdate = await cartModel.findById(cartId).exec();
-
-		if (!cartToUpdate) {
-			// Handle the case where the cart is not found
-			return res
-				.status(404)
-				.json({ error: `Cart with ID ${cartId} not found.` });
-		}
-
-		const product = await productModel.findById(productId).exec();
-
-		if (!product) {
-			// Handle the case where the product is not found
-			return res
-				.status(404)
-				.json({ error: `Product with ID ${productId} not found.` });
-		}
-
-		// Check if the product already exists in the cart
-		const existingProduct = cartToUpdate.products.find(
-			(productItem) => productItem.productId.toString() === productId
-		);
-
-		if (existingProduct) {
-			// If the product exists, update its quantity
-			existingProduct.quantity += quantity;
-		} else {
-			// If the product doesn't exist, add it to the cart
-			cartToUpdate.products.push({
-				productId: product._id,
-				quantity,
-			});
-		}
-
-		// Save the updated cart
-		const updatedCart = await cartToUpdate.save();
-
-		// Respond with the updated cart
-		res.status(200).json(updatedCart);
-	} catch (error) {
-		// Here we handle any other errors that occur during the request
-		console.error("Error adding product to cart:", error.message);
-		res.status(500).json({ error: error.message });
-	}
-};
 export const deleteProductFromCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
 		const productId = req.params.pid;
-		const cartToUpdate = await cartModel.findById(cartId);
+		const cartToUpdate = await CartService.getCartById(cartId);
 
 		if (!cartToUpdate) {
 			// Handle the case where the cart is not found
@@ -206,7 +196,7 @@ export const deleteProductFromCartController = async (req, res) => {
 				.json({ error: `Cart with ID ${cartId} not found.` });
 		}
 
-		const productToDelete = await productModel.findById(productId);
+		const productToDelete = await ProductService.getById(productId);
 
 		if (!productToDelete) {
 			// Handle the case where the product is not found
@@ -217,7 +207,7 @@ export const deleteProductFromCartController = async (req, res) => {
 
 		// Check if the product with the specified productId is in the cart
 		const productIndex = cartToUpdate.products.findIndex(
-			(product) => product.productId.toString() === productId
+			(product) => product.productId._id.toString() === productId.toString()
 		);
 
 		if (productIndex === -1) {
@@ -227,10 +217,16 @@ export const deleteProductFromCartController = async (req, res) => {
 			});
 		} else {
 			// Use $pull to remove the product with a specific productId from the products array
-			cartToUpdate.products.pull({ productId: productToDelete._id });
+			// Check if the product with the specified productId is in the cart
+			const updatedProducts = cartToUpdate.products.filter(
+				(product) => product.productId._id.toString() !== productId.toString()
+			);
+
+			// Update the products array with the filtered result
+			cartToUpdate.products = updatedProducts;
 
 			// Save the updated cart
-			const updatedCart = await cartToUpdate.save();
+			const updatedCart = await CartService.updateCart(cartToUpdate);
 
 			res.status(200).json(updatedCart);
 		}
@@ -240,10 +236,11 @@ export const deleteProductFromCartController = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
+
 export const deleteCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
-		const cartToUpdate = await cartModel.findById(cartId);
+		const cartToUpdate = await CartService.getCartById(cartId);
 
 		if (!cartToUpdate) {
 			return res.status(404).json({
@@ -253,7 +250,8 @@ export const deleteCartController = async (req, res) => {
 
 		cartToUpdate.products = [];
 
-		const updatedCart = await cartToUpdate.save();
+		const updatedCart = await CartService.updateCart(cartToUpdate);
+
 		res.status(200).json({ status: "Success", payload: updatedCart });
 	} catch (error) {
 		console.error(`Error deleting al products from cart ${error.message}`);

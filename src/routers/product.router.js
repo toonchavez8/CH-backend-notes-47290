@@ -15,8 +15,8 @@ const productRouter = Router();
 // router path to get all products
 productRouter.get(
 	"/",
-	passportCall("jwt"),
-	handlePolicies(["USER", "ADMIN"]),
+	// passportCall("jwt"),
+	// handlePolicies(["USER", "ADMIN"]),
 	getProducts
 );
 

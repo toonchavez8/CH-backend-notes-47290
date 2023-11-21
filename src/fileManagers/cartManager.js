@@ -70,6 +70,17 @@ export class CartManager {
 		return cartToAdd;
 	}
 
+	async getCarts() {
+		return this.#_cart;
+	}
+
+	getCartById(cid) {
+		try {
+			const cart = this.#_cart.find((cart) => cart.id === cid);
+			return cart;
+		} catch (error) {}
+	}
+
 	async getProductsFromCart(cid) {
 		console.log(cid);
 		const cart = this.#_cart.find((cart) => cart.id === cid);

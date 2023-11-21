@@ -6,72 +6,6 @@ import chalk from "chalk";
 
 const PORT = config.APISERVER.PORT;
 
-export const getAllProducts = async (req, res) => {
-	try {
-		const limit = req.query.limit || 10;
-		const page = req.query.page || 1;
-
-		const filterOptions = {};
-
-		if (req.query.stock) filterOptions.stock = req.query.stock;
-		if (req.query.category) filterOptions.category = req.query.category;
-
-		const paginateOptions = { lean: true, limit, page };
-
-		if (req.query.sort === "asc") paginateOptions.sort = { price: 1 };
-		if (req.query.sort === "desc") paginateOptions.sort = { price: -1 };
-
-		const result = await productModel.paginate(filterOptions, paginateOptions);
-
-		let prevLink;
-
-		if (!req.query.page) {
-			prevLink = `http://${req.hostname}:${PORT}${req.originalUrl}?page=${result.prevPage}`;
-		} else {
-			const modifiedUrl = req.originalUrl.replace(
-				`page=${req.query.page}`,
-				`page=${result.prevPage}`
-			);
-			prevLink = `http://${req.hostname}:${PORT}${modifiedUrl}`;
-		}
-		let nextLink;
-
-		if (!req.query.page) {
-			nextLink = `http://${req.hostname}:${PORT}${req.originalUrl}&page=${result.nextPage}`;
-		} else {
-			const modifiedUrl = req.originalUrl.replace(
-				`page=${req.query.page}`,
-				`page=${result.nextPage}`
-			);
-			nextLink = `http://${req.hostname}:${PORT}${modifiedUrl}`;
-		}
-
-		return {
-			statusCode: 200,
-			response: {
-				status: "success",
-				payload: result.docs,
-				totalPages: result.totalPages,
-				prevPage: result.prevPage,
-				nextPage: result.nextPage,
-				page: result.page,
-				hasPrevPage: result.hasPrevPage,
-				hasNextPage: result.hasNextPage,
-				prevLink: result.hasPrevPage ? prevLink : null,
-				nextLink: result.hasNextPage ? nextLink : null,
-			},
-		};
-	} catch (error) {
-		return {
-			statusCode: 500,
-			response: {
-				status: "error",
-				error: error.message,
-			},
-		};
-	}
-};
-
 export const getProducts = async (req, res) => {
 	try {
 		const products = await ProductService.getAllPaginate(req, PORT);
@@ -115,7 +49,7 @@ export const addProduct = async (req, res) => {
 		console.log(product);
 
 		// Save the new product to the database
-		const addedProduct = await ProductService.save(product);
+		const addedProduct = await ProductService.create(product);
 		console.log(addedProduct);
 
 		const getAllProducts = await ProductService.getAll();
@@ -146,13 +80,9 @@ export const updateProduct = async (req, res) => {
 		const updatedProductdata = req.body;
 
 		// Call the updateProductById method to update the product by ID
-		const updatedProduct = await productModel.findByIdAndUpdate(
-			id,
-			updatedProductdata,
-			{
-				new: true,
-			}
-		);
+		const updatedProduct = await ProductService.update(id, updatedProductdata, {
+			new: true,
+		});
 
 		// Check if the product was successfully updated
 		if (!updatedProduct) {
@@ -180,7 +110,7 @@ export const deleteProduct = async (req, res) => {
 		const id = req.params.pid;
 
 		// Use productModel.findByIdAndRemove to delete the product by ID
-		deletedProduct = await productModel.findByIdAndRemove(id);
+		deletedProduct = await ProductService.delete(id);
 
 		// Check if the product was successfully deleted
 		if (!deletedProduct) {
@@ -217,7 +147,7 @@ export const getProductsView = async (req, res) => {
 			filterOptions.category = req.query.category;
 		}
 
-		const products = await getAllProducts(req, filterOptions); // Pass the filterOptions to getAllProducts
+		const products = await ProductService.getAllPaginate(req, filterOptions); // Pass the filterOptions to getAllProducts
 
 		if (products.statusCode === 200) {
 			const totalPages = [];
@@ -293,7 +223,7 @@ export const getProductByIDView = async (req, res) => {
 		}
 
 		// Find the product by ID using findById
-		const product = await productModel.findById(id).lean().exec();
+		const product = await ProductService.getById(id);
 
 		if (!product) {
 			return res.status(404).json({ error: "Product not found." });
@@ -311,7 +241,7 @@ export const getProductByIDView = async (req, res) => {
 
 export const realTimeProductsView = async (req, res) => {
 	try {
-		const products = await productModel.find().lean().exec();
+		const products = await ProductService.getAll();
 		const processedProducts = products.map((product) => ({
 			...product,
 			shortId: product._id.toString().slice(-4),

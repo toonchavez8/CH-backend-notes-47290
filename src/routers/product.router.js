@@ -15,25 +15,20 @@ const productRouter = Router();
 // router path to get all products
 productRouter.get(
 	"/",
-	passportCall("jwt"),
-	handlePolicies(["USER", "ADMIN"]),
+	// passportCall("jwt"),
+	// handlePolicies(["USER", "ADMIN"]),
 	getProducts
 );
 
 // productRouter path to get product by id
-productRouter.get(
-	"/:pid",
-	passportCall("jwt"),
-	handlePolicies(["USER", "ADMIN"]),
-	getProductById
-);
+productRouter.get("/:pid", getProductById);
 
 // Create a new POST route for adding products
-productRouter.post("/", handlePolicies(["ADMIN"]), addProduct);
+productRouter.post("/", addProduct);
 
 // route to update product by id
-productRouter.put("/:pid", handlePolicies(["ADMIN"]), updateProduct);
+productRouter.put("/:pid", updateProduct);
 
-productRouter.delete("/:pid", handlePolicies(["ADMIN"]), deleteProduct);
+productRouter.delete("/:pid", deleteProduct);
 
 export { productRouter };

@@ -1,6 +1,11 @@
+// repositories/index.js
+
 import { CartDAO, ProductDAO } from "../dao/persitanceFactory.js";
 import CartRepository from "./cart.repository.js";
 import ProductRepository from "./product.respository.js";
 
-export const ProductService = new ProductRepository(new ProductDAO());
-export const CartService = new CartRepository(new CartDAO());
+const productRepository = new ProductRepository(new ProductDAO());
+const cartRepository = new CartRepository(new CartDAO());
+
+export const ProductService = productRepository;
+export const CartService = cartRepository;

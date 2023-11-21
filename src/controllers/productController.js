@@ -2,6 +2,7 @@ import config from "../config/config.js";
 import productModel from "../models/products.model.js";
 import mongoose from "mongoose";
 import { ProductService } from "../repositories/index.js";
+import chalk from "chalk";
 
 const PORT = config.APISERVER.PORT;
 
@@ -74,6 +75,7 @@ export const getAllProducts = async (req, res) => {
 export const getProducts = async (req, res) => {
 	try {
 		const products = await ProductService.getAllPaginate(req, PORT);
+		// Return the entire result object
 		res.status(200).json(products.response); // Return the entire result object
 	} catch (error) {
 		console.log("Error:", error);
@@ -92,7 +94,8 @@ export const getProductById = async (req, res) => {
 		}
 
 		// Find the product by ID using findById
-		const product = await productModel.findById(id).lean().exec();
+		const product = await ProductService.getById(id);
+		console.log("getProductById", product);
 
 		if (!product) {
 			return res.status(404).json({ error: "Product not found." });
@@ -108,27 +111,19 @@ export const getProductById = async (req, res) => {
 export const addProduct = async (req, res) => {
 	try {
 		// Extract product data from the request body
-		const { title, description, price, thumbnail, code, stock, category } =
-			req.body;
-
-		// Create a new product using the productModel
-		const newProduct = new productModel({
-			title,
-			description,
-			price,
-			thumbnail,
-			code,
-			stock,
-			category,
-		});
+		const product = req.body;
+		console.log(product);
 
 		// Save the new product to the database
-		const addedProduct = await newProduct.save();
+		const addedProduct = await ProductService.save(product);
+		console.log(addedProduct);
+
+		const getAllProducts = await ProductService.getAll();
 
 		// Respond with a success message and the added product
 		res.status(201).json({
 			message: "Product added successfully.",
-			payload: addedProduct,
+			payload: getAllProducts,
 		});
 	} catch (error) {
 		console.log(chalk.red("Error adding product:", error.message));

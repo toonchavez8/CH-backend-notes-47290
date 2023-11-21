@@ -1,17 +1,3 @@
-export const privateRoutes = (req, res, next) => {
-	console.log("req from private routes", req.user);
-	if (req.user.user) return res.redirect("/profile");
-	next();
-};
-
-export const publicRoutes = (req, res, next) => {
-	if (!req.user.user) {
-		console.log("User is not logged in");
-		return res.redirect("/");
-	}
-	next();
-};
-
 export const isAdminCheck = (req, res, next) => {
 	console.log("req from is admin", req.body);
 	const { email, password } = req.body;
@@ -28,16 +14,10 @@ export const isAdminCheck = (req, res, next) => {
 };
 
 export const handlePolicies = (policies) => (req, res, next) => {
+	console.log("req from handle policies", req.user.user);
 	if (policies.includes("PUBLIC")) return next();
-	if (!req.user.user) return res.redirect("/");
-	if (policies.length > 0) {
-		if (!policies.includes(req.user.user.role.toUppercase())) {
-			return res
-				.status(401)
-				.json({
-					status: "unauthorized",
-					error: "you are not authorized to perform this action",
-				});
-		}
-	}
+	if (!req.user.user || !req.user.user == "undefined")
+		return res.render("error", { Error: "You are not logged in" });
+	if (policies.includes(req.user.user.role.toUpperCase())) return next();
+	return res.render("error", { error: "You are not authorized" });
 };

@@ -29,14 +29,16 @@
 			<h1 class="text-3xl font-bold mb-4">All products</h1>
 			<p class="text-gray-600">Check out our awesome selection of products!</p>
 		</div>
-		<div
-			class="container mt-4 md:mt-0 md:ml-4 flex flex-col items-center gap-2"
-		>
-			<h2 class="text-lg font-medium">Need to add or edit something else?</h2>
-			<a href="/products/realtimeproducts"><button
-					class="bg-gradient-to-r from-purple-400 to-purple-600 text-white px-4 py-2 rounded-md"
-				>Add product</button></a>
-		</div>
+		{{#if isAdmin}}
+			<div
+				class="container mt-4 md:mt-0 md:ml-4 flex flex-col items-center gap-2"
+			>
+				<h2 class="text-lg font-medium">Need to add or edit something else?</h2>
+				<a href="/products/realtimeproducts"><button
+						class="bg-gradient-to-r from-purple-400 to-purple-600 text-white px-4 py-2 rounded-md"
+					>Add product</button></a>
+			</div>
+		{{/if}}
 	</section>
 
 	<section class="py-8">

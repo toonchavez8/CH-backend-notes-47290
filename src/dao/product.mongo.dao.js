@@ -2,7 +2,7 @@ import productModel from "../models/products.model.js";
 
 export default class ProductMongoDAO {
 	getAll = async () => await productModel.find().lean().exec();
-	getByID = async (id) => await productModel.findById(id).lean().exec();
+	getById = async (id) => await productModel.findById(id).lean().exec();
 	getAllPaginate = async (req, PORT) => {
 		try {
 			const limit = req.query.limit || 10;

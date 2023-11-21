@@ -1,20 +1,24 @@
 import { Router } from "express";
-import { publicRoutes } from "../middlewares/auth.middleware.js";
+import { handlePolicies } from "../middlewares/auth.middleware.js";
 import * as ProductController from "../controllers/productController.js";
 
 const productsViewsRouter = Router();
 
-productsViewsRouter.get("/", publicRoutes, ProductController.getProductsView);
+productsViewsRouter.get(
+	"/",
+	handlePolicies(["USER", "ADMIN"]),
+	ProductController.getProductsView
+);
 
 productsViewsRouter.get(
 	"/id/:pid",
-	publicRoutes,
+	handlePolicies(["USER", "ADMIN"]),
 	ProductController.getProductByIDView
 );
 
 productsViewsRouter.get(
 	"/realtimeproducts",
-	publicRoutes,
+	handlePolicies(["USER", "ADMIN"]),
 	ProductController.realTimeProductsView
 );
 

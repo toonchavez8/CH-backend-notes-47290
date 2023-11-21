@@ -43,11 +43,3 @@ export const passportCall = (strategy) => {
 		})(req, res, next);
 	};
 };
-
-export const handlePolicies = (policies) => (req, res, next) => {
-	const user = req.user || null;
-	if (!policies.includes(user.role)) {
-		return res.status(401).render("error", { error: "Unauthorized" });
-	}
-	return next();
-};

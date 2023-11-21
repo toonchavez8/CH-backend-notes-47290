@@ -1,6 +1,6 @@
 import { Router } from "express";
 import cartModel from "../models/carts.model.js";
-import { getProductsFromCart } from "../controllers/cartController.js";
+import { getProductsFromCartController } from "../controllers/cartController.js";
 
 const cartsViewsRouter = Router();
 
@@ -23,7 +23,7 @@ cartsViewsRouter.get("/", async (req, res) => {
 
 cartsViewsRouter.get("/:cid", async (req, res) => {
 	try {
-		const result = await getProductsFromCart(req, res);
+		const result = await getProductsFromCartController(req, res);
 
 		const cart = result.response.payload;
 

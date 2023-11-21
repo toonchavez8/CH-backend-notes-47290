@@ -1,7 +1,7 @@
 import cartModel from "../models/carts.model.js";
 import productModel from "../models/products.model.js";
 
-export const getProductsFromCart = async (req, res) => {
+export const getProductsFromCartController = async (req, res) => {
 	try {
 		const id = req.params.cid;
 		const result = await cartModel
@@ -39,7 +39,7 @@ export const getProductsFromCart = async (req, res) => {
 		};
 	}
 };
-export const getAllCarts = async (req, res) => {
+export const getAllCartsController = async (req, res) => {
 	try {
 		// Retrieve all carts from the database
 		const allCarts = await cartModel.find().lean().exec();
@@ -51,7 +51,7 @@ export const getAllCarts = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export const createCart = async (req, res) => {
+export const createCartController = async (req, res) => {
 	try {
 		const { userEmail } = req.body;
 
@@ -84,7 +84,7 @@ export const createCart = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export const updateCart = async (req, res) => {
+export const updateCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
 		const productId = req.params.pid;
@@ -131,7 +131,7 @@ export const updateCart = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export const getCartByID = async (req, res) => {
+export const getCartByIDController = async (req, res) => {
 	try {
 		const result = await getProductsFromCart(req, res);
 		res.status(200).json({ status: "Success", payload: result });
@@ -141,7 +141,7 @@ export const getCartByID = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export const addProductToCart = async (req, res) => {
+export const addProductToCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
 		const productId = req.params.pid;
@@ -193,7 +193,7 @@ export const addProductToCart = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export const deleteProductFromCart = async (req, res) => {
+export const deleteProductFromCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
 		const productId = req.params.pid;
@@ -240,7 +240,7 @@ export const deleteProductFromCart = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
-export const deleteCart = async (req, res) => {
+export const deleteCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
 		const cartToUpdate = await cartModel.findById(cartId);

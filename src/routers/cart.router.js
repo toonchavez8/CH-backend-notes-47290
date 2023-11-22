@@ -6,8 +6,9 @@ import {
 	updateCartController,
 	getCartByIDController,
 	addProductToCartController,
-	deleteCartController,
+	clearCartController,
 	deleteProductFromCartController,
+	checkoutCartController,
 } from "../controllers/cartController.js";
 
 const cartRouter = Router();
@@ -18,6 +19,6 @@ cartRouter.put("/:cid/product/:pid", updateCartController);
 cartRouter.get("/:cid", getCartByIDController);
 cartRouter.post("/:cid/product/:pid", addProductToCartController);
 cartRouter.delete("/:cid/product/:pid", deleteProductFromCartController);
-cartRouter.delete("/:cid", deleteCartController);
-
+cartRouter.delete("/:cid", clearCartController);
+cartRouter.get("/:cid/purchase", checkoutCartController);
 export { cartRouter };

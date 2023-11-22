@@ -1,7 +1,9 @@
 import chalk from "chalk";
-import cartModel from "../models/carts.model.js";
-import productModel from "../models/products.model.js";
-import { CartService, ProductService } from "../repositories/index.js";
+import {
+	CartService,
+	ProductService,
+	TicketService,
+} from "../repositories/index.js";
 
 export const getProductsFromCartController = async (req, res) => {
 	try {
@@ -237,7 +239,7 @@ export const deleteProductFromCartController = async (req, res) => {
 	}
 };
 
-export const deleteCartController = async (req, res) => {
+export const clearCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
 		const cartToUpdate = await CartService.getCartById(cartId);
@@ -256,5 +258,79 @@ export const deleteCartController = async (req, res) => {
 	} catch (error) {
 		console.error(`Error deleting al products from cart ${error.message}`);
 		res.status(500).json({ error: error.message });
+	}
+};
+
+export const checkoutCartController = async (req, res) => {
+	try {
+		const cartId = req.params.cid;
+
+		const cartToPurchase = await CartService.getCartById(cartId);
+
+		if (!cartToPurchase) {
+			return res
+				.status(404)
+				.json({ error: `Cart with id ${cartId} not found!` });
+		}
+
+		const productsToTicket = [];
+		let productsAfterPurchase = [];
+
+		let totalAmount = 0;
+
+		for (const cartProduct of cartToPurchase.products) {
+			const { product, quantity } = cartProduct;
+
+			const productToPurchase = await ProductService.getById(product._id);
+
+			if (!productToPurchase) {
+				return res.status(400).json({
+					status: "error",
+					error: `Product with id=${product._id} does not exist. Cannot purchase this product.`,
+				});
+			}
+
+			if (quantity <= productToPurchase.stock) {
+				// Update product stock
+				productToPurchase.stock -= quantity;
+				await ProductService.update(productToPurchase._id, {
+					stock: productToPurchase.stock,
+				});
+
+				// Calculate total amount
+				totalAmount += productToPurchase.price * quantity;
+
+				// Add product to ticket
+				productsToTicket.push({
+					product: productToPurchase._id,
+					price: productToPurchase.price,
+					quantity,
+				});
+
+				// Add product to productsAfterPurchase
+				productsAfterPurchase.push(cartProduct);
+			}
+		}
+
+		// Update cart with productsAfterPurchase
+		await CartService.updateCart(cartToPurchase._id, {
+			products: productsAfterPurchase,
+		});
+
+		// Create ticket
+		const ticketCode = shortid.generate();
+		const purchaserEmail = req.session.user.email;
+
+		const ticketResult = await TicketService.createTicket({
+			code: ticketCode,
+			products: productsToTicket,
+			totalAmount,
+			purchaser: purchaserEmail,
+		});
+
+		return res.status(201).json({ status: "success", payload: ticketResult });
+	} catch (error) {
+		console.error(chalk.red(`Error checking out cart: ${error.message}`));
+		return res.status(500).json({ status: "error", error: error.message });
 	}
 };

@@ -10,6 +10,7 @@ import {
 	deleteProductFromCartController,
 	checkoutCartController,
 } from "../controllers/cartController.js";
+import { passportCall } from "../utils.js";
 
 const cartRouter = Router();
 
@@ -20,5 +21,5 @@ cartRouter.get("/:cid", getCartByIDController);
 cartRouter.post("/:cid/product/:pid", addProductToCartController);
 cartRouter.delete("/:cid/product/:pid", deleteProductFromCartController);
 cartRouter.delete("/:cid", clearCartController);
-cartRouter.get("/:cid/purchase", checkoutCartController);
+cartRouter.get("/:cid/purchase", passportCall("jwt"), checkoutCartController);
 export { cartRouter };

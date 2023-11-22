@@ -1,4 +1,7 @@
 import dotenv from "dotenv";
+import program from "./command.js";
+
+const opts = program.opts();
 
 dotenv.config();
 
@@ -24,5 +27,5 @@ export default {
 		EXPIRES_IN: process.env.JWT_EXPIRES_IN,
 		COOKIE_NAME: process.env.JWT_COOKIE_NAME,
 	},
-	PERSISTANCE: process.env.PERSISTANCE,
+	PERSISTANCE: opts.Persistence || process.env.PERSISTANCE,
 };

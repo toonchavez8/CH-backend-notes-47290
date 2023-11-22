@@ -14,6 +14,7 @@ export default class CartMongoDao {
 	};
 
 	updateCart = async (data) => {
+		console.log("from update", data);
 		return await cartModel.findByIdAndUpdate(data._id, data, { new: true });
 	};
 

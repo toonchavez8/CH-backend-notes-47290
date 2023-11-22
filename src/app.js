@@ -19,9 +19,11 @@ import { passportCall } from "./utils.js";
 import cookieParser from "cookie-parser";
 import CONFIG from "./config/config.js";
 import { ticketRouter } from "./routers/ticket.router.js";
+import program from "./config/command.js";
 
 const app = express();
-export const PORT = CONFIG.APISERVER.PORT;
+const opts = program.opts();
+export const PORT = opts.port || CONFIG.APISERVER.PORT;
 
 // Middleware
 app.use(express.json());

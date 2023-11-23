@@ -23,6 +23,6 @@ cartRouter.post("/:cid/product/:pid", addProductToCartController);
 cartRouter.delete("/:cid/product/:pid", deleteProductFromCartController);
 cartRouter.delete("/:cid", clearCartController);
 cartRouter.get("/:cid/purchase", passportCall("jwt"), checkoutCartController);
-cartRouter.post("/get/bill", getBill);
+cartRouter.post("/getbill/:ticketId", getBill);
 export { cartRouter };
 1;

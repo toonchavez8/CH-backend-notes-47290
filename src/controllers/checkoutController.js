@@ -1,12 +1,13 @@
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 import dotenv from "dotenv";
+import { TicketService } from "../repositories/index.js"; // Import TicketService or the service responsible for retrieving purchase data
 
 dotenv.config();
 
 const getBill = async (req, res) => {
 	try {
-		const destinatario = req.body.destinatario;
+		const purchaseCode = req.params.ticketId; // Use req.params to get the purchase code from the URL parameter
 
 		// Use environment variables for better security
 		const emailUser = process.env.NODEMAILER_USER;
@@ -22,37 +23,40 @@ const getBill = async (req, res) => {
 
 		let transporter = nodemailer.createTransport(config);
 		let Mailgenerator = new Mailgen({
-			theme: "cerberus ",
+			theme: "cerberus",
 			product: {
 				name: "PixelLend",
 				link: "http://www.PixelLend.com",
 			},
 		});
 
+		// Retrieve purchase data based on the purchase code
+		const ticket = await TicketService.getById(purchaseCode); // Use the appropriate service method to retrieve ticket data
+
+		const userEmail = ticket.buyerEmail;
+
 		let response = {
 			body: {
-				intro: "Hola, esto es un correo de prueba",
+				intro: `Hello, this is an email confirming your purchase with code: ${purchaseCode}`,
 				table: {
-					data: [
-						{
-							item: "Producto 1",
-							descripcion: "Descripcion del producto 1",
-							price: "100",
-							quantity: "1",
-							total: "100",
-						},
-					],
+					data: ticket.products.map((product) => ({
+						item: product.product.title,
+						descripcion: product.product.description,
+						price: product.product.price.toString(),
+						quantity: product.quantity.toString(),
+						total: (product.product.price * product.quantity).toString(),
+					})),
 				},
-				outro: "Gracias por su compra",
+				outro: "Thank you for your purchase!",
 			},
 		};
 
 		let mail = Mailgenerator.generate(response);
 
 		let message = {
-			from: "Coder Shop <EMAIL>",
-			to: destinatario,
-			subject: "Pedido Coder Shop",
+			from: "PixelLend",
+			to: userEmail,
+			subject: `Order PixelLend - Code: ${purchaseCode}`,
 			html: mail,
 		};
 

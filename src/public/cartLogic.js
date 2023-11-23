@@ -151,8 +151,9 @@ async function purchaseCart(cartId) {
 				<p>Products:</p>
 				<ul>
 					<li>${result.payload.products[0].quantity} x ${result.payload.products[0].product}</li>
-					<!-- Add more <li> elements if there are more products -->
 				</ul>
+                <p>Please view your purchase ticket below. you will be getting an email shorty with confirmation of your purchase</p>
+                
 			`,
 			icon: "success",
 			showCancelButton: true,
@@ -160,10 +161,17 @@ async function purchaseCart(cartId) {
 			cancelButtonColor: "#d33",
 			confirmButtonText: "View Purchase Ticket",
 			cancelButtonText: "Close",
-		}).then((result) => {
+		}).then(async (result) => {
 			if (result.isConfirmed) {
+				await fetch(`/api/cart/getbill/${tiketCode}`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+
 				// Redirect to the purchase ticket
-				window.location.href = `/api/ticket/${tiketCode}`;
+				window.location.href = `/ticket/${tiketCode}`;
 			} else {
 				location.reload();
 			}

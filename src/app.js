@@ -20,6 +20,7 @@ import cookieParser from "cookie-parser";
 import CONFIG from "./config/config.js";
 import { ticketRouter } from "./routers/ticket.router.js";
 import program from "./config/command.js";
+import ticketViewRouter from "./routers/ticket.view.router.js";
 
 const app = express();
 const opts = program.opts();
@@ -83,7 +84,7 @@ async function startServer() {
 		app.use("/products", passportCall("jwt"), productsViewsRouter);
 		app.use("/carts", cartsViewsRouter);
 		app.use("/chat", chatRouter);
-		app.use("/ticket", ticketRouter);
+		app.use("/ticket", ticketViewRouter);
 		// Initialize sockets
 		Sockets(io);
 	} catch (error) {

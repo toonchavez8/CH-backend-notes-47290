@@ -1,0 +1,45 @@
+<main class="flex flex-row justify-center items-center gap-4">
+	<section class="text-white max-w-5xl py-8">
+		<h1 class="text-4xl text-center">Ticket Details</h1>
+
+		<div class="p-4 bg-gray-800 rounded-lg shadow-lg mx-4 mt-8">
+			<div class="text-center">
+				<h2 class="text-2xl font-semibold">User Email:</h2>
+				<p class="text-lg">{{ticket.buyerEmail}}</p>
+			</div>
+
+			<div class="mt-4">
+				<h2 class="text-2xl font-semibold">Ticket Contents:
+					{{ticket.purchaseCode}}</h2>
+				{{#each ticket.products}}
+					<div
+						class="border-b-2 border-gray-600 py-2 flex justify-between items-center"
+					>
+						<div>
+							<h3 class="text-xl">{{this.product.title}}</h3>
+							<p class="text-gray-400">Description:
+								{{this.product.description}}</p>
+							<p class="text-gray-400">Price: ${{this.product.price}}</p>
+							<img
+								src="{{this.product.thumbnail}}"
+								alt="{{this.product.title}}"
+								class="w-24 h-24 object-cover mt-2"
+							/>
+							<p class="text-gray-400">Quantity: {{this.quantity}}</p>
+						</div>
+					</div>
+				{{/each}}
+			</div>
+
+			<section class="mt-4">
+				<h2 class="text-2xl font-semibold">Total: ${{ticket.totalAmount}}</h2>
+				<button
+					class="bg-blue-500 text-white px-4 py-2 rounded mt-4 email-button"
+					data-ticket="{{ticket.purchaseCode}}"
+				>Send Ticket as Email</button>
+			</section>
+		</div>
+	</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="/ticketLogic.js"></script>

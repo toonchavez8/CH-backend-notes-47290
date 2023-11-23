@@ -5,9 +5,10 @@ const ticketSchema = new mongoose.Schema(
 		purchaseCode: { type: String, required: true, unique: true },
 		products: [
 			{
-				product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+				product: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
 				price: Number,
 				quantity: Number,
+				_id: false,
 			},
 		],
 		totalAmount: Number,

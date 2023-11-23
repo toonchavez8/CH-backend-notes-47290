@@ -10,4 +10,6 @@ export default class TicketRepository {
 	create = async (data) => await this.dao.create(data);
 	update = async (id, data) => await this.dao.update(id, data);
 	delete = async (id) => await this.dao.delete(id);
+	getTicketsByBuyerEmail = async (email) =>
+		await this.dao.getTicketsByBuyerEmail(email);
 }

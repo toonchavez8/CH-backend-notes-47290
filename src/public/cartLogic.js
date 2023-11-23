@@ -122,16 +122,87 @@ async function clearCart(cartId) {
 	}
 }
 
+// Function to purchase the cart
+async function purchaseCart(cartId) {
+	try {
+		const response = await fetch(`/api/cart/${cartId}/purchase`, {
+			method: "GET", // You might need to adjust the method based on your API
+		});
+
+		if (!response.ok) {
+			// Handle non-OK responses
+			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
+
+		const result = await response.json();
+		const tiketCode = result.payload.purchaseCode;
+		console.log("tiket code", tiketCode);
+
+		// Log the result
+		console.log("result from purchase cart", result);
+
+		// Show a success message using SweetAlert
+		Swal.fire({
+			title: "Purchase Successful",
+			html: `
+				<p>Thank you for your purchase!</p>
+				<p>Purchase Code: ${result.payload.purchaseCode}</p>
+				<p>Total Amount: $${result.payload.totalAmount}</p>
+				<p>Products:</p>
+				<ul>
+					<li>${result.payload.products[0].quantity} x ${result.payload.products[0].product}</li>
+					<!-- Add more <li> elements if there are more products -->
+				</ul>
+			`,
+			icon: "success",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "View Purchase Ticket",
+			cancelButtonText: "Close",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				// Redirect to the purchase ticket
+				window.location.href = `/api/ticket/${tiketCode}`;
+			} else {
+				location.reload();
+			}
+		});
+	} catch (error) {
+		// Show an error message using SweetAlert
+		Swal.fire({
+			title: "Error",
+			text: "Error processing the purchase. Please try again.",
+			icon: "error",
+		});
+		console.error("Error purchasing cart:", error.message);
+	}
+}
+
+// Assuming you have a purchase button with the class "purchase-cart-btn"
+const purchaseBtn = document.querySelector(".purchase-cart-btn");
+
 const cartBtn = document.querySelector(".clear-cartBtn");
 const deleteProdBtns = document.querySelectorAll(".delete-product-btn");
 
-cartBtn.addEventListener("click", () => {
-	const cartId = cartBtn.getAttribute("data-cart-id");
-	clearCart(cartId);
-});
-deleteProdBtns.forEach((deleteProdBtn) => {
-	deleteProdBtn.addEventListener("click", () => {
-		const productId = deleteProdBtn.getAttribute("data-product-id");
-		deleteProduct(productId);
+if (cartBtn) {
+	cartBtn.addEventListener("click", () => {
+		const cartId = cartBtn.getAttribute("data-cart-id");
+		clearCart(cartId);
 	});
-});
+}
+if (deleteProdBtns) {
+	deleteProdBtns.forEach((deleteProdBtn) => {
+		deleteProdBtn.addEventListener("click", () => {
+			const productId = deleteProdBtn.getAttribute("data-product-id");
+			deleteProduct(productId);
+		});
+	});
+}
+
+if (purchaseBtn) {
+	purchaseBtn.addEventListener("click", () => {
+		const cartId = purchaseBtn.getAttribute("data-cart-id");
+		purchaseCart(cartId);
+	});
+}

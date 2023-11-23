@@ -1,9 +1,14 @@
 import { Router } from "express";
 
-import { CartService } from "../repositories/index.js";
+import { CartService, TicketService } from "../repositories/index.js";
 import { passportCall } from "../utils.js";
 
 const cartsViewsRouter = Router();
+
+function formatDate(dateString) {
+	const options = { year: "numeric", month: "short", day: "numeric" };
+	return new Date(dateString).toLocaleDateString("en-US", options);
+}
 
 cartsViewsRouter.get("/", passportCall("jwt"), async (req, res) => {
 	try {
@@ -29,6 +34,16 @@ cartsViewsRouter.get("/:cid", async (req, res) => {
 
 		const cart = await CartService.getCartById(cid);
 
+		const buyerEmail = cart.userEmail;
+
+		const userTickets = await TicketService.getTicketsByBuyerEmail(buyerEmail);
+
+		// Reformat the purchase date for each ticket
+		userTickets.forEach((ticket) => {
+			// Assuming the date is stored in the property 'purchase_datetime'
+			ticket.formattedPurchaseDate = formatDate(ticket.purchase_datetime);
+		});
+
 		// Calculate the total price
 		const totalPrice = cart.products.reduce((total, product) => {
 			const productPrice = product.productId.price;
@@ -44,11 +59,11 @@ cartsViewsRouter.get("/:cid", async (req, res) => {
 			currency: "USD", // Change to your desired currency code
 		}).format(totalPrice);
 
-		// Add the total price to the cart object
+		// Add the total price and userTickets to the cart object
 		cart.totalPrice = formattedTotalPrice;
 
-		console.log("cart", cart);
-		res.render("cart", { cart });
+		console.log("cart", userTickets);
+		res.render("cart", { cart, userTickets });
 	} catch (error) {
 		// Handle any potential errors here
 		console.error("Error:", error);

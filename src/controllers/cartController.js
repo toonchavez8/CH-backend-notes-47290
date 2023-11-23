@@ -267,7 +267,6 @@ export const checkoutCartController = async (req, res) => {
 		const cartId = req.params.cid;
 
 		const cartToPurchase = await CartService.getCartById(cartId);
-		console.log("cartToPurchase", cartToPurchase);
 
 		if (!cartToPurchase) {
 			return res
@@ -283,11 +282,7 @@ export const checkoutCartController = async (req, res) => {
 		for (const cartProduct of cartToPurchase.products) {
 			const { productId, quantity } = cartProduct;
 
-			console.log("product in for const of", productId);
-			console.log("quantity", quantity);
-
 			const productToPurchase = await ProductService.getById(productId._id);
-			console.log("productToPurchase", productToPurchase);
 
 			if (!productToPurchase) {
 				failedPurchases.push({

@@ -83,6 +83,7 @@ async function startServer() {
 		app.use("/products", passportCall("jwt"), productsViewsRouter);
 		app.use("/carts", cartsViewsRouter);
 		app.use("/chat", chatRouter);
+		app.use("/ticket", ticketRouter);
 		// Initialize sockets
 		Sockets(io);
 	} catch (error) {

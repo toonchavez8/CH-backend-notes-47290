@@ -16,15 +16,10 @@ export const getTickets = async (req, res) => {
 export const getTicketById = async (req, res) => {
 	try {
 		// Extract the ticket ID from the request parameters
-		const id = req.params.tid;
-
-		// Check if the provided ID is a valid ObjectId
-		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ error: "Invalid ticket ID." });
-		}
+		const purchaseCode = req.params.tid;
 
 		// Find the ticket by ID using findById
-		const ticket = await TicketService.getById(id);
+		const ticket = await TicketService.getById(purchaseCode);
 
 		if (!ticket) {
 			return res.status(404).json({ error: "Ticket not found." });

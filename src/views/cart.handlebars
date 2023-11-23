@@ -45,13 +45,38 @@
 							data-cart-id={{cart._id}}
 						>Clear Cart</button>
 						<button
-							class="bg-green-500 text-white px-4 py-2 rounded"
-							onclick="purchaseCart()"
+							class="bg-green-500 text-white px-4 py-2 rounded purchase-cart-btn"
+							data-cart-id={{cart._id}}
 						>Purchase</button>
 					</div>
 				</section>
 			{{else}}
 				<p class="text-center">Your cart is empty.</p>
+			{{/if}}
+		</div>
+
+		<!-- Ticket History Section -->
+		<div class="p-4 bg-gray-800 rounded-lg shadow-lg mx-4 mt-8">
+			<h2 class="text-2xl font-semibold">Ticket History:</h2>
+			{{#if userTickets}}
+				{{#each userTickets}}
+					<div
+						class="border-b-2 border-gray-600 py-2 flex justify-between items-center"
+					>
+						<div>
+							<p class="text-gray-400">Purchase Code: {{this.purchaseCode}}</p>
+							<p class="text-gray-400">Total Amount: ${{this.totalAmount}}</p>
+							<p class="text-gray-400">Purchase Date:
+								{{this.formattedPurchaseDate}}</p>
+						</div>
+						<div class="flex items-center">
+							<a href="/ticket/{{this.purchaseCode}}" class="text-blue-500">View
+								Details</a>
+						</div>
+					</div>
+				{{/each}}
+			{{else}}
+				<p class="text-center">No ticket history available.</p>
 			{{/if}}
 		</div>
 	</section>

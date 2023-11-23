@@ -1,9 +1,9 @@
-<main class="flex flex-row justify-center items-center">
-	<section class="text-white max-w-5xl">
+<main class="flex flex-row justify-center items-center gap-4">
+	<section class="text-white max-w-5xl py-8">
 		<h1 class="text-4xl text-center">Cart</h1>
 
-		<div class="p-4 bg-gray-800 rounded-lg shadow-lg mx-4">
-			{{#if cart}}
+		<div class="p-4 bg-gray-800 rounded-lg shadow-lg mx-4 mt-8">
+			{{#if cart.products}}
 				<div class="text-center">
 					<h2 class="text-2xl font-semibold">User Email:</h2>
 					<p class="text-lg">{{cart.userEmail}}</p>
@@ -12,23 +12,51 @@
 				<div class="mt-4">
 					<h2 class="text-2xl font-semibold">Cart Contents:</h2>
 					{{#each cart.products}}
-						<div class="border-b-2 border-gray-600 py-2">
-							<h3 class="text-xl">{{this.productId.title}}</h3>
-							<p class="text-gray-400">Description:
-								{{this.productId.description}}</p>
-							<p class="text-gray-400">Price: ${{this.productId.price}}</p>
-							<img
-								src="{{this.productId.thumbnail}}"
-								alt="{{this.productId.title}}"
-								class="w-24 h-24 object-cover mt-2"
-							/>
-							<p class="text-gray-400">Quantity: {{this.quantity}}</p>
+						<div
+							class="border-b-2 border-gray-600 py-2 flex justify-between items-center"
+						>
+							<div>
+								<h3 class="text-xl">{{this.productId.title}}</h3>
+								<p class="text-gray-400">Description:
+									{{this.productId.description}}</p>
+								<p class="text-gray-400">Price: ${{this.productId.price}}</p>
+								<img
+									src="{{this.productId.thumbnail}}"
+									alt="{{this.productId.title}}"
+									class="w-24 h-24 object-cover mt-2"
+								/>
+								<p class="text-gray-400">Quantity: {{this.quantity}}</p>
+							</div>
+							<div class="flex items-center">
+								<button
+									class="text-red-500 px-2 py-1 delete-product-btn"
+									data-product-id="{{this.productId._id}}"
+								>Delete</button>
+							</div>
 						</div>
 					{{/each}}
 				</div>
+
+				<section class="mt-4">
+					<h2 class="text-2xl font-semibold">Total: {{cart.totalPrice}}</h2>
+					<div class="mt-4 flex justify-between">
+						<button
+							class="bg-red-500 text-white px-4 py-2 rounded clear-cartBtn"
+							data-cart-id={{cart._id}}
+						>Clear Cart</button>
+						<button
+							class="bg-green-500 text-white px-4 py-2 rounded"
+							onclick="purchaseCart()"
+						>Purchase</button>
+					</div>
+				</section>
 			{{else}}
 				<p class="text-center">Your cart is empty.</p>
 			{{/if}}
 		</div>
 	</section>
 </main>
+
+<script src="/cartLogic.js" type="module"></script><script
+	src="https://cdn.jsdelivr.net/npm/sweetalert2@10"
+></script>

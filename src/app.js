@@ -21,6 +21,8 @@ import CONFIG from "./config/config.js";
 import { ticketRouter } from "./routers/ticket.router.js";
 import program from "./config/command.js";
 import ticketViewRouter from "./routers/ticket.view.router.js";
+import errorHandler from "./middlewares/error.js";
+import CustomError from "./errors/CustomError.js";
 
 const app = express();
 const opts = program.opts();
@@ -35,7 +37,7 @@ app.use(express.static("./src/public"));
 app.engine("handlebars", handlebars.engine());
 app.set("views", "./src/views");
 app.set("view engine", "handlebars");
-
+app.use(errorHandler);
 // Error handling middleware
 app.use((err, req, res, next) => {
 	console.error(err.stack);
@@ -88,8 +90,12 @@ async function startServer() {
 		// Initialize sockets
 		Sockets(io);
 	} catch (error) {
-		console.log(chalk.red(error.message));
-		throw error;
+		CustomError.createError({
+			name: "Server Error",
+			message: "Server failed to start",
+			cause: error.message,
+			code: 500,
+		});
 	}
 }
 

@@ -12,6 +12,9 @@ import GitHubStrategy from "passport-github2";
 import PassPortJWT from "passport-jwt";
 import cartModel from "../models/carts.model.js";
 import config from "./config.js";
+import CustomError from "../errors/CustomError.js";
+import { generateUserErrorInfo } from "../errors/userErrorInfo.js";
+import CustomErrorIDs from "../errors/enums.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -27,6 +30,15 @@ const InitializePassport = () => {
 			},
 			async (req, username, password, done) => {
 				let { first_name, last_name, email, age } = req.body;
+
+				if (!first_name || !last_name || !email || !age) {
+					CustomError.createError({
+						name: "Missing Fields",
+						cause: generateUserErrorInfo(req.body),
+						code: CustomErrorIDs.INVALID_INPUT,
+						message: "Missing Fields",
+					});
+				}
 
 				try {
 					const existingUser = await UserModel.findOne({ email: username });

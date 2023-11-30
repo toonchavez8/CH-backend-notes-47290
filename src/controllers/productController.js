@@ -3,6 +3,8 @@ import productModel from "../models/products.model.js";
 import mongoose from "mongoose";
 import { ProductService } from "../repositories/index.js";
 import chalk from "chalk";
+import CustomError from "../errors/CustomError.js";
+import CustomErrorIDs from "../errors/enums.js";
 
 const PORT = config.APISERVER.PORT;
 
@@ -219,7 +221,12 @@ export const getProductByIDView = async (req, res) => {
 
 		// Check if the provided ID is a valid ObjectId
 		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).json({ error: "Invalid product ID." });
+			CustomError.createError({
+				name: "Invalid ID",
+				message: "The provided ID is not a valid ObjectId.",
+				code: CustomErrorIDs.DATABASE_ERROR,
+				cause: "Invalid ID",
+			});
 		}
 
 		// Find the product by ID using findById

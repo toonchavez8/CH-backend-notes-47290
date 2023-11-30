@@ -1,4 +1,5 @@
 function filterProducts(category) {
+	console.log("Filtering products by category:", category);
 	const currentUrl = new URL(window.location.href);
 
 	// Check if the selected category is "All Categories"
@@ -14,6 +15,19 @@ function filterProducts(category) {
 	window.location.href = currentUrl.toString();
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+	// Find the categoryFilter select element
+	const categoryFilter = document.getElementById("categoryFilter");
+
+	// Check if the categoryFilter element is found
+	if (categoryFilter) {
+		// Attach the change event listener
+		categoryFilter.addEventListener("change", function (event) {
+			// Call your filterProducts function when the value changes
+			filterProducts(event.target.value);
+		});
+	}
+});
 const addToCartBtns = document.querySelectorAll(".addTocart");
 
 const categoryButtons = document.querySelectorAll(".categoryButton");
@@ -82,3 +96,53 @@ addToCartBtns.forEach((addToCartBtn) => {
 		addToCart(productId, cartID);
 	});
 });
+
+// ...
+
+if (document.getElementById("addMockProducts")) {
+	const addMockProductsBtn = document.getElementById("addMockProducts");
+
+	addMockProductsBtn.addEventListener("click", async (event) => {
+		event.preventDefault();
+
+		try {
+			const response = await fetch("/api/products/create/mockingproducts", {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (response.ok) {
+				// Mock products created successfully
+				Swal.fire({
+					icon: "success",
+					title: "Mock products created!",
+					text: "100 mock products have been added to the database.",
+					confirmButtonText: "OK",
+				}).then(() => {
+					// Refresh the page
+					location.reload();
+				});
+			} else {
+				// Handle the case where there was an error creating mock products
+				console.error("Error creating mock products:", response.statusText);
+				Swal.fire({
+					icon: "error",
+					title: "Error",
+					text: "Failed to create mock products. Please try again.",
+					confirmButtonText: "OK",
+				});
+			}
+		} catch (error) {
+			// Handle any other errors that occur during the fetch
+			console.error("Error creating mock products:", error);
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: "An error occurred. Please try again.",
+				confirmButtonText: "OK",
+			});
+		}
+	});
+}

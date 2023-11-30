@@ -35,8 +35,15 @@
 			>
 				<h2 class="text-lg font-medium">Need to add or edit something else?</h2>
 				<a href="/products/realtimeproducts"><button
-						class="bg-gradient-to-r from-purple-400 to-purple-600 text-white px-4 py-2 rounded-md"
+						class="bg-gradient-to-r from-purple-400 to-purple-600 text-white px-4 py-2 rounded-md transition-all duration-300 ease-in-out transform hover:scale-105"
 					>Add product</button></a>
+
+				<button
+					id="addMockProducts"
+					class="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-full mt-4 transition-all duration-300 ease-in-out transform hover:scale-105"
+				>
+					Add 100 mock products
+				</button>
 			</div>
 		{{/if}}
 	</section>
@@ -46,11 +53,7 @@
 		<section class="mb-4">
 			<label for="categoryFilter" class="font-semibold text-white">Filter by
 				Category:</label>
-			<select
-				id="categoryFilter"
-				name="categoryFilter"
-				onchange="filterProducts(this.value)"
-			>
+			<select id="categoryFilter" name="categoryFilter">
 				<option value="" class="categoryButton">Categories</option>
 				{{#each categories}}
 					<option value="{{this}}">{{this}}</option>
@@ -72,11 +75,15 @@
 							class="text-xl text-purple-600 text-center font-semibold mb-2"
 						>{{this.title}}</p>
 						<!-- Category Button -->
-						<button
-							class="bg-indigo-500 hover:bg-indigo-700 text-white px-4 rounded-full mt-2 categoryButton"
-						>
-							{{this.category}}
-						</button>
+						<div class="flex">
+							{{#each this.category}}
+								<button
+									class="bg-indigo-500 hover:bg-indigo-700 text-white px-4 rounded-full mt-2 categoryButton"
+								>
+									{{this}}
+								</button>
+							{{/each}}
+						</div>
 
 						<!-- Square Image -->
 						<a
@@ -164,13 +171,12 @@
 
 	</section>
 
+	<script src="/home.js" type="module"></script>
+
+	<script>function incrementQuantity(button) { const productId =
+		button.getAttribute("data-product-id"); const input =
+		button.parentNode.querySelector('input[type="number"]'); input.value =
+		parseInt(input.value) + 1; } function decrementQuantity(button) { const
+		input = button.parentNode.querySelector('input[type="number"]'); const value
+		= parseInt(input.value); if (value > 1) { input.value = value - 1; } }</script>
 </main>
-
-<script src="/home.js" type="module"></script>
-
-<script>function incrementQuantity(button) { const productId =
-	button.getAttribute("data-product-id"); const input =
-	button.parentNode.querySelector('input[type="number"]'); input.value =
-	parseInt(input.value) + 1; } function decrementQuantity(button) { const input
-	= button.parentNode.querySelector('input[type="number"]'); const value =
-	parseInt(input.value); if (value > 1) { input.value = value - 1; } }</script>

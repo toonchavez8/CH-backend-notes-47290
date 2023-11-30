@@ -5,6 +5,7 @@ import { ProductService } from "../repositories/index.js";
 import chalk from "chalk";
 import CustomError from "../errors/CustomError.js";
 import CustomErrorIDs from "../errors/enums.js";
+import { generateProducts } from "../mocking/Product.Gen.js";
 
 const PORT = config.APISERVER.PORT;
 
@@ -258,5 +259,25 @@ export const realTimeProductsView = async (req, res) => {
 		// Handle any potential errors here
 		console.error("Error:", error);
 		res.status(500).send("Internal Server Error");
+	}
+};
+
+export const mockingproducts = async (req, res) => {
+	try {
+		// Generate mock products
+		const mockProducts = generateProducts();
+
+		// Save mock products to the database
+		for (const mockProduct of mockProducts) {
+			await ProductService.create(mockProduct);
+		}
+
+		res.status(201).json({
+			message: "Mock products added successfully.",
+			payload: mockProducts,
+		});
+	} catch (error) {
+		console.log("Error mocking products:", error.message);
+		res.status(500).json({ error: error.message });
 	}
 };

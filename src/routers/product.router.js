@@ -5,6 +5,7 @@ import {
 	addProduct,
 	updateProduct,
 	deleteProduct,
+	mockingproducts,
 } from "../controllers/productController.js";
 import { handlePolicies } from "../middlewares/auth.middleware.js";
 import { passportCall } from "../utils.js";
@@ -50,5 +51,7 @@ productRouter.delete(
 	handlePolicies(["ADMIN"]),
 	deleteProduct
 );
+
+productRouter.get("/create/mockingproducts", mockingproducts);
 
 export { productRouter };

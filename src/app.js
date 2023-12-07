@@ -23,6 +23,7 @@ import program from "./config/command.js";
 import ticketViewRouter from "./routers/ticket.view.router.js";
 import errorHandler from "./middlewares/error.js";
 import CustomError from "./errors/CustomError.js";
+import logger from "./config/logger.js";
 
 const app = express();
 const opts = program.opts();
@@ -53,7 +54,7 @@ async function startServer() {
 		await mongoose.connect(dbUrl, { dbName, useUnifiedTopology: true });
 
 		const server = app.listen(PORT, () =>
-			console.log(chalk.green(`Server connected to PORT ${PORT}`))
+			logger.info(`Server is running on port ${PORT}`)
 		);
 
 		const io = new Server(server);
@@ -87,6 +88,15 @@ async function startServer() {
 		app.use("/carts", cartsViewsRouter);
 		app.use("/chat", chatRouter);
 		app.use("/ticket", ticketViewRouter);
+		app.get("/loggertest", (req, res) => {
+			logger.debug("Mock Debug Message");
+			logger.http("Mock Http Message");
+			logger.info("Mock Info Message");
+			logger.warning("Mock Warning Message");
+			logger.error("Mock Error Message");
+			logger.fatal("Mock Fatal Message");
+			res.send("ok");
+		});
 		// Initialize sockets
 		Sockets(io);
 	} catch (error) {

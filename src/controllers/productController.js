@@ -6,6 +6,8 @@ import chalk from "chalk";
 import CustomError from "../errors/CustomError.js";
 import CustomErrorIDs from "../errors/enums.js";
 import { generateProducts } from "../mocking/Product.Gen.js";
+import logger from "../config/logger.js";
+import { logout } from "./sessionController.js";
 
 const PORT = config.APISERVER.PORT;
 
@@ -15,7 +17,7 @@ export const getProducts = async (req, res) => {
 		// Return the entire result object
 		res.status(200).json(products.response); // Return the entire result object
 	} catch (error) {
-		console.log("Error:", error);
+		logger.error("Error:", error);
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
@@ -32,7 +34,6 @@ export const getProductById = async (req, res) => {
 
 		// Find the product by ID using findById
 		const product = await ProductService.getById(id);
-		console.log("getProductById", product);
 
 		if (!product) {
 			return res.status(404).json({ error: "Product not found." });
@@ -40,7 +41,7 @@ export const getProductById = async (req, res) => {
 
 		res.status(200).json({ payload: product });
 	} catch (error) {
-		console.log(chalk.red("Error fetching product:", error.message));
+		logger.error("Error fetching product:", error);
 		res.status(500).json({ error: error.message });
 	}
 };
@@ -49,11 +50,9 @@ export const addProduct = async (req, res) => {
 	try {
 		// Extract product data from the request body
 		const product = req.body;
-		console.log(product);
 
 		// Save the new product to the database
-		const addedProduct = await ProductService.create(product);
-		console.log(addedProduct);
+		await ProductService.create(product);
 
 		const getAllProducts = await ProductService.getAll();
 
@@ -63,13 +62,13 @@ export const addProduct = async (req, res) => {
 			payload: getAllProducts,
 		});
 	} catch (error) {
-		console.log(chalk.red("Error adding product:", error.message));
+		logger.error("Error adding product:", error.message);
 		res.status(500).json({ error: error.message });
 	} finally {
 		if (res.statusCode == 201) {
-			console.log(chalk.green("Post completed successfully"));
+			logger.http("Post completed successfully");
 		} else {
-			console.log(chalk.yellow("Post failed"));
+			logger.fatal("Post failed");
 		}
 	}
 };
@@ -100,7 +99,7 @@ export const updateProduct = async (req, res) => {
 			product: updatedProduct,
 		});
 	} catch (error) {
-		console.log(chalk.red("Error updating product:", error.message));
+		logger.error("Error updating product:", error.message);
 		res.status(500).json({ error: error.message });
 	}
 };
@@ -128,16 +127,8 @@ export const deleteProduct = async (req, res) => {
 			productDeleted: deletedProduct,
 		});
 	} catch (error) {
-		console.log(chalk.red("Error deleting product:", error.message));
+		logger.error("Error deleting product:", error.message);
 		res.status(500).json({ error: error.message });
-	} finally {
-		// Display the deleted product in the console
-		if (deletedProduct) {
-			console.log(
-				chalk.green(`Product with ID ${deletedProduct._id} deleted:`)
-			);
-			console.log(deletedProduct);
-		}
 	}
 };
 
@@ -181,7 +172,6 @@ export const getProductsView = async (req, res) => {
 			const user = req.user?.user; // Safely access the user object using optional chaining
 
 			const cartID = user?.cart; // Safely access the cart object using optional chaining
-			console.log("carid from home", cartID);
 
 			// Check if the user is logged in and if they are an admin
 			const isAdmin = user?.role === "admin"; // Check if the user is an admin
@@ -242,7 +232,7 @@ export const getProductByIDView = async (req, res) => {
 
 		res.render("productPage", { product, cartID }); // Pass the product object to the template
 	} catch (error) {
-		console.log("Error fetching product:", error.message);
+		logger.error("Error fetching product:", error.message);
 		res.status(500).json({ error: error.message });
 	}
 };
@@ -277,7 +267,7 @@ export const mockingproducts = async (req, res) => {
 			payload: mockProducts,
 		});
 	} catch (error) {
-		console.log("Error mocking products:", error.message);
+		logger.error("Error mocking products:", error.message);
 		res.status(500).json({ error: error.message });
 	}
 };

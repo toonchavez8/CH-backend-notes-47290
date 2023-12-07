@@ -15,6 +15,7 @@ import config from "./config.js";
 import CustomError from "../errors/CustomError.js";
 import { generateUserErrorInfo } from "../errors/userErrorInfo.js";
 import CustomErrorIDs from "../errors/enums.js";
+import logger from "./logger.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -60,17 +61,12 @@ const InitializePassport = () => {
 					// Generate a JWT token for the new user
 					const token = generateToken(newUser);
 
-					console.log("newUser", newUser);
-					console.log("token", token);
-
 					// Add the token to the user object
 					newUser.token = token;
 
 					// Create a cart for the user
 					const newCart = new cartModel({ userEmail: email, products: [] });
 					await newCart.save();
-
-					console.log("newCart", newCart);
 
 					newUser.cart = newCart._id;
 
@@ -109,7 +105,6 @@ const InitializePassport = () => {
 					}
 
 					const token = generateToken(user);
-					console.log("token", token);
 					user.token = token;
 
 					// save cartID to localsession for later use
@@ -117,7 +112,7 @@ const InitializePassport = () => {
 
 					return done(null, user);
 				} catch (error) {
-					console.error(error);
+					logger.error(error);
 					return done(error);
 				}
 			}
@@ -142,7 +137,6 @@ const InitializePassport = () => {
 
 					if (existingUser) {
 						const token = generateToken(existingUser);
-						console.log("User already exists. Generating JWT token.");
 
 						existingUser.token = token;
 

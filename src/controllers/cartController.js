@@ -326,8 +326,6 @@ export const checkoutCartController = async (req, res) => {
 		};
 		// Update cart with products that were successfully purchased
 		await CartService.updateCart(data);
-		console.log("successfulPurchases", successfulPurchases);
-		console.log("failedPurchases", failedPurchases);
 
 		// Create ticket
 		const ticketCode = shortid.generate();

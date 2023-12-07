@@ -1,6 +1,6 @@
 import { TicketService } from "../repositories/index.js";
-import mongoose from "mongoose";
-import chalk from "chalk";
+
+import logger from "../config/logger.js";
 
 export const getTickets = async (req, res) => {
 	try {
@@ -8,7 +8,7 @@ export const getTickets = async (req, res) => {
 		// Return the entire result object
 		res.status(200).json(tickets);
 	} catch (error) {
-		console.log("Error:", error);
+		logger.error("Error:", error);
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
@@ -27,7 +27,7 @@ export const getTicketById = async (req, res) => {
 
 		res.status(200).json({ payload: ticket });
 	} catch (error) {
-		console.log(chalk.red("Error fetching ticket:", error.message));
+		logger.error("Error fetching ticket:", error.message);
 		res.status(500).json({ error: error.message });
 	}
 };
@@ -46,13 +46,13 @@ export const addTicket = async (req, res) => {
 			payload: addedTicket,
 		});
 	} catch (error) {
-		console.log(chalk.red("Error adding ticket:", error.message));
+		logger.error("Error adding ticket:", error.message);
 		res.status(500).json({ error: error.message });
 	} finally {
 		if (res.statusCode == 201) {
-			console.log(chalk.green("Post completed successfully"));
+			logger.error("Post completed successfully");
 		} else {
-			console.log(chalk.yellow("Post failed"));
+			logger.http("Post failed");
 		}
 	}
 };
@@ -81,7 +81,7 @@ export const updateTicket = async (req, res) => {
 			ticket: updatedTicket,
 		});
 	} catch (error) {
-		console.log(chalk.red("Error updating ticket:", error.message));
+		logger.error("Error updating ticket:", error.message);
 		res.status(500).json({ error: error.message });
 	}
 };
@@ -107,13 +107,13 @@ export const deleteTicket = async (req, res) => {
 			ticketDeleted: deletedTicket,
 		});
 	} catch (error) {
-		console.log(chalk.red("Error deleting ticket:", error.message));
+		logger.error("Error deleting ticket:", error.message);
 		res.status(500).json({ error: error.message });
 	} finally {
 		// Display the deleted ticket in the console
 		if (deletedTicket) {
-			console.log(chalk.green(`Ticket with ID ${deletedTicket._id} deleted:`));
-			console.log(deletedTicket);
+			logger.http(`Ticket with ID ${deletedTicket._id} deleted:`);
+			logger.warning(deletedTicket);
 		}
 	}
 };

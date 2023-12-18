@@ -50,5 +50,3 @@ export const generatePasswordResetToken = () => {
 
 	return token;
 };
-
-console.log(generatePasswordResetToken());

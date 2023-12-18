@@ -28,4 +28,9 @@ export default {
 		COOKIE_NAME: process.env.JWT_COOKIE_NAME,
 	},
 	PERSISTANCE: opts.Persistence || process.env.PERSISTANCE,
+
+	NODEMAILER: {
+		user: process.env.NODEMAILER_USER,
+		pass: process.env.NODEMAILER_PASS,
+	},
 };

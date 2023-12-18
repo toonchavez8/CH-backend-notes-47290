@@ -18,7 +18,7 @@ const userPasswordSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		default: Date.now,
-		expireAfterSeconds: 3600,
+		expires: 3600,
 	},
 });
 

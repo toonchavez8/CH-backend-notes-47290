@@ -3,6 +3,8 @@ import passport from "passport";
 import { passportCall } from "../utils.js";
 import * as sessionController from "../controllers/sessionController.js";
 import UserDTO from "../dto/user.DTO.js";
+import userPasswordModel from "../models/user-password.model.js";
+import UserModel from "../models/users.model.js";
 const sessionsViewRouter = Router();
 
 sessionsViewRouter.get("/register", (req, res) => {
@@ -51,5 +53,10 @@ sessionsViewRouter.get(
 sessionsViewRouter.get("/session/forgot-password", (req, res) => {
 	res.render("sessions/forgot-password");
 });
+
+sessionsViewRouter.get(
+	"/session/reset-password/:token",
+	sessionController.verfiyToken
+);
 
 export default sessionsViewRouter;

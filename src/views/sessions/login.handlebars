@@ -39,12 +39,19 @@
 				Login with Github
 			</button>
 		</a>
-		<a href="/register">
-			<button
-				href="/register"
-				class="mt-4 w-full rounded bg-indigo-100 text-center p-2 text-indigo-500 hover:bg-indigo-600 hover:underline focus:bg-indigo-600 focus:outline-none hover:text-stone-50"
-			>Register</button>
-		</a>
+		<div class="flex gap-2 mt-4">
+			<a href="/register" class="flex-1">
+				<button
+					href="/register"
+					class="w-full rounded bg-indigo-100 text-center p-2 text-indigo-500 hover:bg-indigo-600 hover:underline focus:bg-indigo-600 focus:outline-none hover:text-stone-50"
+				>Register</button>
+			</a>
+			<a href="/session/forgot-password" class="flex-1">
+				<button
+					class="w-full capitalize rounded text-center text-indigo-500 p-2 hover:bg-indigo-100 transition-all ease hover:underline focus:bg-indigo-200 focus:outline-none hover:text-indigo-700"
+				>forgot password</button>
+			</a>
+		</div>
 
 	</div>
 </main>

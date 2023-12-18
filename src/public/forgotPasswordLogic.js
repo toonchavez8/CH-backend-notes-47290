@@ -1,4 +1,5 @@
 const emailBox = document.getElementById("email");
+
 const emailContainer = document.getElementById("email-container");
 let invalidEmailBadge;
 

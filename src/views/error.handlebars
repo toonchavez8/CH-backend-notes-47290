@@ -22,14 +22,61 @@
 		<p>{{error}}</p>
 	</div>
 
-	<button
-		class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-		onclick="window.history.back()"
-	>Go Back</button>
+	{{#if resetPassword}}
+		<script src="/forgotPasswordLogic.js" defer></script>
+		<div class="w-full max-w-md rounded-lg bg-white p-8 shadow-md mx-8">
+			<h1 class="mb-4 text-center text-3xl font-semibold text-indigo-500">Forgot
+				Password</h1>
 
-	<a href="/session/login">
+			<!-- Forgot Password Form -->
+			<form action="/api/sessions/forgot-password" method="post">
+				<div class="mb-4" id="email-container">
+					<input
+						id="email"
+						type="text"
+						name="email"
+						placeholder="Your email"
+						class="w-full rounded border p-2 focus:border-indigo-500 focus:outline-none"
+					/>
+				</div>
+				<button
+					type="submit"
+					class="w-full rounded bg-indigo-600 p-2 text-white hover:bg-indigo-800 focus:bg-indigo-600 focus:outline-none"
+				>Reset Password</button>
+			</form>
+
+			<!-- Links to other pages -->
+			<div class="flex gap-4 mt-4">
+				<a href="/session/login" class="flex-1">
+					<button
+						class="rounded w-full rounded bg-indigo-400 p-2 text-white hover:bg-indigo-600 focus:bg-indigo-600 focus:outline-none text-center p-2 text-slate-100 font-bold ease hover:bg-gray-600 hover:underline focus:bg-gray-600 focus:outline-none transition hover:text-stone-50"
+					>
+						Login
+					</button>
+				</a>
+				<a href="/register" class="flex-1">
+					<button
+						class="rounded w-full bg-indigo-100 text-center p-2 text-indigo-500 hover:bg-indigo-600 hover:underline focus:bg-indigo-600 focus:outline-none hover:text-stone-50"
+					>
+						Register
+					</button>
+				</a>
+
+			</div>
+		</div>
+	{{/if}}
+
+	{{#unless resetPassword}}
+
 		<button
-			class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-		>Login</button>
-	</a>
+			class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+			onclick="window.history.back()"
+		>Go Back</button>
+
+		<a href="/session/login">
+			<button
+				class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+			>Login</button>
+		</a>
+	{{/unless}}
 </main>

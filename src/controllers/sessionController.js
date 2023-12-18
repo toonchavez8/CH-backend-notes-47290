@@ -121,9 +121,10 @@ export const verfiyToken = async (req, res) => {
 		});
 
 		if (!userPassword) {
-			return res
-				.status(404)
-				.render("error", { error: "Token not found or expried" });
+			return res.status(404).render("error", {
+				error: "Token not found or expired, please try again below",
+				resetPassword: true,
+			});
 		}
 
 		const user = await UserModel.findOne({ email: userPassword.email });

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import passport from "passport";
 import config from "./config/config.js";
+import crypto from "crypto";
 
 export const JWT_SECRET = config.JWT.SECRET;
 export const JWT_COOKIE_NAME = config.JWT.COOKIE_NAME;
@@ -43,3 +44,11 @@ export const passportCall = (strategy) => {
 		})(req, res, next);
 	};
 };
+
+export const generatePasswordResetToken = () => {
+	const token = crypto.randomBytes(16).toString("hex");
+
+	return token;
+};
+
+console.log(generatePasswordResetToken());

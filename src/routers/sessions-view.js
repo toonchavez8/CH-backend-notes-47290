@@ -48,4 +48,8 @@ sessionsViewRouter.get(
 	sessionController.login
 );
 
+sessionsViewRouter.get("/session/forgot-password", (req, res) => {
+	res.render("sessions/forgot-password");
+});
+
 export default sessionsViewRouter;

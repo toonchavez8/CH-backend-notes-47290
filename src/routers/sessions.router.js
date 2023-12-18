@@ -20,7 +20,6 @@ sessionsRouter.get("/logout", sessionController.logout);
 
 sessionsRouter.post("/forgot-password", sessionController.forgotPassword);
 
-sessionsRouter.post("/verify-token/:token", sessionController.verfiyToken);
 sessionsRouter.post("/reset-password/:user", sessionController.resetPassword);
 
 export default sessionsRouter;

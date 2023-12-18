@@ -3,8 +3,6 @@ import passport from "passport";
 import { passportCall } from "../utils.js";
 import * as sessionController from "../controllers/sessionController.js";
 import UserDTO from "../dto/user.DTO.js";
-import userPasswordModel from "../models/user-password.model.js";
-import UserModel from "../models/users.model.js";
 const sessionsViewRouter = Router();
 
 sessionsViewRouter.get("/register", (req, res) => {

@@ -3,10 +3,15 @@ const emailBox = document.getElementById("email");
 const emailContainer = document.getElementById("email-container");
 let invalidEmailBadge;
 
+const submitButton = document.getElementById("submit");
 document.querySelector("form").addEventListener("submit", async (event) => {
 	event.preventDefault();
 
 	const email = emailBox.value;
+
+	submitButton.setAttribute("disabled", true);
+	submitButton.innerHTML = "Sending...";
+	submitButton.classList.add("animate-pulse");
 
 	// Validate email format
 	if (!isValidEmail(email)) {
@@ -57,6 +62,10 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 				"Please check your email for password reset instructions.",
 				"success"
 			);
+
+			submitButton.removeAttribute("disabled");
+			submitButton.innerHTML = "Reset Password";
+			submitButton.classList.remove("animate-pulse");
 		} else {
 			// Handle other cases or errors
 			console.error(result.message);

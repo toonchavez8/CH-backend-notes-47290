@@ -145,4 +145,5 @@ export const resetPassword = async (req, res) => {
 	if (!user) {
 		return res.status(400).render("error", { error: "user is required" });
 	}
+	res.send("resetPassword");
 };

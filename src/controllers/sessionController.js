@@ -1,4 +1,3 @@
-import UserDTO from "../dto/user.DTO.js";
 import UserModel from "../models/users.model.js";
 import { JWT_COOKIE_NAME, generatePasswordResetToken } from "../utils.js";
 

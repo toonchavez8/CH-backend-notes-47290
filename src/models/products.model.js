@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema({
 	code: { type: String, required: true, unique: true },
 	stock: Number,
 	category: [String],
+	owner: { type: String, required: true, default: "admin", ref: "users" },
 });
 
 productSchema.plugin(mongoosePaginate);

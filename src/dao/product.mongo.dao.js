@@ -75,4 +75,6 @@ export default class ProductMongoDAO {
 	update = async (id, data) =>
 		await productModel.findByIdAndUpdate(id, data, { returnDocument: "after" });
 	delete = async (id) => await productModel.findByIdAndDelete(id);
+	getByOwner = async (owner) =>
+		await productModel.find({ owner }).lean().exec();
 }

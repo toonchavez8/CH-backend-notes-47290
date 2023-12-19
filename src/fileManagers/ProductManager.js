@@ -182,4 +182,11 @@ export class ProductManager {
 		console.log("Product updated successfully and database updated.");
 		return this.#_products[index];
 	}
+
+	async getProductsByOwner(email) {
+		const products = this.#_products.filter(
+			(product) => product.owner === email
+		);
+		return products;
+	}
 }

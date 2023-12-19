@@ -6,6 +6,7 @@ import {
 	updateProduct,
 	deleteProduct,
 	mockingproducts,
+	realTimeProducts,
 } from "../controllers/productController.js";
 import { handlePolicies } from "../middlewares/auth.middleware.js";
 import { passportCall } from "../utils.js";
@@ -16,8 +17,8 @@ const productRouter = Router();
 // router path to get all products
 productRouter.get(
 	"/",
-	// passportCall("jwt"),
-	// handlePolicies(["USER", "ADMIN"]),
+	passportCall("jwt"),
+	handlePolicies(["USER", "ADMIN", "PREMIUM"]),
 	getProducts
 );
 
@@ -25,7 +26,7 @@ productRouter.get(
 productRouter.get(
 	"/:pid",
 	passportCall("jwt"),
-	handlePolicies(["USER", "ADMIN"]),
+	handlePolicies(["USER", "ADMIN", "PREMIUM"]),
 	getProductById
 );
 
@@ -50,6 +51,13 @@ productRouter.delete(
 	passportCall("jwt"),
 	handlePolicies(["ADMIN", "PREMIUM"]),
 	deleteProduct
+);
+
+productRouter.get(
+	"/realtime/products",
+	passportCall("jwt"),
+	handlePolicies(["ADMIN", "PREMIUM"]),
+	realTimeProducts
 );
 
 productRouter.get("/create/mockingproducts", mockingproducts);

@@ -6,19 +6,19 @@ const productsViewsRouter = Router();
 
 productsViewsRouter.get(
 	"/",
-	handlePolicies(["USER", "ADMIN"]),
+	handlePolicies(["USER", "ADMIN", "PREMIUM"]),
 	ProductController.getProductsView
 );
 
 productsViewsRouter.get(
 	"/id/:pid",
-	handlePolicies(["USER", "ADMIN"]),
+	handlePolicies(["USER", "ADMIN", "PREMIUM"]),
 	ProductController.getProductByIDView
 );
 
 productsViewsRouter.get(
 	"/realtimeproducts",
-	handlePolicies(["USER", "ADMIN"]),
+	handlePolicies(["ADMIN", "PREMIUM"]),
 	ProductController.realTimeProductsView
 );
 

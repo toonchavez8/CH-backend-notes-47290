@@ -50,13 +50,14 @@ export const addProduct = async (req, res) => {
 	try {
 		// Extract product data from the request body
 		const product = req.body;
+		console.log("req from add product", req.body);
+
+		product.owner = req.user.user.email;
 
 		// Save the new product to the database
 		await ProductService.create(product);
 
 		const getAllProducts = await ProductService.getAll();
-
-		product.owner = req.user.email;
 
 		logger.info(product, "email", req.user.email);
 
@@ -64,6 +65,7 @@ export const addProduct = async (req, res) => {
 		res.status(201).json({
 			message: "Product added successfully.",
 			payload: getAllProducts,
+			user: req.user.user,
 		});
 	} catch (error) {
 		logger.error("Error adding product:", error.message);
@@ -84,6 +86,14 @@ export const updateProduct = async (req, res) => {
 
 		// Create an object with the updated product data
 		const updatedProductdata = req.body;
+		// Check if the user is the owner of the product or an admin
+		const { role, email } = req.user; // Assuming user information is stored in req.user
+		const isProductOwnerOrAdmin =
+			role === "admin" || email === updatedProductdata.owner;
+
+		if (!isProductOwnerOrAdmin) {
+			return res.status(403).json({ error: "Permission denied." });
+		}
 
 		// Call the updateProductById method to update the product by ID
 		const updatedProduct = await ProductService.update(id, updatedProductdata, {
@@ -115,7 +125,14 @@ export const deleteProduct = async (req, res) => {
 		// Extract the product ID from the request parameters
 		const id = req.params.pid;
 
-		// Use productModel.findByIdAndRemove to delete the product by ID
+		// Check if the user is an admin
+		const { role } = req.user; // Assuming user information is stored in req.user
+		const isAdmin = role === "admin" || "premium";
+
+		if (!isAdmin) {
+			return res.status(403).json({ error: "Permission denied." });
+		}
+
 		deletedProduct = await ProductService.delete(id);
 
 		// Check if the product was successfully deleted
@@ -178,8 +195,8 @@ export const getProductsView = async (req, res) => {
 			const cartID = user?.cart; // Safely access the cart object using optional chaining
 
 			// Check if the user is logged in and if they are an admin
-			const isAdmin = user?.role === "admin"; // Check if the user is an admin
-
+			const isAdmin = user?.role === "admin";
+			const isPremiumRole = user?.role === "premium";
 			const paginateInfo = {
 				hasPrevPage: products.response.hasPrevPage,
 				hasNextPage: products.response.hasNextPage,
@@ -195,6 +212,7 @@ export const getProductsView = async (req, res) => {
 			}));
 			res.render("home", {
 				isAdmin,
+				isPremiumRole,
 				user,
 				products: updatedProducts,
 				paginateInfo,
@@ -243,11 +261,33 @@ export const getProductByIDView = async (req, res) => {
 
 export const realTimeProductsView = async (req, res) => {
 	try {
-		const products = await ProductService.getAll();
+		const user = req.user?.user; // Safely access the user object using optional chaining
+
+		if (!user) {
+			return res.status(401).send("Unauthorized"); // If the user is not logged in, return unauthorized
+		}
+
+		const isAdmin = user.role === "admin";
+		const isPremium = user.role === "premium";
+
+		let products;
+
+		if (isAdmin) {
+			// If the user is an admin, get all products
+			products = await ProductService.getAll();
+		} else if (isPremium) {
+			// If the user is premium, get only their products
+			products = await ProductService.getByOwner(user.email);
+		} else {
+			return res.status(403).send("Forbidden"); // If the user is neither admin nor premium, return forbidden
+		}
+
+		// Process the products
 		const processedProducts = products.map((product) => ({
 			...product,
 			shortId: product._id.toString().slice(-4),
 		}));
+
 		res.render("realTimeProducts", { processedProducts });
 	} catch (error) {
 		// Handle any potential errors here
@@ -273,5 +313,45 @@ export const mockingproducts = async (req, res) => {
 	} catch (error) {
 		logger.error("Error mocking products:", error.message);
 		res.status(500).json({ error: error.message });
+	}
+};
+
+export const realTimeProducts = async (req, res) => {
+	try {
+		const user = req.user?.user; // Safely access the user object using optional chaining
+
+		if (!user) {
+			return res.status(401).send("Unauthorized"); // If the user is not logged in, return unauthorized
+		}
+
+		const isAdmin = user.role === "admin";
+		const isPremium = user.role === "premium";
+
+		let products;
+
+		if (isAdmin) {
+			// If the user is an admin, get all products
+			products = await ProductService.getAll();
+		} else if (isPremium) {
+			// If the user is premium, get only their products
+			products = await ProductService.getByOwner(user.email);
+		} else {
+			return res.status(403).send("Forbidden"); // If the user is neither admin nor premium, return forbidden
+		}
+
+		// Process the products
+		const processedProducts = products.map((product) => ({
+			...product,
+			shortId: product._id.toString().slice(-4),
+		}));
+
+		res.status(200).json({
+			message: "Products fetched successfully.",
+			payload: processedProducts,
+		});
+	} catch (error) {
+		// Handle any potential errors here
+		console.error("Error:", error);
+		res.status(500).send("Internal Server Error");
 	}
 };

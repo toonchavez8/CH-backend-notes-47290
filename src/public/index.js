@@ -36,7 +36,7 @@ document.getElementById("createBtn").addEventListener("click", (event) => {
 			// Reset the form after successful submission
 			document.getElementById("createForm").reset();
 
-			return fetch("/api/products");
+			return fetch("/api/products/realtime/products");
 		})
 		.then((result) => result.json())
 		.then((result) => {
@@ -95,6 +95,7 @@ function deleteProduct(id) {
 		.then((result) => {
 			if (result.error) throw new Error(result.error);
 			socket.emit("productList", result.payload);
+			console.log(result.user);
 			let timerInterval;
 			console.log(deletedProduct.productDeleted);
 			Swal.fire({
@@ -203,7 +204,7 @@ function updateProduct(id) {
 			createBtn.classList.remove("pointer-events-none", "opacity-50");
 
 			// Fetch and update the product list (similar to what you do after creation)
-			return fetch("/api/products");
+			return fetch("/api/products/realtime/products");
 		})
 		.then((result) => result.json())
 		.then((result) => {
@@ -480,6 +481,11 @@ function updateTable(processedProducts) {
 }
 
 socket.on("updatedProducts", (data) => {
+	// Call the updateTable function with the new product data
+	updateTable(data);
+});
+
+socket.on("productList", (data) => {
 	// Call the updateTable function with the new product data
 	updateTable(data);
 });

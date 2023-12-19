@@ -25,4 +25,6 @@ export default class ProductFileDao {
 	create = async (data) => await productManager.addProduct(data);
 	update = async (id, data) => await productManager.updateProductById(id, data);
 	delete = async (id) => await productManager.deleteProductById(id);
+	getProductsByOwner = async (owner) =>
+		await productManager.getProductsByOwner(owner);
 }

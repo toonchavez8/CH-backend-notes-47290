@@ -1,1 +1,0 @@
-alert("reset-passwordLogic.js");

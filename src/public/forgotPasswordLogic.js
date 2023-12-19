@@ -1,10 +1,11 @@
 const emailBox = document.getElementById("email");
-
 const emailContainer = document.getElementById("email-container");
 let invalidEmailBadge;
 
 const submitButton = document.getElementById("submit");
-document.querySelector("form").addEventListener("submit", async (event) => {
+const form = document.querySelector("form");
+
+form.addEventListener("submit", async (event) => {
 	event.preventDefault();
 
 	const email = emailBox.value;
@@ -29,7 +30,6 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 		}
 
 		// Make the email container red
-
 		emailBox.classList.remove("rounded");
 		emailBox.classList.add("rounded-b-lg", "border-red-500");
 		return;
@@ -53,7 +53,11 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 			body: JSON.stringify({ email }),
 		});
 
+		console.log("Response:", response);
+
 		const result = await response.json();
+
+		console.log("Result:", result);
 
 		if (result.status === "success") {
 			// Trigger SweetAlert on success
@@ -63,21 +67,47 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 				"success"
 			);
 
+			// Reset the form and clear the email box
+			form.reset();
+			emailBox.value = "";
+
 			submitButton.removeAttribute("disabled");
 			submitButton.innerHTML = "Reset Password";
 			submitButton.classList.remove("animate-pulse");
-		} else {
-			// Handle other cases or errors
-			console.error(result.message);
+		} else if (response.status === 404) {
+			// Trigger SweetAlert on error
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: result.message,
+			});
+
+			// Reset the form and clear the email box
+			form.reset();
+			emailBox.value = "";
 		}
 	} catch (error) {
-		console.error("Error:", error.message);
+		console.error("Error sending forgot password email:", error);
+
+		// Trigger SweetAlert on error
+		Swal.fire({
+			icon: "error",
+			title: "Error",
+			text: "Internal Server Error",
+		});
+
+		// Reset the form and clear the email box
+		form.reset();
+		emailBox.value = "";
+	} finally {
+		submitButton.removeAttribute("disabled");
+		submitButton.innerHTML = "Reset Password";
+		submitButton.classList.remove("animate-pulse");
 	}
 });
 
 // Function to validate email format
 function isValidEmail(email) {
-	// You can implement a more sophisticated email validation if needed
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	return emailRegex.test(email);
 }

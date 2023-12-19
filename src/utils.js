@@ -9,10 +9,13 @@ export const JWT_COOKIE_NAME = config.JWT.COOKIE_NAME;
 
 // Helper function to create a hash from a password
 export const createHash = (password) => {
+	console.log("password", password);
 	const salt = bcrypt.genSaltSync(10);
 	return bcrypt.hashSync(password, salt);
 };
-
+export const comparePassword = (newPassword, oldHashedPassword) => {
+	return bcrypt.compareSync(newPassword, oldHashedPassword);
+};
 // Helper function to verify a password against a hash
 export const isValidPassword = (user, password) =>
 	bcrypt.compareSync(password, user.password);

@@ -1,7 +1,13 @@
 import config from "../config/config.js";
 import userPasswordModel from "../models/user-password.model.js";
 import UserModel from "../models/users.model.js";
-import { JWT_COOKIE_NAME, generatePasswordResetToken } from "../utils.js";
+import {
+	JWT_COOKIE_NAME,
+	comparePassword,
+	createHash,
+	generatePasswordResetToken,
+	isValidPassword,
+} from "../utils.js";
 import nodemailer from "nodemailer";
 
 export const register = async (req, res) => {
@@ -132,8 +138,6 @@ export const verfiyToken = async (req, res) => {
 		if (!user) {
 			return res.status(404).render("error", { error: "User not found" });
 		}
-
-		console.log(user);
 		res.render("sessions/reset-password", user);
 	} catch (error) {
 		console.error("Error retrieving password reset token:", error);
@@ -141,9 +145,41 @@ export const verfiyToken = async (req, res) => {
 	}
 };
 export const resetPassword = async (req, res) => {
-	const user = req.params.user;
-	if (!user) {
-		return res.status(400).render("error", { error: "user is required" });
+	try {
+		const userEmail = req.body.email;
+		const newPassword = req.body.password;
+
+		const hashedPassword = createHash(newPassword);
+
+		const user = await UserModel.findOne({ email: userEmail });
+
+		if (!user) {
+			return res
+				.status(404)
+				.json({ status: "error", message: "User not found" });
+		}
+
+		// Check if the new password is the same as a previous password
+		const comparePasswords = isValidPassword(user, newPassword);
+
+		if (comparePasswords) {
+			return res.status(400).json({
+				status: "error",
+				message: "Passwords is the same as a previous password",
+				resetPassword: true,
+			});
+		}
+
+		// Update the user's password
+		await UserModel.findByIdAndUpdate(user._id, { password: hashedPassword });
+
+		return res.status(200).render("sessions/reset-password-success", {
+			email: userEmail,
+		});
+	} catch (error) {
+		console.error("Error resetting password:", error);
+		return res
+			.status(500)
+			.json({ status: "error", message: "Internal Server Error" });
 	}
-	res.send("resetPassword");
 };

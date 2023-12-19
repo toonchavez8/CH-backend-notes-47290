@@ -183,3 +183,36 @@ export const resetPassword = async (req, res) => {
 			.json({ status: "error", message: "Internal Server Error" });
 	}
 };
+
+export const togglePremium = async (req, res) => {
+	try {
+		const email = req.params.email;
+
+		const User = await UserModel.findOne({ email });
+
+		const userRole = User.role;
+		let updatedRole;
+		if (userRole === "user") {
+			await UserModel.findByIdAndUpdate(User._id, {
+				role: "premium",
+			});
+			updatedRole = "premium";
+		} else if (userRole === "premium") {
+			await UserModel.findByIdAndUpdate(User._id, {
+				role: "user",
+			});
+			updatedRole = "user";
+		} else {
+			updatedRole = req.user.role;
+			return res.json({
+				status: "warning",
+				message: "You are Admin you silly goose",
+				userRole: updatedRole,
+			});
+		}
+		return res.json({ status: "success", userRole: updatedRole });
+	} catch (error) {
+		console.error("Error toggling premium status:", error);
+		res.json({ status: "error", message: error });
+	}
+};

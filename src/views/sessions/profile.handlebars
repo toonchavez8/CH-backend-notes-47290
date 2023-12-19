@@ -5,23 +5,49 @@
 		<h2 class="text-2xl font-semibold text-indigo-500 mb-2">User Profile</h2>
 		<div class="mb-4">
 			<label class="block text-gray-700 text-sm font-bold mb-2">First Name:</label>
-			<p class="text-gray-800 text-lg font-medium">{{first_name}}</p>
+			<p class="text-gray-800 text-lg font-medium">{{user.first_name}}</p>
 		</div>
-		{{#if last_name}}
+		{{#if user.last_name}}
 			<div class="mb-4">
 				<label class="block text-gray-700 text-sm font-bold mb-2">Last Name:</label>
-				<p class="text-gray-800 text-lg font-medium">{{last_name}}</p>
+				<p class="text-gray-800 text-lg font-medium">{{user.last_name}}</p>
 			</div>
 		{{/if}}
 
 		<div class="mb-4">
 			<label class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
-			<p class="text-gray-800 text-lg font-medium">{{email}}</p>
+			<p class="text-gray-800 text-lg font-medium">{{user.email}}</p>
 		</div>
 
 		<div class="mb-4">
 			<label class="block text-gray-700 text-sm font-bold mb-2">Role:</label>
-			<p class="text-gray-800 text-lg font-medium">{{role}}</p>
+			{{#if isPremiumRole}}
+			<p class="text-indigo-800 text-lg font-medium">Premium User</p>
+			{{/if}}
+			{{#if isRegularRole}}
+			<p class="text-gray-800 text-lg font-medium">Standerd User</p>
+			{{/if}}
+			{{#if isAdminRole}}
+			<p class="text-blue-800 text-lg font-medium">Admin User</p>
+			{{/if}}
 		</div>
+		{{#unless RoleAdmin}}
+			 <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Toggle Role:</label>
+                <input
+                    type="checkbox"
+                    id="changeRoleCheckBox"
+                    name="changeRole"
+                    data-email={{user.email}}
+                    {{#if isPremiumRole}}
+                        checked
+                    {{/if}}
+                    class="rounded p-2 border focus:border-indigo-500 focus:outline-none"
+                />
+                <label for="changeRoleCheckBox" class="text-gray-700 text-sm ml-2">Premium User</label>
+            </div>
+		{{/unless}}
 	</div>
 </main>
+
+<script src="/profileLogic.js"></script>

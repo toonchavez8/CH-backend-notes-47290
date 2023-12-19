@@ -9,7 +9,6 @@ export const JWT_COOKIE_NAME = config.JWT.COOKIE_NAME;
 
 // Helper function to create a hash from a password
 export const createHash = (password) => {
-	console.log("password", password);
 	const salt = bcrypt.genSaltSync(10);
 	return bcrypt.hashSync(password, salt);
 };

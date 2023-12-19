@@ -3,6 +3,7 @@ import passport from "passport";
 import { passportCall } from "../utils.js";
 import * as sessionController from "../controllers/sessionController.js";
 import UserDTO from "../dto/user.DTO.js";
+import UserModel from "../models/users.model.js";
 const sessionsViewRouter = Router();
 
 sessionsViewRouter.get("/register", (req, res) => {
@@ -18,14 +19,44 @@ sessionsViewRouter.get("/", passportCall("jwt"), (req, res) => {
 	res.render("sessions/login");
 });
 
-sessionsViewRouter.get("/profile", passportCall("jwt"), (req, res) => {
-	let user = req.user.user;
+sessionsViewRouter.get("/profile", passportCall("jwt"), async (req, res) => {
+	try {
+		const user = await UserModel.findById(req.user.user._id);
+		const { role, ...userWithoutRole } = user.toObject();
 
-	if (user.role === "user") {
-		const userDto = new UserDTO(user);
-		user = userDto;
+		let RoleAdmin;
+		let isPremiumRole;
+		let isRegularRole;
+
+		if (role === "user") {
+			const userDto = new UserDTO(userWithoutRole);
+			isRegularRole = true;
+			res.render("sessions/profile", {
+				user: userDto,
+				RoleAdmin,
+				isPremiumRole,
+				isRegularRole,
+			});
+		} else if (role === "premium") {
+			const userDto = new UserDTO(userWithoutRole);
+			isPremiumRole = true;
+			res.render("sessions/profile", {
+				user: userDto,
+				RoleAdmin,
+				isPremiumRole,
+			});
+		} else if (role === "admin") {
+			RoleAdmin = true;
+			res.render("sessions/profile", {
+				user,
+				RoleAdmin,
+				isPremiumRole,
+			});
+		}
+	} catch (error) {
+		console.error("Error fetching user:", error);
+		res.status(500).render("error", { error: "Internal Server Error" });
 	}
-	res.render("sessions/profile", user);
 });
 
 sessionsViewRouter.get(

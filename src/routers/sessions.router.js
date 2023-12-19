@@ -22,4 +22,5 @@ sessionsRouter.post("/forgot-password", sessionController.forgotPassword);
 
 sessionsRouter.post("/reset-password/:user", sessionController.resetPassword);
 
+sessionsRouter.post("/premium/:email", sessionController.togglePremium);
 export default sessionsRouter;

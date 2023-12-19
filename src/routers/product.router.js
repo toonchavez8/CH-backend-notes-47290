@@ -33,7 +33,7 @@ productRouter.get(
 productRouter.post(
 	"/",
 	passportCall("jwt"),
-	handlePolicies(["ADMIN"]),
+	handlePolicies(["ADMIN", "PREMIUM"]),
 	addProduct
 );
 
@@ -41,14 +41,14 @@ productRouter.post(
 productRouter.put(
 	"/:pid",
 	passportCall("jwt"),
-	handlePolicies(["ADMIN"]),
+	handlePolicies(["ADMIN", "PREMIUM"]),
 	updateProduct
 );
 
 productRouter.delete(
 	"/:pid",
 	passportCall("jwt"),
-	handlePolicies(["ADMIN"]),
+	handlePolicies(["ADMIN", "PREMIUM"]),
 	deleteProduct
 );
 

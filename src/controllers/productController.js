@@ -56,6 +56,10 @@ export const addProduct = async (req, res) => {
 
 		const getAllProducts = await ProductService.getAll();
 
+		product.owner = req.user.email;
+
+		logger.info(product, "email", req.user.email);
+
 		// Respond with a success message and the added product
 		res.status(201).json({
 			message: "Product added successfully.",

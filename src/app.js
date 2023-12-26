@@ -12,6 +12,8 @@ import sessionsRouter from "./routers/sessions.router.js";
 import sessionsViewRouter from "./routers/sessions-view.js";
 import session from "express-session";
 
+
+
 import passport from "passport";
 import InitializePassport from "./config/passport.config.js";
 import { passportCall } from "./utils.js";
@@ -23,6 +25,11 @@ import ticketViewRouter from "./routers/ticket.view.router.js";
 import errorHandler from "./middlewares/error.js";
 import CustomError from "./errors/CustomError.js";
 import logger from "./config/logger.js";
+
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express"
+
+
 
 const app = express();
 const opts = program.opts();
@@ -44,6 +51,22 @@ app.use((err, req, res, next) => {
 	res.status(500).send("Something went wrong!");
 });
 
+//Swagger options
+const swaggerDefinition = {
+	definition: {
+		openapi: "3.0.1",
+		info: {
+			title: "PixelLend API",
+			version: "1.0.0",
+			description: "A simple API for managing rental products",
+		},
+	},
+	apis: ["./docs/**/*.yaml"],
+};
+
+const specs = swaggerJSDoc(swaggerDefinition);
+
+app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 // Database configuration
 const dbUrl = CONFIG.MONGO.URI;
 const dbName = CONFIG.MONGO.DB;

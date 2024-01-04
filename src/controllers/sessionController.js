@@ -3,7 +3,6 @@ import userPasswordModel from "../models/user-password.model.js";
 import UserModel from "../models/users.model.js";
 import {
 	JWT_COOKIE_NAME,
-	comparePassword,
 	createHash,
 	generatePasswordResetToken,
 	isValidPassword,

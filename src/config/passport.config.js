@@ -110,6 +110,7 @@ const InitializePassport = () => {
 					// save cartID to localsession for later use
 					req.session.cartID = user.cart;
 
+					console.log("login", user);
 					return done(null, user);
 				} catch (error) {
 					logger.error(error);

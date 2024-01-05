@@ -111,12 +111,6 @@ export const addProductToCartController = async (req, res) => {
 				.json({ error: `Product with ID ${productId} not found.` });
 		}
 
-		if (product.owner === req.user.email) {
-			return res
-				.status(400)
-				.json({ error: `You can't add your own product to your cart.` });
-		}
-
 		// Check if the product already exists in the cart
 		const existingProduct = cartToUpdate.products.find(
 			(productItem) =>

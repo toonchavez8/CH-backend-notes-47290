@@ -9,6 +9,7 @@ import {
 	clearCartController,
 	deleteProductFromCartController,
 	checkoutCartController,
+	deleteCartController,
 } from "../controllers/cartController.js";
 import { passportCall } from "../utils.js";
 import getBill from "../controllers/checkoutController.js";
@@ -22,7 +23,7 @@ cartRouter.get("/:cid", getCartByIDController);
 cartRouter.post("/:cid/product/:pid", addProductToCartController);
 cartRouter.delete("/:cid/product/:pid", deleteProductFromCartController);
 cartRouter.delete("/:cid", clearCartController);
+cartRouter.delete("/delete/cart/:email", deleteCartController);
 cartRouter.get("/:cid/purchase", passportCall("jwt"), checkoutCartController);
 cartRouter.post("/getbill/:ticketId", getBill);
 export { cartRouter };
-1;

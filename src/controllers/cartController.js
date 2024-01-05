@@ -268,6 +268,24 @@ export const clearCartController = async (req, res) => {
 	}
 };
 
+export const deleteCartController = async (req, res) => {
+	try {
+		const email = req.params.email;
+
+		const cartToDelete = await CartService.deleteCart(email);
+
+		if (!cartToDelete) {
+			return res
+				.status(404)
+				.json({ error: `Cart with email ${email} not found` });
+		}
+
+		res
+			.status(200)
+			.json({ status: "success", message: `deleted cart for user ${email}` });
+	} catch (error) {}
+};
+
 export const checkoutCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;

@@ -16,6 +16,8 @@ sessionsRouter.post(
 	passport.authenticate("login", { failureRedirect: "/failregister" }),
 	sessionController.login
 );
+
+sessionsRouter.delete("/user/:email", sessionController.deleteUser);
 sessionsRouter.get("/logout", sessionController.logout);
 
 sessionsRouter.post("/forgot-password", sessionController.forgotPassword);

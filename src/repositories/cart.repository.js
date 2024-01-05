@@ -8,7 +8,7 @@ export default class CartRepository {
 	getCartById = async (id) => await this.dao.getCartById(id);
 
 	updateCart = async (data) => await this.dao.updateCart(data);
-
+	deleteCart = async (email) => await this.dao.deleteCart(email);
 	clearCart = async () => await this.dao.clearCart();
 	purchaseCart = async () => await this.dao.purchaseCart();
 }

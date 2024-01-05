@@ -20,4 +20,7 @@ export default class CartMongoDao {
 
 	clearCart = async () => await this.dao.clearCart();
 	purchaseCart = async () => await this.dao.purchaseCart();
+	deleteCart = async (email) => {
+		return await cartModel.findOneAndDelete({ userEmail: email });
+	};
 }

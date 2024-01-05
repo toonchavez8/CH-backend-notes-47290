@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import supertest from "supertest";
+import { after } from "mocha";
 
 const Requester = supertest("http://localhost:3000");
 
@@ -49,6 +50,7 @@ describe("Api Sessions Routes", () => {
 			password: "password123",
 		};
 
+		let createdUserEmail = validRegisterData.email;
 		const invalidRegisterData = {
 			// Missing some required fields
 			first_name: "Jane",
@@ -71,6 +73,32 @@ describe("Api Sessions Routes", () => {
 				.expect(302);
 
 			expect(response.header.location).to.equal("/failregister");
+		});
+
+		after(async function () {
+			try {
+				const deleteCart = await Requester.delete(
+					`/api/cart/delete/cart/${createdUserEmail}`
+				);
+
+				const deleteUser = await Requester.delete(
+					`/api/sessions/user/${createdUserEmail}`
+				);
+
+				// Ensure the cart deletion is successful
+				if (deleteCart.status !== 200) {
+					console.error(`Error deleting cart. Status: ${deleteCart.status}`);
+					throw new Error(`Error deleting cart. Status: ${deleteCart.status}`);
+				}
+
+				if (deleteUser.status !== 200) {
+					console.error(`Error deleting user. Status: ${deleteUser.status}`);
+					throw new Error(`Error deleting user. Status: ${deleteUser.status}`);
+				}
+			} catch (error) {
+				console.error(error);
+				throw error;
+			}
 		});
 	});
 });

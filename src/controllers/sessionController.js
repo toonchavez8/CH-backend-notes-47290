@@ -24,6 +24,27 @@ export const logout = (req, res) => {
 	res.clearCookie(JWT_COOKIE_NAME).redirect("/session/login");
 };
 
+export const deleteUser = async (req, res) => {
+	const email = req.params.email;
+
+	console.log("userEmail", email);
+
+	const deleteUser = await UserModel.findOneAndDelete({ email });
+
+	console.log(deleteUser);
+
+	if (!deleteUser) {
+		return res.status(404).json({
+			status: "user not found",
+		});
+	}
+
+	res.status(200).json({
+		status: "success",
+		message: `user ${email} sucessfully deleted`,
+	});
+};
+
 export const forgotPassword = async (req, res) => {
 	const email = req.body.email;
 	if (!email) {

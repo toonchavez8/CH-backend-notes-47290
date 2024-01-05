@@ -2,12 +2,11 @@ import config from "../config/config.js";
 import productModel from "../models/products.model.js";
 import mongoose from "mongoose";
 import { ProductService } from "../repositories/index.js";
-import chalk from "chalk";
+
 import CustomError from "../errors/CustomError.js";
 import CustomErrorIDs from "../errors/enums.js";
 import { generateProducts } from "../mocking/Product.Gen.js";
 import logger from "../config/logger.js";
-import { logout } from "./sessionController.js";
 
 const PORT = config.APISERVER.PORT;
 

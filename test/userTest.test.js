@@ -6,8 +6,8 @@ const Requester = supertest("http://localhost:3000");
 
 describe("Api Sessions Routes", () => {
 	describe("/api/sessions/login", () => {
-		const validEmail = "toonchavez@yahoo.com";
-		const validPassword = "123456";
+		const validEmail = "test@user.com";
+		const validPassword = "password";
 		const invalidEmail = "invaliduser@example.com";
 		const invalidPassword = "invalidpassword";
 
@@ -16,27 +16,24 @@ describe("Api Sessions Routes", () => {
 				.send({ email: validEmail, password: validPassword })
 				.expect(302);
 
-			// Check if the JWT cookie is set
 			const jwtCookie = response.header["set-cookie"].find((cookie) =>
 				cookie.startsWith("PixelLendCookie")
 			);
 			expect(jwtCookie).to.not.be.undefined;
-			// Check if the redirect location is "/products"
+
 			expect(response.header.location).to.equal("/products");
 		});
 
 		it("should return an error on invalid login credentials", async () => {
 			const response = await Requester.post("/api/sessions/login")
 				.send({ email: invalidEmail, password: invalidPassword })
-				.expect(302); // Assuming you're using redirects for failed logins
+				.expect(302);
 
-			// Check if the JWT cookie is not set for failed login
 			const jwtCookie = response.header["set-cookie"].find((cookie) =>
 				cookie.startsWith("PixelLendCookie")
 			);
 			expect(jwtCookie).to.be.undefined;
 
-			// Check if the redirect location is "/failregister" or another appropriate error page
 			expect(response.header.location).to.equal("/failregister");
 		});
 	});
@@ -85,7 +82,6 @@ describe("Api Sessions Routes", () => {
 					`/api/sessions/user/${createdUserEmail}`
 				);
 
-				// Ensure the cart deletion is successful
 				if (deleteCart.status !== 200) {
 					console.error(`Error deleting cart. Status: ${deleteCart.status}`);
 					throw new Error(`Error deleting cart. Status: ${deleteCart.status}`);

@@ -17,12 +17,10 @@ sessionsRouter.post(
 	sessionController.login
 );
 
-sessionsRouter.delete("/user/:email", sessionController.deleteUser);
 sessionsRouter.get("/logout", sessionController.logout);
 
 sessionsRouter.post("/forgot-password", sessionController.forgotPassword);
 
 sessionsRouter.post("/reset-password/:user", sessionController.resetPassword);
 
-sessionsRouter.post("/premium/:email", sessionController.togglePremium);
 export default sessionsRouter;

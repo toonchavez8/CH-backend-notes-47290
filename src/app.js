@@ -12,8 +12,6 @@ import sessionsRouter from "./routers/sessions.router.js";
 import sessionsViewRouter from "./routers/sessions-view.js";
 import session from "express-session";
 
-
-
 import passport from "passport";
 import InitializePassport from "./config/passport.config.js";
 import { passportCall } from "./utils.js";
@@ -27,9 +25,8 @@ import CustomError from "./errors/CustomError.js";
 import logger from "./config/logger.js";
 
 import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUiExpress from "swagger-ui-express"
-
-
+import swaggerUiExpress from "swagger-ui-express";
+import userRouter from "./routers/user.router.js";
 
 const app = express();
 const opts = program.opts();
@@ -104,6 +101,7 @@ async function startServer() {
 		app.use("/api/cart", cartRouter);
 		app.use("/api/sessions", sessionsRouter);
 		app.use("/api/ticket", ticketRouter);
+		app.use("/api/users", userRouter);
 		// Middleware to check if the user is an admin
 		app.use("/", sessionsViewRouter);
 		app.use("/products", passportCall("jwt"), productsViewsRouter);

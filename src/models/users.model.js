@@ -31,6 +31,23 @@ const userSchema = new mongoose.Schema({
 		enum: ["user", "admin", "premium"],
 		default: "user",
 	},
+
+	// Nueva propiedad para almacenar documentos
+	documents: [
+		{
+			name: {
+				type: String,
+			},
+			reference: {
+				type: String,
+			},
+		},
+	],
+
+	// Nueva propiedad para almacenar la última conexión
+	last_connection: {
+		type: Date,
+	},
 });
 
 const UserModel = mongoose.model(userCollection, userSchema);

@@ -33,12 +33,6 @@ export const passportCall = (strategy) => {
 		passport.authenticate(strategy, function (err, user, info) {
 			if (err) {
 				return next(err);
-			}
-			if (!user) {
-				const errorMessage = info.message || "Authentication failed";
-				return res.render("error", {
-					error: errorMessage,
-				});
 			} else {
 				req.user = user;
 				next();

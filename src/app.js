@@ -67,7 +67,6 @@ app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 // Database configuration
 const dbUrl = CONFIG.MONGO.URI;
 const dbName = CONFIG.MONGO.DB;
-
 async function startServer() {
 	try {
 		await mongoose.connect(dbUrl, { dbName, useUnifiedTopology: true });

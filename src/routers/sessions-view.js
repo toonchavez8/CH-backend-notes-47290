@@ -22,7 +22,9 @@ sessionsViewRouter.get("/", passportCall("jwt"), (req, res) => {
 sessionsViewRouter.get("/profile", passportCall("jwt"), async (req, res) => {
 	try {
 		const user = await UserModel.findById(req.user.user._id);
-		const { role, ...userWithoutRole } = user.toObject();
+		const { role, _id, ...userWithoutRole } = user.toObject();
+
+		const UID = _id.toString();
 
 		let RoleAdmin;
 		let isPremiumRole;
@@ -36,6 +38,7 @@ sessionsViewRouter.get("/profile", passportCall("jwt"), async (req, res) => {
 				RoleAdmin,
 				isPremiumRole,
 				isRegularRole,
+				UID, // Include UID in the data object
 			});
 		} else if (role === "premium") {
 			const userDto = new UserDTO(userWithoutRole);
@@ -44,6 +47,7 @@ sessionsViewRouter.get("/profile", passportCall("jwt"), async (req, res) => {
 				user: userDto,
 				RoleAdmin,
 				isPremiumRole,
+				UID, // Include UID in the data object
 			});
 		} else if (role === "admin") {
 			RoleAdmin = true;
@@ -51,6 +55,7 @@ sessionsViewRouter.get("/profile", passportCall("jwt"), async (req, res) => {
 				user,
 				RoleAdmin,
 				isPremiumRole,
+				UID, // Include UID in the data object
 			});
 		}
 	} catch (error) {

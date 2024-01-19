@@ -79,7 +79,7 @@ describe("Api Sessions Routes", () => {
 				);
 
 				const deleteUser = await Requester.delete(
-					`/api/sessions/user/${createdUserEmail}`
+					`/api/users/delete/${createdUserEmail}`
 				);
 
 				if (deleteCart.status !== 200) {

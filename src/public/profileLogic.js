@@ -1,6 +1,6 @@
 const toggleUserRole = async (email) => {
 	try {
-		const response = await fetch(`/api/sessions/premium/${email}`, {
+		const response = await fetch(`/api/users/premium/${email}`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

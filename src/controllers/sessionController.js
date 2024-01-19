@@ -17,10 +17,23 @@ export const login = async (req, res) => {
 	if (!req.user) {
 		return res.status(401).render("error", { error: "passport login failed" });
 	}
+	// Update last_connection when user logs in
+	await UserModel.findByIdAndUpdate(req.user._id, {
+		last_connection: new Date(),
+	});
+
+	// Set JWT cookie
 	res.cookie(JWT_COOKIE_NAME, req.user.token).redirect("/products");
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
+	// Update last_connection when user logs out
+	if (req.user) {
+		await UserModel.findByIdAndUpdate(req.user._id, {
+			last_connection: new Date(),
+		});
+	}
+
 	res.clearCookie(JWT_COOKIE_NAME).redirect("/session/login");
 };
 

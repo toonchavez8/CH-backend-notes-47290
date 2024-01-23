@@ -14,7 +14,7 @@ userRouter.post("/premium/:email", sessionController.togglePremium);
 // Endpoint to handle file uploads
 userRouter.post(
 	"/:uid/documents",
-	upload.single("file"),
+	upload.any(),
 	userController.uploadDocuments
 );
 

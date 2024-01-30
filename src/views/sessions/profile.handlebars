@@ -52,18 +52,18 @@
         <!-- Add the form for uploading documents and updating the role -->
         <form id="uploadDocumentsForm" enctype="multipart/form-data">
             <div class="mb-4">
-                <label for="identificationInput" class="block text-gray-700 text-sm font-bold mb-2">Identification:</label>
-                <input type="file" id="identificationInput" name="identification" accept=".pdf, .jpg, .png" class="rounded p-2 border focus:border-indigo-500 focus:outline-none">
+                <label for="identification" class="block text-gray-700 text-sm font-bold mb-2">Identification:</label>
+                <input type="file" id="identification" name="identification" accept=".pdf, .jpg, .png" class="rounded p-2 border focus:border-indigo-500 focus:outline-none">
             </div>
 
             <div class="mb-4">
-                <label for="proofOfAddressInput" class="block text-gray-700 text-sm font-bold mb-2">Proof of Address:</label>
-                <input type="file" id="proofOfAddressInput" name="proofOfAddress" accept=".pdf, .jpg, .png" class="rounded p-2 border focus:border-indigo-500 focus:outline-none">
+                <label for="proofOfAddress" class="block text-gray-700 text-sm font-bold mb-2">Proof of Address:</label>
+                <input type="file" id="proofOfAddress" name="proofOfAddress" accept=".pdf, .jpg, .png" class="rounded p-2 border focus:border-indigo-500 focus:outline-none">
             </div>
 
             <div class="mb-4">
-                <label for="bankStatementInput" class="block text-gray-700 text-sm font-bold mb-2">Bank Statement:</label>
-                <input type="file" id="bankStatementInput" name="bankStatement" accept=".pdf" class="rounded p-2 border focus:border-indigo-500 focus:outline-none">
+                <label for="bankStatement" class="block text-gray-700 text-sm font-bold mb-2">Bank Statement:</label>
+                <input type="file" id="bankStatement" name="bankStatement" accept=".pdf" class="rounded p-2 border focus:border-indigo-500 focus:outline-none">
             </div>
 
             <button id="fileUploadBtn" type="submit" class="bg-indigo-500 text-white p-2 rounded hover:bg-indigo-600" data-uid={{UID}}>Upload Documents and Upgrade to Premium </button>

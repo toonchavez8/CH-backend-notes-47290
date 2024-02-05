@@ -33,4 +33,8 @@ export default {
 		user: process.env.NODEMAILER_USER,
 		pass: process.env.NODEMAILER_PASS,
 	},
+	STRIPE: {
+		PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+		SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+	},
 };

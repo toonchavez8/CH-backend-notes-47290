@@ -62,7 +62,6 @@ cartsViewsRouter.get("/:cid", async (req, res) => {
 		// Add the total price and userTickets to the cart object
 		cart.totalPrice = formattedTotalPrice;
 
-		console.log("cart", userTickets);
 		res.render("cart", { cart, userTickets });
 	} catch (error) {
 		// Handle any potential errors here

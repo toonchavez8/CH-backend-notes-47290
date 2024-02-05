@@ -279,7 +279,6 @@ export const deleteCartController = async (req, res) => {
 			.json({ status: "success", message: `deleted cart for user ${email}` });
 	} catch (error) {}
 };
-
 export const checkoutCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
@@ -293,6 +292,7 @@ export const checkoutCartController = async (req, res) => {
 		}
 
 		const successfulPurchases = [];
+
 		const failedPurchases = [];
 
 		let totalAmount = 0;
@@ -337,7 +337,6 @@ export const checkoutCartController = async (req, res) => {
 				});
 			}
 		}
-
 		const data = {
 			_id: cartToPurchase._id,
 			products: failedPurchases,
@@ -345,23 +344,33 @@ export const checkoutCartController = async (req, res) => {
 		// Update cart with products that were successfully purchased
 		await CartService.updateCart(data);
 
+		//stripe create order based on succesful products
+
 		// Create ticket
 		const ticketCode = shortid.generate();
-		const purchaserEmail = req.user.user.email;
+		// const purchaserEmail = req.user.user.email;
+		const purchaserEmail = "toonchavez8@gmail.com";
 
-		const ticketResult = await TicketService.create({
-			purchaseCode: ticketCode,
-			products: successfulPurchases,
-			totalAmount,
-			buyerEmail: purchaserEmail,
-		});
-
-		return res.status(201).json({
-			status: "success",
-			payload: ticketResult,
-			message: `Successfully purchased products. Ticket code: ${ticketCode}`,
-			failedPurchases: failedPurchases,
-		});
+		if (totalAmount !== 0 || successfulPurchases.length !== 0) {
+			const ticketResult = await TicketService.create({
+				purchaseCode: ticketCode,
+				products: successfulPurchases,
+				totalAmount,
+				buyerEmail: purchaserEmail,
+			});
+			return res.status(201).json({
+				status: "successfull purchase",
+				payload: ticketResult,
+				message: `Successfully purchased products. Ticket code: ${ticketCode}`,
+				failedPurchases: failedPurchases,
+			});
+		} else {
+			return res.status(406).json({
+				status: "error",
+				payload: failedPurchases,
+				message: `${failedPurchases[0].error}`,
+			});
+		}
 	} catch (error) {
 		console.error(chalk.red(`Error checking out cart: ${error.message}`));
 		return res.status(500).json({ status: "error", error: error.message });

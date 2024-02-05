@@ -126,20 +126,25 @@ async function clearCart(cartId) {
 async function purchaseCart(cartId) {
 	try {
 		const response = await fetch(`/api/cart/${cartId}/purchase`, {
-			method: "GET", // You might need to adjust the method based on your API
+			method: "POST", // You might need to adjust the method based on your API
 		});
+
+		const result = await response.json();
+		const errorMessage = result.message;
+
+		if (result.status === "error") {
+			return Swal.fire({
+				title: "Error",
+				text: errorMessage,
+				icon: "error",
+			});
+		}
 
 		if (!response.ok) {
 			// Handle non-OK responses
 			throw new Error(`HTTP error! Status: ${response.status}`);
 		}
-
-		const result = await response.json();
 		const tiketCode = result.payload.purchaseCode;
-		console.log("tiket code", tiketCode);
-
-		// Log the result
-		console.log("result from purchase cart", result);
 
 		// Show a success message using SweetAlert
 		Swal.fire({
@@ -178,9 +183,10 @@ async function purchaseCart(cartId) {
 		});
 	} catch (error) {
 		// Show an error message using SweetAlert
+		console.log("error from purchaseCart", error);
 		Swal.fire({
 			title: "Error",
-			text: "Error processing the purchase. Please try again.",
+			text: "Error purchasing cart. Please try again.",
 			icon: "error",
 		});
 		console.error("Error purchasing cart:", error.message);

@@ -27,8 +27,6 @@ ticketBtn.addEventListener("click", async () => {
 				text: "Failed to send email. Please try again.",
 			});
 		}
-
-		console.log(data);
 	} catch (error) {
 		console.error("Error fetching data:", error);
 

@@ -6,10 +6,8 @@ const toggleUserRole = async (email) => {
 				"Content-Type": "application/json",
 			},
 		});
-		console.log("response", response);
-		const responseData = await response.json();
 
-		console.log("responseData", responseData);
+		const responseData = await response.json();
 
 		if (responseData.status === "warning") {
 			Swal.fire({

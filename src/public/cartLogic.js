@@ -1,7 +1,7 @@
 // Function to show a confirmation dialog using SweetAlert
 async function showDeleteConfirmation(productId, cartId) {
 	const product = await fetchProduct(productId, cartId); // Fetch product details
-	console.log(product);
+
 	const result = await Swal.fire({
 		title: `Delete ${product.payload.title}?`,
 		text: `Are you sure you want to delete ${product.payload.title} from your cart?`,

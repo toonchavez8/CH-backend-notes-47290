@@ -1,5 +1,4 @@
 function filterProducts(category) {
-	console.log("Filtering products by category:", category);
 	const currentUrl = new URL(window.location.href);
 
 	// Check if the selected category is "All Categories"
@@ -59,9 +58,6 @@ function addToCart(productId, cartID) {
 	})
 		.then((response) => {
 			if (response.ok) {
-				// Handle the success case where the product is added to the cart
-				console.log("Product added to cart successfully");
-
 				// Show SweetAlert message
 				Swal.fire({
 					icon: "success",
@@ -91,8 +87,6 @@ addToCartBtns.forEach((addToCartBtn) => {
 	const cartID = addToCartBtn.getAttribute("data-cartID");
 
 	addToCartBtn.addEventListener("click", () => {
-		console.log("Product ID:", productId);
-		console.log("Cart ID:", cartID);
 		addToCart(productId, cartID);
 	});
 });

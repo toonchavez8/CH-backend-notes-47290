@@ -13,7 +13,6 @@ function formatDate(dateString) {
 cartsViewsRouter.get("/", passportCall("jwt"), async (req, res) => {
 	try {
 		const user = req.user.user;
-		console.log("user", user);
 
 		if (user.role === "user") return res.redirect(`/carts/${user.cart}`);
 

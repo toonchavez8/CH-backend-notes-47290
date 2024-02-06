@@ -6,7 +6,7 @@ function initializeChat() {
 
 	// Use the user object in your chat logic
 	const user = userData;
-	console.log(user);
+
 	if (!user) {
 		Swal.fire({
 			title: "Authentication",
@@ -17,7 +17,7 @@ function initializeChat() {
 		}).then((result) => {
 			if (result.value) {
 				const user = result.value.toLowerCase();
-				console.log(user);
+
 				initializeChatUI(user);
 			}
 		});

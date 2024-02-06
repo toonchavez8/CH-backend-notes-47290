@@ -88,16 +88,15 @@ function deleteProduct(id) {
 		.then((result) => {
 			if (result.error) throw new Error(result.error);
 			deletedProduct = result;
-			console.log(deletedProduct);
 		})
 		.then(() => fetch("/api/products"))
 		.then((result) => result.json())
 		.then((result) => {
 			if (result.error) throw new Error(result.error);
 			socket.emit("productList", result.payload);
-			console.log(result.user);
+
 			let timerInterval;
-			console.log(deletedProduct.productDeleted);
+
 			Swal.fire({
 				title: "Success",
 				icon: "success",
@@ -175,7 +174,6 @@ function updateProduct(id) {
 		thumbnail: document.getElementById("image").value,
 		category: categories,
 	};
-	console.log(updatedProduct);
 
 	// Send a PUT request to update the product with the provided ID
 	fetch(`/api/products/${id}`, {
@@ -247,8 +245,6 @@ function updateProduct(id) {
 }
 
 function editProduct(id) {
-	console.log(`Editing product with id ${id}`);
-
 	window.scrollTo({ top: 0, behavior: "smooth" });
 	// Retrieve the product data by product ID (use an API call if needed)
 	fetch(`/api/products/${id}`)
@@ -277,7 +273,7 @@ function editProduct(id) {
 			// Add a click event listener for updating the product and scrolling to the top of the page
 			updateBtn.addEventListener("click", (event) => {
 				event.preventDefault();
-				console.log("Updating product");
+
 				// Call the updateProduct function with the product ID
 				updateProduct(id);
 
@@ -360,8 +356,6 @@ function updateTable(processedProducts) {
 
 		const categoryContainer = document.createElement("div");
 		categoryContainer.classList.add("flex", "flex-col", "gap-1", "w-full");
-
-		console.log("product", product.category);
 
 		// Loop through product categories and create span elements
 		product.category.forEach((category) => {

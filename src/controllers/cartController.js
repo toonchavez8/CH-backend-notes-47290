@@ -348,8 +348,7 @@ export const checkoutCartController = async (req, res) => {
 
 		// Create ticket
 		const ticketCode = shortid.generate();
-		// const purchaserEmail = req.user.user.email;
-		const purchaserEmail = "toonchavez8@gmail.com";
+		const purchaserEmail = req.user.user.email;
 
 		if (totalAmount !== 0 || successfulPurchases.length !== 0) {
 			const ticketResult = await TicketService.create({

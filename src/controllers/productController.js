@@ -49,7 +49,6 @@ export const addProduct = async (req, res) => {
 	try {
 		// Extract product data from the request body
 		const product = req.body;
-		console.log("req from add product", req.body);
 
 		product.owner = req.user.user.email;
 
@@ -162,6 +161,7 @@ export const getProductsView = async (req, res) => {
 		}
 
 		const products = await ProductService.getAllPaginate(req, filterOptions); // Pass the filterOptions to getAllProducts
+		// Sort the products based on their stock (quantity)
 
 		if (products.statusCode === 200) {
 			const totalPages = [];
@@ -209,6 +209,7 @@ export const getProductsView = async (req, res) => {
 				...product,
 				cartID: cartID,
 			}));
+
 			res.render("home", {
 				isAdmin,
 				isPremiumRole,

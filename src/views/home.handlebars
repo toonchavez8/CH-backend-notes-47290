@@ -138,13 +138,24 @@
 							>+</button>
 						</div>
 
-						<button
-							class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105 mt-2 addTocart"
-							data-product-id="{{this.id}}"
-							data-cartID="{{this.cartID}}"
-						>
-							Add to cart
-						</button>
+						{{#if this.stock}}
+							<!-- Add to cart button only if quantity is greater than 0 -->
+							<button
+								class="rounded bg-purple-600 text-white px-2 py-2 md:px-6 hover:bg-purple-700 transition-all ease hover:scale-105 mt-2 addTocart"
+								data-product-id="{{this.id}}"
+								data-cartID="{{this.cartID}}"
+							>
+								Add to cart
+							</button>
+						{{else}}
+							<!-- Disabled button with out-of-stock message -->
+							<button
+								class="rounded bg-gray-400 text-white px-2 py-2 md:px-6 mt-2"
+								disabled
+							>
+								Out of Stock
+							</button>
+						{{/if}}
 					</article>
 				{{/each}}
 

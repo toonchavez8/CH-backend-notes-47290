@@ -7,6 +7,7 @@ import shortid from "shortid";
 import config from "../config/config.js";
 import Stripe from "stripe";
 import { PORT } from "../app.js";
+import cartModel from "../models/carts.model.js";
 
 export const getProductsFromCartController = async (req, res) => {
 	try {
@@ -378,7 +379,8 @@ export const checkoutCartController = async (req, res) => {
 		});
 
 		// Update cart with products that were successfully purchased
-		await CartService.updateCart(data);
+		const updateCart = await CartService.updateCart(data);
+		console.log("🚀 ~ checkoutCartController ~ updateCart:", updateCart);
 
 		if (totalAmount !== 0 || successfulPurchases.length !== 0) {
 			return res.status(201).json({

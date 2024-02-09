@@ -19,6 +19,37 @@ const cartSchema = new mongoose.Schema({
 			_id: false,
 		},
 	],
+	successfulPurchases: [
+		{
+			productId: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "products",
+			},
+			quantity: {
+				type: Number,
+				default: 1,
+			},
+
+			_id: false,
+		},
+	],
+	failedPurchases: [
+		{
+			productId: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "products",
+			},
+			quantity: {
+				type: Number,
+				default: 1,
+			},
+			error: {
+				type: String,
+				default: "",
+			},
+			_id: false,
+		},
+	],
 });
 
 const cartModel = mongoose.model("carts", cartSchema);

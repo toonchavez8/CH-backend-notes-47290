@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import {
 	CartService,
 	ProductService,
@@ -92,12 +91,11 @@ export const getCartByIDController = async (req, res) => {
 export const addProductToCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
+		console.log("🚀 ~ addProductToCartController ~ cartId:", cartId);
 		const productId = req.params.pid;
 		const quantity = req.body.quantity || 1; // Get quantity from request body or default to 1
-
 		// Find the cart by its _id using the Cart model
 		const cartToUpdate = await CartService.getCartById(cartId);
-
 		if (!cartToUpdate) {
 			// Handle the case where the cart is not found
 			return res
@@ -113,7 +111,6 @@ export const addProductToCartController = async (req, res) => {
 				.status(404)
 				.json({ error: `Product with ID ${productId} not found.` });
 		}
-
 		// Check if the product already exists in the cart
 		const existingProduct = cartToUpdate.products.find(
 			(productItem) =>
@@ -137,7 +134,7 @@ export const addProductToCartController = async (req, res) => {
 		res.status(200).json(updatedCart);
 	} catch (error) {
 		// Here we handle any other errors that occur during the request
-		console.error("Error adding product to cart:", error.message);
+		console.error("Error adding product to cart from api:", error.message);
 		res.status(500).json({ error: error.message });
 	}
 };
@@ -282,12 +279,19 @@ export const deleteCartController = async (req, res) => {
 			.json({ status: "success", message: `deleted cart for user ${email}` });
 	} catch (error) {}
 };
+
+//stripe create order based on succesful products
+const stripe = new Stripe(config.STRIPE.SECRET_KEY);
+
 export const checkoutCartController = async (req, res) => {
 	try {
+		// Get the cartId from the request params
 		const cartId = req.params.cid;
 
+		// Get the cart from the database
 		const cartToPurchase = await CartService.getCartById(cartId);
 
+		// If cart doesnt exist return 404
 		if (!cartToPurchase) {
 			return res
 				.status(404)
@@ -300,11 +304,14 @@ export const checkoutCartController = async (req, res) => {
 
 		let totalAmount = 0;
 
+		// Loop through the cart products
 		for (const cartProduct of cartToPurchase.products) {
 			const { productId, quantity } = cartProduct;
 
+			// Get the product data from the database
 			const productToPurchase = await ProductService.getById(productId._id);
 
+			// If product doesnt exist push to failed purchases array
 			if (!productToPurchase) {
 				failedPurchases.push({
 					productId: productId._id,
@@ -314,6 +321,7 @@ export const checkoutCartController = async (req, res) => {
 				continue; // Move to the next iteration
 			}
 
+			// if the product more than the quanity requested, add to successfulPurchases
 			if (quantity <= productToPurchase.stock) {
 				// Update product stock
 				productToPurchase.stock -= quantity;
@@ -339,18 +347,14 @@ export const checkoutCartController = async (req, res) => {
 				});
 			}
 		}
+
+		// Set up Cart with and empty products and add successful purchases and failed purchases to db
 		const data = {
 			_id: cartToPurchase._id,
-			products: failedPurchases,
+			products: cartToPurchase.products,
+			successfulPurchases: successfulPurchases,
+			failedPurchases: failedPurchases,
 		};
-
-		console.log(
-			"🚀 ~ file: cartController.js ~ line 122 ~ checkoutCartController ~ successfulPurchases",
-			successfulPurchases
-		);
-
-		//stripe create order based on succesful products
-		const stripe = new Stripe(config.STRIPE.SECRET_KEY);
 
 		const productDataOBJ = successfulPurchases.map((product) => ({
 			price_data: {
@@ -364,41 +368,22 @@ export const checkoutCartController = async (req, res) => {
 			},
 			quantity: product.quantity,
 		}));
-		console.log(
-			"🚀 ~ productDataOBJ ~ successfulPurchases:",
-			successfulPurchases
-		);
 
 		const ticketCode = shortid.generate();
 		const stripeCheckoutSession = await stripe.checkout.sessions.create({
 			line_items: productDataOBJ,
 			mode: "payment",
-			success_url: `http://${req.hostname}:${PORT}/ticket/${ticketCode}`,
+			success_url: `http://${req.hostname}:${PORT}/api/cart/stripe/success/${ticketCode}`,
 			cancel_url: `http://${req.hostname}:${PORT}/api/cart/stripe/cancel`,
 		});
-		console.log(
-			"🚀 ~ checkoutCartController ~ stripeCheckoutSession:",
-			stripeCheckoutSession
-		);
 
 		// Update cart with products that were successfully purchased
 		await CartService.updateCart(data);
 
-		// Create ticket
-		const purchaserEmail = req.user.user.email;
-
 		if (totalAmount !== 0 || successfulPurchases.length !== 0) {
-			const ticketResult = await TicketService.create({
-				purchaseCode: ticketCode,
-				products: successfulPurchases,
-				totalAmount,
-				buyerEmail: purchaserEmail,
-			});
-			console.log("🚀 ~ checkoutCartController ~ ticketResult:", ticketResult);
 			return res.status(201).json({
 				status: "success",
 				payload: {
-					ticket: ticketResult,
 					stripeSession: stripeCheckoutSession,
 				},
 				message: `Successfully purchased products. Ticket code: ${ticketCode}`,
@@ -412,16 +397,29 @@ export const checkoutCartController = async (req, res) => {
 			});
 		}
 	} catch (error) {
-		console.error(chalk.red(`Error checking out cart: ${error.message}`));
+		console.error(`Error checking out cart: ${error.message}`);
 		return res.status(500).json({ status: "error", error: error.message });
 	}
 };
 
 export const successStripePayment = async (req, res) => {
 	const purchaseCode = req.params.purchaseCode;
+	// const ticketResult = await TicketService.create({
+	// 	purchaseCode: ticketCode,
+	// 	products: successfulPurchases,
+	// 	totalAmount,
+	// 	buyerEmail: purchaserEmail,
+	// });
+	// // Update product stock
+	// productToPurchase.stock -= quantity;
 
-	const result = await TicketService.getById(purchaseCode);
-	console.log("🚀 ~ successStripePayment ~ result:", result);
+	// await ProductService.update(productToPurchase._id, {
+	// 	stock: productToPurchase.stock,
+	// });
 
-	res.send(result);
+	// // Calculate total amount
+	// totalAmount += productToPurchase.price * quantity;
+	res.send(
+		`<h1>Thank you for your purchase</h1> <h3>Your purchase code is: ${purchaseCode}</h3>`
+	);
 };

@@ -192,6 +192,7 @@ export const getProductsView = async (req, res) => {
 			const user = req.user?.user; // Safely access the user object using optional chaining
 
 			const cartID = user?.cart; // Safely access the cart object using optional chaining
+			console.log("🚀 ~ getProductsView ~ cartID:", cartID);
 
 			// Check if the user is logged in and if they are an admin
 			const isAdmin = user?.role === "admin";

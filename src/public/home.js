@@ -42,12 +42,13 @@ categoryButtons.forEach((categoryButton) => {
 });
 
 function addToCart(productId, cartID) {
+	console.log("🚀 ~ addToCart ~ cartID:", cartID);
+	console.log("🚀 ~ addToCart ~ productId:", productId);
 	// Get the quantity input field associated with this product
 	const quantityInput = document.getElementById(`quantityInput_${productId}`);
 
 	// Get the quantity value from the input field
 	const quantity = quantityInput.value;
-
 	// Send a POST request to add the product to the cart
 	fetch(`/api/cart/${cartID}/product/${productId}`, {
 		method: "POST",
@@ -73,7 +74,10 @@ function addToCart(productId, cartID) {
 				});
 			} else {
 				// Handle the case where there was an error adding the product to the cart
-				console.error("Error adding product to cart:", response.statusText);
+				console.error(
+					"Error adding product to cart from front:",
+					response.statusText
+				);
 			}
 		})
 		.catch((error) => {

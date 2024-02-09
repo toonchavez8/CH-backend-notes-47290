@@ -130,7 +130,6 @@ async function purchaseCart(cartId) {
 		});
 
 		const result = await response.json();
-		console.log("🚀 ~ purchaseCart ~ result:", result);
 		const errorMessage = result.message;
 
 		if (result.status === "error") {

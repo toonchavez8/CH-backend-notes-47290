@@ -32,7 +32,6 @@ cartsViewsRouter.get("/:cid", async (req, res) => {
 		const cid = req.params.cid;
 
 		const cart = await CartService.getCartById(cid);
-
 		const buyerEmail = cart.userEmail;
 
 		const userTickets = await TicketService.getTicketsByBuyerEmail(buyerEmail);

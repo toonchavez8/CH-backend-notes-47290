@@ -5,6 +5,9 @@ import {
 	TicketService,
 } from "../repositories/index.js";
 import shortid from "shortid";
+import config from "../config/config.js";
+import Stripe from "stripe";
+import { PORT } from "../app.js";
 
 export const getProductsFromCartController = async (req, res) => {
 	try {
@@ -324,8 +327,7 @@ export const checkoutCartController = async (req, res) => {
 
 				// Add product details to successfulPurchases
 				successfulPurchases.push({
-					product: productToPurchase._id, // Assuming you want to store the product ID
-					price: productToPurchase.price,
+					...productToPurchase,
 					quantity: quantity,
 				});
 			} else {
@@ -341,13 +343,48 @@ export const checkoutCartController = async (req, res) => {
 			_id: cartToPurchase._id,
 			products: failedPurchases,
 		};
+
+		console.log(
+			"🚀 ~ file: cartController.js ~ line 122 ~ checkoutCartController ~ successfulPurchases",
+			successfulPurchases
+		);
+
+		//stripe create order based on succesful products
+		const stripe = new Stripe(config.STRIPE.SECRET_KEY);
+
+		const productDataOBJ = successfulPurchases.map((product) => ({
+			price_data: {
+				currency: "usd",
+				unit_amount: product.price * 100,
+				product_data: {
+					name: product.title,
+					description: product.description,
+					images: product.thumbnail,
+				},
+			},
+			quantity: product.quantity,
+		}));
+		console.log(
+			"🚀 ~ productDataOBJ ~ successfulPurchases:",
+			successfulPurchases
+		);
+
+		const ticketCode = shortid.generate();
+		const stripeCheckoutSession = await stripe.checkout.sessions.create({
+			line_items: productDataOBJ,
+			mode: "payment",
+			success_url: `http://${req.hostname}:${PORT}/ticket/${ticketCode}`,
+			cancel_url: `http://${req.hostname}:${PORT}/api/cart/stripe/cancel`,
+		});
+		console.log(
+			"🚀 ~ checkoutCartController ~ stripeCheckoutSession:",
+			stripeCheckoutSession
+		);
+
 		// Update cart with products that were successfully purchased
 		await CartService.updateCart(data);
 
-		//stripe create order based on succesful products
-
 		// Create ticket
-		const ticketCode = shortid.generate();
 		const purchaserEmail = req.user.user.email;
 
 		if (totalAmount !== 0 || successfulPurchases.length !== 0) {
@@ -357,9 +394,13 @@ export const checkoutCartController = async (req, res) => {
 				totalAmount,
 				buyerEmail: purchaserEmail,
 			});
+			console.log("🚀 ~ checkoutCartController ~ ticketResult:", ticketResult);
 			return res.status(201).json({
-				status: "successfull purchase",
-				payload: ticketResult,
+				status: "success",
+				payload: {
+					ticket: ticketResult,
+					stripeSession: stripeCheckoutSession,
+				},
 				message: `Successfully purchased products. Ticket code: ${ticketCode}`,
 				failedPurchases: failedPurchases,
 			});
@@ -374,4 +415,13 @@ export const checkoutCartController = async (req, res) => {
 		console.error(chalk.red(`Error checking out cart: ${error.message}`));
 		return res.status(500).json({ status: "error", error: error.message });
 	}
+};
+
+export const successStripePayment = async (req, res) => {
+	const purchaseCode = req.params.purchaseCode;
+
+	const result = await TicketService.getById(purchaseCode);
+	console.log("🚀 ~ successStripePayment ~ result:", result);
+
+	res.send(result);
 };

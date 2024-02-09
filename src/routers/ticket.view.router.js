@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { CartService, TicketService } from "../repositories/index.js";
+import { TicketService } from "../repositories/index.js";
 import { passportCall } from "../utils.js";
 
 const ticketViewRouter = Router();

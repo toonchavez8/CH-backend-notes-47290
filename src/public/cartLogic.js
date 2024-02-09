@@ -130,6 +130,7 @@ async function purchaseCart(cartId) {
 		});
 
 		const result = await response.json();
+		console.log("🚀 ~ purchaseCart ~ result:", result);
 		const errorMessage = result.message;
 
 		if (result.status === "error") {
@@ -146,41 +147,11 @@ async function purchaseCart(cartId) {
 		}
 		const tiketCode = result.payload.purchaseCode;
 
-		// Show a success message using SweetAlert
-		Swal.fire({
-			title: "Purchase Successful",
-			html: `
-				<p>Thank you for your purchase!</p>
-				<p>Purchase Code: ${result.payload.purchaseCode}</p>
-				<p>Total Amount: $${result.payload.totalAmount}</p>
-				<p>Products:</p>
-				<ul>
-					<li>${result.payload.products[0].quantity} x ${result.payload.products[0].product}</li>
-				</ul>
-                <p>Please view your purchase ticket below. you will be getting an email shorty with confirmation of your purchase</p>
-                
-			`,
-			icon: "success",
-			showCancelButton: true,
-			confirmButtonColor: "#3085d6",
-			cancelButtonColor: "#d33",
-			confirmButtonText: "View Purchase Ticket",
-			cancelButtonText: "Close",
-		}).then(async (result) => {
-			if (result.isConfirmed) {
-				await fetch(`/api/cart/getbill/${tiketCode}`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
+		// adcceder a la url de stripe payments y mandar el usario ahi
 
-				// Redirect to the purchase ticket
-				window.location.href = `/ticket/${tiketCode}`;
-			} else {
-				location.reload();
-			}
-		});
+		const stripeURL = result.payload.stripeSession.url;
+
+		window.location.href = stripeURL;
 	} catch (error) {
 		// Show an error message using SweetAlert
 		console.log("error from purchaseCart", error);

@@ -2,6 +2,7 @@ const ticketBtn = document.querySelector(".email-button");
 
 ticketBtn.addEventListener("click", async () => {
 	const ticketId = ticketBtn.getAttribute("data-ticket");
+	console.log("🚀 ~ ticketBtn.addEventListener ~ ticketId:", ticketId);
 
 	try {
 		const response = await fetch(`/api/cart/getbill/${ticketId}`, {
@@ -10,8 +11,10 @@ ticketBtn.addEventListener("click", async () => {
 				"Content-Type": "application/json",
 			},
 		});
+		console.log("🚀 ~ ticketBtn.addEventListener ~ response:", response);
 
 		const data = await response.json();
+		console.log("🚀 ~ ticketBtn.addEventListener ~ data:", data);
 
 		// Check if the response is successful (you can modify this condition based on your API response structure)
 		if (response.ok) {

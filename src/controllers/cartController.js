@@ -337,6 +337,7 @@ export const checkoutCartController = async (req, res) => {
 				// Add product details to successfulPurchases
 				successfulPurchases.push({
 					...productToPurchase,
+					productId: productId._id,
 					quantity: quantity,
 				});
 			} else {
@@ -370,11 +371,10 @@ export const checkoutCartController = async (req, res) => {
 			quantity: product.quantity,
 		}));
 
-		const ticketCode = shortid.generate();
 		const stripeCheckoutSession = await stripe.checkout.sessions.create({
 			line_items: productDataOBJ,
 			mode: "payment",
-			success_url: `http://${req.hostname}:${PORT}/api/cart/stripe/success/${ticketCode}`,
+			success_url: `http://${req.hostname}:${PORT}/api/cart/stripe/success/${cartId}`,
 			cancel_url: `http://${req.hostname}:${PORT}/api/cart/stripe/cancel`,
 		});
 
@@ -388,7 +388,7 @@ export const checkoutCartController = async (req, res) => {
 				payload: {
 					stripeSession: stripeCheckoutSession,
 				},
-				message: `Successfully purchased products. Ticket code: ${ticketCode}`,
+				message: `Started checkout process for cart with id ${cartId}`,
 				failedPurchases: failedPurchases,
 			});
 		} else {
@@ -406,22 +406,77 @@ export const checkoutCartController = async (req, res) => {
 
 export const successStripePayment = async (req, res) => {
 	const purchaseCode = req.params.purchaseCode;
-	// const ticketResult = await TicketService.create({
-	// 	purchaseCode: ticketCode,
-	// 	products: successfulPurchases,
-	// 	totalAmount,
-	// 	buyerEmail: purchaserEmail,
-	// });
-	// // Update product stock
-	// productToPurchase.stock -= quantity;
 
-	// await ProductService.update(productToPurchase._id, {
-	// 	stock: productToPurchase.stock,
-	// });
+	const purchasedCart = await CartService.getCartById(purchaseCode);
 
-	// // Calculate total amount
-	// totalAmount += productToPurchase.price * quantity;
-	res.send(
-		`<h1>Thank you for your purchase</h1> <h3>Your purchase code is: ${purchaseCode}</h3>`
-	);
+	if (!purchasedCart) {
+		return res
+			.status(404)
+			.json({ error: `Cart with id ${purchaseCode} not found!` });
+	}
+
+	let totalAmount = 0;
+	const successfulPurchases = [];
+
+	// Check if there are successful purchases
+	if (purchasedCart.successfulPurchases.length > 0) {
+		for (const product of purchasedCart.successfulPurchases) {
+			const { productId, quantity } = product;
+			const productToPurchase = await ProductService.getById(productId._id);
+			console.log(
+				"🚀 ~ successStripePayment ~ productToPurchase:",
+				productToPurchase
+			);
+
+			if (!productToPurchase) {
+				return res
+					.status(404)
+					.json({ error: `Product with id ${productId._id} not found!` });
+			}
+
+			totalAmount += productToPurchase.price * quantity;
+
+			successfulPurchases.push({
+				product: productId._id,
+				price: productToPurchase.price,
+				quantity: quantity,
+			});
+			console.log(
+				"🚀 ~ successStripePayment ~ successfulPurchases:",
+				successfulPurchases
+			);
+		}
+
+		const ticketCode = shortid.generate();
+		const purchaserEmail = purchasedCart.userEmail;
+
+		try {
+			// Create ticket
+			const ticketResult = await TicketService.create({
+				purchaseCode: ticketCode,
+				products: successfulPurchases,
+				totalAmount,
+				buyerEmail: purchaserEmail,
+			});
+
+			if (!ticketResult) {
+				throw new Error("Error creating ticket");
+			}
+
+			// Clear successful purchases from cart
+			await CartService.updateCart({
+				_id: purchaseCode,
+				products: [],
+				successfulPurchases: [],
+			});
+
+			res.render("ticket", { ticketResult });
+		} catch (error) {
+			console.error(`Error creating ticket: ${error.message}`);
+			return res.status(500).json({ error: "Internal Server Error" });
+		}
+	} else {
+		// No successful purchases
+		return res.render("error", { error: "No successful purchases found." });
+	}
 };

@@ -7,7 +7,8 @@ dotenv.config();
 
 const getBill = async (req, res) => {
 	try {
-		const purchaseCode = req.params.ticketId; // Use req.params to get the purchase code from the URL parameter
+		const purchaseCode = req.params.ticket; // Use req.params to get the purchase code from the URL parameter
+		console.log("🚀 ~ getBill ~ purchaseCode:", purchaseCode);
 
 		// Use environment variables for better security
 		const emailUser = process.env.NODEMAILER_USER;

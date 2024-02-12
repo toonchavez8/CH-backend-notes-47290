@@ -375,7 +375,7 @@ export const checkoutCartController = async (req, res) => {
 			line_items: productDataOBJ,
 			mode: "payment",
 			success_url: `http://${req.hostname}:${PORT}/api/cart/stripe/success/${cartId}`,
-			cancel_url: `http://${req.hostname}:${PORT}/api/cart/stripe/cancel`,
+			cancel_url: `http://${req.hostname}:${PORT}/api/cart/stripe/cancel/${cartId}`,
 		});
 
 		// Update cart with products that were successfully purchased
@@ -405,14 +405,12 @@ export const checkoutCartController = async (req, res) => {
 };
 
 export const successStripePayment = async (req, res) => {
-	const purchaseCode = req.params.purchaseCode;
+	const cartid = req.params.cartid;
 
-	const purchasedCart = await CartService.getCartById(purchaseCode);
+	const purchasedCart = await CartService.getCartById(cartid);
 
 	if (!purchasedCart) {
-		return res
-			.status(404)
-			.json({ error: `Cart with id ${purchaseCode} not found!` });
+		return res.status(404).json({ error: `Cart with id ${cartid} not found!` });
 	}
 
 	let totalAmount = 0;
@@ -437,7 +435,7 @@ export const successStripePayment = async (req, res) => {
 			totalAmount += productToPurchase.price * quantity;
 
 			successfulPurchases.push({
-				product: productId._id,
+				productId: productId._id,
 				price: productToPurchase.price,
 				quantity: quantity,
 			});
@@ -479,4 +477,32 @@ export const successStripePayment = async (req, res) => {
 		// No successful purchases
 		return res.render("error", { error: "No successful purchases found." });
 	}
+};
+
+export const cancelStripePayment = async (req, res) => {
+	const cartid = req.params.cartid;
+
+	// Retrieve the cart from the database
+	const cartToCancel = await CartService.getCartById(cartid);
+
+	// Handle the case where the cart is not found
+	if (!cartToCancel) {
+		return res
+			.status(404)
+			.render("error", { error: `Cart with id ${cartid} not found!` });
+	}
+
+	const allProducts = [
+		...cartToCancel.successfulPurchases,
+		...cartToCancel.failedPurchases,
+	];
+
+	await CartService.updateCart({
+		_id: cartToCancel._id,
+		products: allProducts,
+		successfulPurchases: [],
+		failedPurchases: [],
+	});
+
+	res.redirect(`/carts/${cartid}`);
 };

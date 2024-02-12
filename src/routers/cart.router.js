@@ -11,6 +11,7 @@ import {
 	checkoutCartController,
 	deleteCartController,
 	successStripePayment,
+	cancelStripePayment,
 } from "../controllers/cartController.js";
 import { passportCall } from "../utils.js";
 import getBill from "../controllers/checkoutController.js";
@@ -27,9 +28,7 @@ cartRouter.delete("/:cid", clearCartController);
 cartRouter.delete("/delete/cart/:email", deleteCartController);
 cartRouter.post("/:cid/purchase", passportCall("jwt"), checkoutCartController);
 
-cartRouter.get("/stripe/success/:purchaseCode", successStripePayment);
-cartRouter.get("/stripe/cancel", (req, res) => {
-	res.send("cancel");
-});
+cartRouter.get("/stripe/success/:cartid", successStripePayment);
+cartRouter.get("/stripe/cancel/:cartid", cancelStripePayment);
 cartRouter.post("/getbill/:ticket", getBill);
 export { cartRouter };

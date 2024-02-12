@@ -5,7 +5,7 @@ const ticketSchema = new mongoose.Schema(
 		purchaseCode: { type: String, required: true, unique: true },
 		products: [
 			{
-				product: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
+				productId: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
 				price: Number,
 				quantity: Number,
 				_id: false,

@@ -42,6 +42,11 @@ cartsViewsRouter.get("/:cid", async (req, res) => {
 			ticket.formattedPurchaseDate = formatDate(ticket.purchase_datetime);
 		});
 
+		// Order userTickets by purchase date (newest to oldest)
+		userTickets.sort(
+			(a, b) => new Date(b.purchase_datetime) - new Date(a.purchase_datetime)
+		);
+
 		// Calculate the total price
 		const totalPrice = cart.products.reduce((total, product) => {
 			const productPrice = product.productId.price;

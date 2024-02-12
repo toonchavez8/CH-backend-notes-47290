@@ -8,7 +8,6 @@ const ticketViewRouter = Router();
 ticketViewRouter.get("/:ticketId", passportCall("jwt"), async (req, res) => {
 	const ticketId = req.params.ticketId;
 	const ticket = await TicketService.getById(ticketId);
-
 	if (!ticket) {
 		return res.render("error", { error: "Ticket not found" });
 	}

@@ -92,7 +92,6 @@ export const getCartByIDController = async (req, res) => {
 export const addProductToCartController = async (req, res) => {
 	try {
 		const cartId = req.params.cid;
-		console.log("🚀 ~ addProductToCartController ~ cartId:", cartId);
 		const productId = req.params.pid;
 		const quantity = req.body.quantity || 1; // Get quantity from request body or default to 1
 		// Find the cart by its _id using the Cart model
@@ -380,8 +379,6 @@ export const checkoutCartController = async (req, res) => {
 
 		// Update cart with products that were successfully purchased
 		const updateCart = await CartService.updateCart(data);
-		console.log("🚀 ~ checkoutCartController ~ updateCart:", updateCart);
-
 		if (totalAmount !== 0 || successfulPurchases.length !== 0) {
 			return res.status(201).json({
 				status: "success",
@@ -421,11 +418,6 @@ export const successStripePayment = async (req, res) => {
 		for (const product of purchasedCart.successfulPurchases) {
 			const { productId, quantity } = product;
 			const productToPurchase = await ProductService.getById(productId._id);
-			console.log(
-				"🚀 ~ successStripePayment ~ productToPurchase:",
-				productToPurchase
-			);
-
 			if (!productToPurchase) {
 				return res
 					.status(404)
@@ -435,14 +427,10 @@ export const successStripePayment = async (req, res) => {
 			totalAmount += productToPurchase.price * quantity;
 
 			successfulPurchases.push({
-				productId: productId._id,
+				productId: productToPurchase._id,
 				price: productToPurchase.price,
 				quantity: quantity,
 			});
-			console.log(
-				"🚀 ~ successStripePayment ~ successfulPurchases:",
-				successfulPurchases
-			);
 		}
 
 		const ticketCode = shortid.generate();
@@ -450,25 +438,27 @@ export const successStripePayment = async (req, res) => {
 
 		try {
 			// Create ticket
-			const ticketResult = await TicketService.create({
+			const ticket = await TicketService.create({
 				purchaseCode: ticketCode,
 				products: successfulPurchases,
 				totalAmount,
 				buyerEmail: purchaserEmail,
 			});
-
-			if (!ticketResult) {
+			if (!ticket) {
 				throw new Error("Error creating ticket");
 			}
 
 			// Clear successful purchases from cart
 			await CartService.updateCart({
-				_id: purchaseCode,
+				_id: cartid,
 				products: [],
 				successfulPurchases: [],
 			});
 
-			res.render("ticket", { ticketResult });
+			const ticketData = await TicketService.getById(ticketCode);
+			res.render("ticket", {
+				ticket: ticketData,
+			});
 		} catch (error) {
 			console.error(`Error creating ticket: ${error.message}`);
 			return res.status(500).json({ error: "Internal Server Error" });
@@ -505,4 +495,21 @@ export const cancelStripePayment = async (req, res) => {
 	});
 
 	res.redirect(`/carts/${cartid}`);
+};
+
+const sendEmail = async (ticketCode) => {
+	try {
+		const response = await fetch(`/api/cart/getbill/${ticketCode}`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (!response.ok) {
+			// Handle non-OK responses (e.g., 404 Not Found)
+			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
+
+		return response.json();
+	} catch (error) {}
 };

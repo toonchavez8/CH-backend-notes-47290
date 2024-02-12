@@ -5,7 +5,7 @@ export default class TicketMongoDAO {
 	getById = async (purchaseCode) =>
 		await ticketModel
 			.findOne({ purchaseCode })
-			.populate("products.product")
+			.populate("products.productId")
 			.lean()
 			.exec();
 	create = async (data) => await ticketModel.create(data);
